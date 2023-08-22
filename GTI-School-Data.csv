@@ -1,0 +1,614 @@
+COUNTRY,SCH_ID,SCHOOL_CLASSIFICATION,URBANICITY,REGION,PRIVATE,URBAN,TEACH_NUM,STUD_NUM,IDSCHOOL,IDCNTRY
+Chile,00152-0001,Public,non-rural - avg class size less than 35,05,0,1,,1161,1,152
+Chile,00152-0002,Public,non-rural - avg class size less than 35,05,0,1,,572,2,152
+Chile,00152-0005,Public,non-rural - avg class size 35 or more,05,0,1,,890,5,152
+Chile,00152-0007,Public,non-rural - avg class size 35 or more,08,0,1,,1029,7,152
+Chile,00152-0010,Public,non-rural - avg class size less than 35,08,0,1,,480,10,152
+Chile,00152-0011,Public,non-rural - avg class size less than 35,08,0,1,,661,11,152
+Chile,00152-0016,Public,rural - avg class size less than 35,13,0,0,,966,16,152
+Chile,00152-0017,Public,non-rural - avg class size less than 35,13,0,1,,859,17,152
+Chile,00152-0018,Public,non-rural - avg class size less than 35,13,0,1,,740,18,152
+Chile,00152-0019,Public,non-rural - avg class size less than 35,13,0,1,,554,19,152
+Chile,00152-0020,Public,non-rural - avg class size less than 35,13,0,1,,539,20,152
+Chile,00152-0021,Public,non-rural - avg class size less than 35,13,0,1,,575,21,152
+Chile,00152-0022,Public,non-rural - avg class size less than 35,13,0,1,,463,22,152
+Chile,00152-0023,Public,non-rural - avg class size 35 or more,13,0,1,,152,23,152
+Chile,00152-0024,Public,non-rural - avg class size 35 or more,13,0,1,,662,24,152
+Chile,00152-0025,Public,non-rural - avg class size 35 or more,13,0,1,,745,25,152
+Chile,00152-0026,Public,non-rural - avg class size 35 or more,13,0,1,,1111,26,152
+Chile,00152-0027,Public,non-rural - avg class size 35 or more,13,0,1,,1378,27,152
+Chile,00152-0028,Public,non-rural - avg class size 35 or more,13,0,1,,1557,28,152
+Chile,00152-0029,Public,non-rural - avg class size 35 or more,13,0,1,,2636,29,152
+Chile,00152-0030,Public,non-rural - avg class size 35 or more,13,0,1,,4281,30,152
+Chile,00152-0033,Government dependent,non-rural - avg class size less than 35,05,0,1,,356,33,152
+Chile,00152-0037,Government dependent,non-rural - avg class size 35 or more,05,0,1,,1250,37,152
+Chile,00152-0038,Government dependent,non-rural - avg class size 35 or more,08,0,1,,1984,38,152
+Chile,00152-0039,Government dependent,non-rural - avg class size 35 or more,08,0,1,,1160,39,152
+Chile,00152-0040,Government dependent,non-rural - avg class size 35 or more,08,0,1,,778,40,152
+Chile,00152-0041,Government dependent,non-rural - avg class size less than 35,08,0,1,,394,41,152
+Chile,00152-0043,Government dependent,non-rural - avg class size less than 35,08,0,1,,997,43,152
+Chile,00152-0044,Government dependent,non-rural - avg class size less than 35,13,0,1,,3335,44,152
+Chile,00152-0046,Government dependent,non-rural - avg class size less than 35,13,0,1,,1220,46,152
+Chile,00152-0047,Government dependent,non-rural - avg class size less than 35,13,0,1,,1052,47,152
+Chile,00152-0048,Government dependent,non-rural - avg class size less than 35,13,0,1,,940,48,152
+Chile,00152-0049,Government dependent,non-rural - avg class size less than 35,13,0,1,,917,49,152
+Chile,00152-0052,Government dependent,non-rural - avg class size less than 35,13,0,1,,693,52,152
+Chile,00152-0054,Government dependent,non-rural - avg class size less than 35,13,0,1,,456,54,152
+Chile,00152-0058,Government dependent,non-rural - avg class size 35 or more,13,0,1,,748,58,152
+Chile,00152-0059,Government dependent,non-rural - avg class size 35 or more,13,0,1,,926,59,152
+Chile,00152-0060,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1049,60,152
+Chile,00152-0061,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1099,61,152
+Chile,00152-0062,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1191,62,152
+Chile,00152-0064,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1493,64,152
+Chile,00152-0065,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1743,65,152
+Chile,00152-0066,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1547,66,152
+Chile,00152-0075,Independent private,non-rural - avg class size less than 35,08,1,1,,1265,75,152
+Chile,00152-0078,Independent private,non-rural - avg class size less than 35,13,1,1,,328,78,152
+Chile,00152-0082,Independent private,non-rural - avg class size less than 35,13,1,1,,791,82,152
+Chile,00152-0083,Independent private,non-rural - avg class size less than 35,13,1,1,,706,83,152
+Chile,00152-0084,Independent private,non-rural - avg class size less than 35,13,1,1,,813,84,152
+Chile,00152-0087,Independent private,non-rural - avg class size less than 35,13,1,1,,1032,87,152
+Chile,00152-0088,Independent private,non-rural - avg class size less than 35,13,1,1,,1210,88,152
+Chile,00152-0094,Independent private,non-rural - avg class size less than 35,13,1,1,,1671,94,152
+Chile,00152-0095,Independent private,non-rural - avg class size less than 35,13,1,1,,1924,95,152
+Chile,00152-0098,Independent private,non-rural - avg class size less than 35,13,1,1,,1988,98,152
+Chile,00152-0101,Public,non-rural - avg class size less than 35,05,0,1,,1037,101,152
+Chile,00152-0104,Public,non-rural - avg class size less than 35,05,0,1,,274,104,152
+Chile,00152-0106,Public,non-rural - avg class size 35 or more,08,0,1,,1187,106,152
+Chile,00152-0109,Public,non-rural - avg class size less than 35,08,0,1,,328,109,152
+Chile,00152-0111,Public,non-rural - avg class size less than 35,08,0,1,,638,111,152
+Chile,00152-0112,Public,non-rural - avg class size less than 35,08,0,1,,731,112,152
+Chile,00152-0113,Public,non-rural - avg class size less than 35,08,0,1,,1405,113,152
+Chile,00152-0114,Public,non-rural - avg class size less than 35,13,0,1,,1554,114,152
+Chile,00152-0117,Public,non-rural - avg class size less than 35,13,0,1,,864,117,152
+Chile,00152-0131,Government dependent,non-rural - avg class size less than 35,05,0,1,,1179,131,152
+Chile,00152-0132,Government dependent,non-rural - avg class size less than 35,05,0,1,,918,132,152
+Chile,00152-0134,Government dependent,non-rural - avg class size less than 35,05,0,1,,441,134,152
+Chile,00152-0135,Government dependent,non-rural - avg class size less than 35,05,0,1,,259,135,152
+Chile,00152-0144,Government dependent,non-rural - avg class size less than 35,13,0,1,,2528,144,152
+Chile,00152-0145,Government dependent,non-rural - avg class size less than 35,13,0,1,,1511,145,152
+Chile,00152-0150,Government dependent,non-rural - avg class size less than 35,13,0,1,,875,150,152
+Chile,00152-0155,Government dependent,non-rural - avg class size less than 35,13,0,1,,380,155,152
+Chile,00152-0156,Government dependent,non-rural - avg class size 35 or more,13,0,1,,492,156,152
+Chile,00152-0157,Government dependent,non-rural - avg class size 35 or more,13,0,1,,622,157,152
+Chile,00152-0163,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1278,163,152
+Chile,00152-0168,Government dependent,non-rural - avg class size 35 or more,13,0,1,,2054,168,152
+Chile,00152-0173,Independent private,non-rural - avg class size less than 35,05,1,1,,516,173,152
+Chile,00152-0174,Independent private,non-rural - avg class size less than 35,05,1,1,,361,174,152
+Chile,00152-0177,Independent private,non-rural - ,13,1,1,,152,177,152
+Chile,00152-0179,Independent private,non-rural - avg class size less than 35,13,1,1,,547,179,152
+Chile,00152-0185,Independent private,non-rural - avg class size less than 35,13,1,1,,944,185,152
+Chile,00152-0186,Independent private,non-rural - avg class size less than 35,13,1,1,,902,186,152
+Chile,00152-0191,Independent private,non-rural - ,13,1,1,,1403,191,152
+Chile,00152-0194,Independent private,non-rural - avg class size less than 35,13,1,1,,1797,194,152
+Chile,00152-0208,Public,non-rural - avg class size less than 35,08,0,1,,263,208,152
+Chile,00152-0229,Public,non-rural - avg class size 35 or more,13,0,1,,2606,229,152
+Chile,00152-0234,Government dependent,non-rural - avg class size less than 35,05,0,1,,478,234,152
+Chile,00152-0236,Government dependent,non-rural - avg class size 35 or more,05,0,1,,734,236,152
+Chile,00152-0242,Government dependent,non-rural - avg class size less than 35,08,0,1,,882,242,152
+Chile,00152-0243,Government dependent,non-rural - avg class size less than 35,08,0,1,,1132,243,152
+Chile,00152-0263,Government dependent,non-rural - avg class size 35 or more,13,0,1,,1300,263,152
+Chile,00152-0271,Independent private,non-rural - avg class size less than 35,05,1,1,,1458,271,152
+Chile,00152-0273,Independent private,non-rural - avg class size less than 35,05,1,1,,686,273,152
+Chile,00152-0276,Independent private,non-rural - ,08,1,1,,596,276,152
+Chile,00152-0279,Independent private,non-rural - ,13,1,1,,454,279,152
+Chile,00152-0286,Independent private,non-rural - avg class size less than 35,13,1,1,,995,286,152
+Chile,00152-0289,Independent private,non-rural - avg class size less than 35,13,1,1,,1180,289,152
+Chile,00152-0292,Independent private,non-rural - ,13,1,1,,1594,292,152
+Chile,00152-0293,Independent private,non-rural - avg class size less than 35,13,1,1,,1625,293,152
+Chile,00152-0298,Independent private,non-rural - avg class size less than 35,13,1,1,,2070,298,152
+Shanghai,00156-0001,Public,Urban,Shanghai,0,1,126,,1,156
+Shanghai,00156-0002,Public,Urban,Shanghai,0,1,116,,2,156
+Shanghai,00156-0004,Public,Urban,Shanghai,0,1,90,,4,156
+Shanghai,00156-0005,Public,Urban,Shanghai,0,1,85,,5,156
+Shanghai,00156-0006,Public,Urban,Shanghai,0,1,81,,6,156
+Shanghai,00156-0007,Public,Urban,Shanghai,0,1,79,,7,156
+Shanghai,00156-0008,Public,Urban,Shanghai,0,1,78,,8,156
+Shanghai,00156-0009,Public,Urban,Shanghai,0,1,74,,9,156
+Shanghai,00156-0010,Public,Urban,Shanghai,0,1,71,,10,156
+Shanghai,00156-0011,Public,Urban,Shanghai,0,1,69,,11,156
+Shanghai,00156-0013,Public,Urban,Shanghai,0,1,63,,13,156
+Shanghai,00156-0014,Public,Urban,Shanghai,0,1,61,,14,156
+Shanghai,00156-0015,Public,Urban,Shanghai,0,1,60,,15,156
+Shanghai,00156-0016,Public,Urban,Shanghai,0,1,58,,16,156
+Shanghai,00156-0017,Public,Urban,Shanghai,0,1,56,,17,156
+Shanghai,00156-0018,Public,Urban,Shanghai,0,1,54,,18,156
+Shanghai,00156-0019,Public,Urban,Shanghai,0,1,52,,19,156
+Shanghai,00156-0020,Public,Urban,Shanghai,0,1,51,,20,156
+Shanghai,00156-0021,Public,Urban,Shanghai,0,1,50,,21,156
+Shanghai,00156-0022,Public,Urban,Shanghai,0,1,49,,22,156
+Shanghai,00156-0023,Public,Urban,Shanghai,0,1,47,,23,156
+Shanghai,00156-0024,Public,Urban,Shanghai,0,1,45,,24,156
+Shanghai,00156-0025,Public,Urban,Shanghai,0,1,40,,25,156
+Shanghai,00156-0026,Public,Urban,Shanghai,0,1,34,,26,156
+Shanghai,00156-0027,Public,Urban,Shanghai,0,1,24,,27,156
+Shanghai,00156-0028,Private,Urban,Shanghai,1,1,152,,28,156
+Shanghai,00156-0029,Private,Urban,Shanghai,1,1,85,,29,156
+Shanghai,00156-0030,Private,Urban,Shanghai,1,1,74,,30,156
+Shanghai,00156-0032,Private,Urban,Shanghai,1,1,42,,32,156
+Shanghai,00156-0033,Public,Suburban,Shanghai,0,0,222,,33,156
+Shanghai,00156-0034,Public,Suburban,Shanghai,0,0,162,,34,156
+Shanghai,00156-0035,Public,Suburban,Shanghai,0,0,137,,35,156
+Shanghai,00156-0036,Public,Suburban,Shanghai,0,0,132,,36,156
+Shanghai,00156-0037,Public,Suburban,Shanghai,0,0,122,,37,156
+Shanghai,00156-0038,Public,Suburban,Shanghai,0,0,117,,38,156
+Shanghai,00156-0039,Public,Suburban,Shanghai,0,0,109,,39,156
+Shanghai,00156-0040,Public,Suburban,Shanghai,0,0,108,,40,156
+Shanghai,00156-0041,Public,Suburban,Shanghai,0,0,105,,41,156
+Shanghai,00156-0043,Public,Suburban,Shanghai,0,0,100,,43,156
+Shanghai,00156-0044,Public,Suburban,Shanghai,0,0,97,,44,156
+Shanghai,00156-0045,Public,Suburban,Shanghai,0,0,95,,45,156
+Shanghai,00156-0046,Public,Suburban,Shanghai,0,0,94,,46,156
+Shanghai,00156-0047,Public,Suburban,Shanghai,0,0,90,,47,156
+Shanghai,00156-0048,Public,Suburban,Shanghai,0,0,88,,48,156
+Shanghai,00156-0049,Public,Suburban,Shanghai,0,0,86,,49,156
+Shanghai,00156-0050,Public,Suburban,Shanghai,0,0,85,,50,156
+Shanghai,00156-0051,Public,Suburban,Shanghai,0,0,84,,51,156
+Shanghai,00156-0052,Public,Suburban,Shanghai,0,0,81,,52,156
+Shanghai,00156-0053,Public,Suburban,Shanghai,0,0,80,,53,156
+Shanghai,00156-0054,Public,Suburban,Shanghai,0,0,78,,54,156
+Shanghai,00156-0055,Public,Suburban,Shanghai,0,0,75,,55,156
+Shanghai,00156-0056,Public,Suburban,Shanghai,0,0,74,,56,156
+Shanghai,00156-0058,Public,Suburban,Shanghai,0,0,72,,58,156
+Shanghai,00156-0059,Public,Suburban,Shanghai,0,0,71,,59,156
+Shanghai,00156-0060,Public,Suburban,Shanghai,0,0,69,,60,156
+Shanghai,00156-0061,Public,Suburban,Shanghai,0,0,68,,61,156
+Shanghai,00156-0062,Public,Suburban,Shanghai,0,0,66,,62,156
+Shanghai,00156-0063,Public,Suburban,Shanghai,0,0,64,,63,156
+Shanghai,00156-0064,Public,Suburban,Shanghai,0,0,62,,64,156
+Shanghai,00156-0065,Public,Suburban,Shanghai,0,0,60,,65,156
+Shanghai,00156-0066,Public,Suburban,Shanghai,0,0,58,,66,156
+Shanghai,00156-0067,Public,Suburban,Shanghai,0,0,56,,67,156
+Shanghai,00156-0068,Public,Suburban,Shanghai,0,0,56,,68,156
+Shanghai,00156-0069,Public,Suburban,Shanghai,0,0,54,,69,156
+Shanghai,00156-0070,Public,Suburban,Shanghai,0,0,53,,70,156
+Shanghai,00156-0071,Public,Suburban,Shanghai,0,0,51,,71,156
+Shanghai,00156-0072,Public,Suburban,Shanghai,0,0,48,,72,156
+Shanghai,00156-0073,Public,Suburban,Shanghai,0,0,46,,73,156
+Shanghai,00156-0074,Public,Suburban,Shanghai,0,0,44,,74,156
+Shanghai,00156-0075,Public,Suburban,Shanghai,0,0,40,,75,156
+Shanghai,00156-0076,Public,Suburban,Shanghai,0,0,38,,76,156
+Shanghai,00156-0077,Public,Suburban,Shanghai,0,0,35,,77,156
+Shanghai,00156-0078,Public,Suburban,Shanghai,0,0,21,,78,156
+Shanghai,00156-0082,Private,Suburban,Shanghai,1,0,53,,82,156
+Shanghai,00156-0083,Private,Suburban,Shanghai,1,0,46,,83,156
+Shanghai,00156-0084,Private,Suburban,Shanghai,1,0,33,,84,156
+Shanghai,00156-0085,Private,Suburban,Shanghai,1,0,14,,85,156
+Shanghai,00156-0103,Public,Urban,Shanghai,0,1,93,,103,156
+Shanghai,00156-0126,Public,Urban,Shanghai,0,1,29,,126,156
+Shanghai,00156-0142,Public,Urban,Shanghai,0,1,101,,142,156
+Shanghai,00156-0157,Public,Suburban,Shanghai,0,0,72,,157,156
+Shanghai,00156-0179,Private,Suburban,Shanghai,1,0,96,,179,156
+Shanghai,00156-0181,Private,Suburban,Shanghai,1,0,57,,181,156
+Shanghai,00156-0201,Public,Urban,Shanghai,0,1,129,,201,156
+Shanghai,00156-0207,Public,Urban,Shanghai,0,1,81,,207,156
+Colombia,00170-0002,Public,Rural,Antioquia - San Juan de UrabÃ¡,0,0,,255,2,170
+Colombia,00170-0005,Public,Rural,BolÃ­var - Cartagena,0,0,,1296,5,170
+Colombia,00170-0007,Public,Rural,Cesar - El Paso,0,0,,1213,7,170
+Colombia,00170-0008,Public,Rural,CÃ³rdoba - San AndrÃ©s Sotavento,0,0,,144,8,170
+Colombia,00170-0009,Public,Rural,Cundinamarca - Silvania,0,0,,445,9,170
+Colombia,00170-0010,Public,Rural,Huila - Palermo,0,0,,100,10,170
+Colombia,00170-0011,Public,Rural,Magdalena - Zona Bananera,0,0,,265,11,170
+Colombia,00170-0012,Public,Rural,NariÃ±o - Santa BÃ¡rbara,0,0,,118,12,170
+Colombia,00170-0015,Public,Rural,Sucre - El Roble,0,0,,86,15,170
+Colombia,00170-0016,Public,Rural,Valle Del Cauca - Candelaria,0,0,,342,16,170
+Colombia,00170-0017,Public,Rural,NariÃ±o - Ipiales,0,0,,156,17,170
+Colombia,00170-0018,Public,Urban,Antioquia - Maceo,0,1,,244,18,170
+Colombia,00170-0019,Public,Urban,Antioquia - Copacabana,0,1,,530,19,170
+Colombia,00170-0021,Public,Urban,Antioquia - MedellÃ­n,0,1,,723,21,170
+Colombia,00170-0022,Public,Urban,Antioquia - MedellÃ­n,0,1,,420,22,170
+Colombia,00170-0023,Public,Urban,Antioquia - MedellÃ­n,0,1,,237,23,170
+Colombia,00170-0024,Public,Urban,Antioquia - ItagÃ¼Ã­,0,1,,584,24,170
+Colombia,00170-0025,Public,Urban,AtlÃ¡ntico - Soledad,0,1,,219,25,170
+Colombia,00170-0026,Public,Urban,AtlÃ¡ntico - Barranquilla,0,1,,576,26,170
+Colombia,00170-0027,Public,Urban,AtlÃ¡ntico - Barranquilla,0,1,,255,27,170
+Colombia,00170-0028,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,458,28,170
+Colombia,00170-0029,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,615,29,170
+Colombia,00170-0030,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,718,30,170
+Colombia,00170-0031,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,814,31,170
+Colombia,00170-0032,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,979,32,170
+Colombia,00170-0033,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,1176,33,170
+Colombia,00170-0035,Public,Urban,BolÃ­var - San MartÃ­n de Loba,0,1,,351,35,170
+Colombia,00170-0036,Public,Urban,BoyacÃ¡ - Siachoque,0,1,,387,36,170
+Colombia,00170-0037,Public,Urban,BoyacÃ¡ - Duitama,0,1,,655,37,170
+Colombia,00170-0038,Public,Urban,CaquetÃ¡ - Puerto Rico,0,1,,513,38,170
+Colombia,00170-0039,Public,Urban,BolÃ­var - Cartagena,0,1,,774,39,170
+Colombia,00170-0040,Public,Urban,Casanare - San Luis De Palenque,0,1,,420,40,170
+Colombia,00170-0042,Public,Urban,Cesar - San MartÃ­n,0,1,,564,42,170
+Colombia,00170-0043,Public,Urban,Cesar - Valledupar,0,1,,1445,43,170
+Colombia,00170-0044,Public,Urban,CÃ³rdoba - San Pelayo,0,1,,619,44,170
+Colombia,00170-0045,Public,Urban,Cundinamarca - San Cayetano,0,1,,209,45,170
+Colombia,00170-0046,Public,Urban,Cundinamarca - ChocontÃ¡,0,1,,752,46,170
+Colombia,00170-0048,Public,Urban,Huila - Neiva,0,1,,653,48,170
+Colombia,00170-0049,Public,Urban,La Guajira - Maicao,0,1,,283,49,170
+Colombia,00170-0051,Public,Urban,Meta - Villavicencio,0,1,,431,51,170
+Colombia,00170-0053,Public,Urban,NariÃ±o - Tumaco,0,1,,673,53,170
+Colombia,00170-0054,Public,Urban,Norte De Santander - CÃºcuta,0,1,,407,54,170
+Colombia,00170-0055,Public,Urban,Putumayo - Mocoa,0,1,,533,55,170
+Colombia,00170-0056,Public,Urban,Risaralda - Santuario,0,1,,358,56,170
+Colombia,00170-0057,Public,Urban,Risaralda - Dosquebradas,0,1,,554,57,170
+Colombia,00170-0058,Public,Urban,Santander - VÃ©lez,0,1,,399,58,170
+Colombia,00170-0059,Public,Urban,Santander - Bucaramanga,0,1,,975,59,170
+Colombia,00170-0060,Public,Urban,Santander - GirÃ³n,0,1,,990,60,170
+Colombia,00170-0061,Public,Urban,Sucre - Sincelejo,0,1,,649,61,170
+Colombia,00170-0062,Public,Urban,Tolima - Guamo,0,1,,754,62,170
+Colombia,00170-0063,Public,Urban,Valle Del Cauca - Pradera,0,1,,63,63,170
+Colombia,00170-0064,Public,Urban,Valle Del Cauca - Cali,0,1,,914,64,170
+Colombia,00170-0065,Public,Urban,Valle Del Cauca - Cali,0,1,,307,65,170
+Colombia,00170-0066,Public,Urban,Valle Del Cauca - Cartago,0,1,,579,66,170
+Colombia,00170-0068,Public,Urban,NariÃ±o - Ipiales,0,1,,522,68,170
+Colombia,00170-0069,Public,Urban,La Guajira - Riohacha,0,1,,499,69,170
+Colombia,00170-0070,Private,Urban,Antioquia - MedellÃ­n,1,1,,1605,70,170
+Colombia,00170-0071,Private,Urban,Antioquia - ItagÃ¼Ã­,1,1,,110,71,170
+Colombia,00170-0072,Private,Urban,AtlÃ¡ntico - Barranquilla,1,1,,313,72,170
+Colombia,00170-0073,Private,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",1,1,,133,73,170
+Colombia,00170-0075,Private,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",1,1,,347,75,170
+Colombia,00170-0076,Private,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",1,1,,495,76,170
+Colombia,00170-0078,Private,Urban,BolÃ­var - Cartagena,1,1,,173,78,170
+Colombia,00170-0079,Private,Urban,Cundinamarca - La Mesa,1,1,,141,79,170
+Colombia,00170-0080,Private,Urban,Cundinamarca - Soacha,1,1,,117,80,170
+Colombia,00170-0081,Public,Rural,Quindio - Armenia,0,0,,211,81,170
+Colombia,00170-0082,Private,Urban,Santander - Floridablanca,1,1,,834,82,170
+Colombia,00170-0083,Private,Urban,Valle Del Cauca - Cali,1,1,,145,83,170
+Colombia,00170-0084,Private,Urban,Valle Del Cauca - Cali,1,1,,389,84,170
+Colombia,00170-0085,Private,Urban,Cundinamarca - ZipaquirÃ¡,1,1,,156,85,170
+Colombia,00170-0102,Public,Rural,Antioquia - TarazÃ¡,0,0,,260,102,170
+Colombia,00170-0104,Public,Rural,BoyacÃ¡ - Pesca,0,0,,67,104,170
+Colombia,00170-0111,Public,Rural,Magdalena - Zona Bananera,0,0,,334,111,170
+Colombia,00170-0114,Public,Rural,Santander - CarcasÃ­,0,0,,85,114,170
+Colombia,00170-0141,Public,Urban,Cauca - PopayÃ¡n,0,1,,380,141,170
+Colombia,00170-0147,Public,Urban,Cundinamarca - Soacha,0,1,,669,147,170
+Colombia,00170-0152,Public,Urban,NariÃ±o - MagÃ¼i,0,1,,665,152,170
+Colombia,00170-0174,Private,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",1,1,,223,174,170
+Colombia,00170-0213,Public,Rural,Norte De Santander - Villa Caro,0,0,,57,213,170
+Colombia,00170-0220,Public,Urban,Antioquia - Remedios,0,1,,849,220,170
+Colombia,00170-0234,Public,Urban,"BogotÃ¡, D.C. - BogotÃ¡, D.C.",0,1,,1676,234,170
+Colombia,00170-0250,Public,Urban,Magdalena - Sitionuevo,0,1,,933,250,170
+Colombia,00170-0277,Private,Urban,BoyacÃ¡ - Tunja,1,1,,61,277,170
+Germany,00276-0001,public,small town,1,0,0,,,1,276
+Germany,00276-0002,public,small town,2,0,0,,,2,276
+Germany,00276-0004,public,city,3,0,1,,,4,276
+Germany,00276-0005,public,city,2,0,1,,,5,276
+Germany,00276-0006,public,small town,3,0,0,,,6,276
+Germany,00276-0007,public,town,3,0,0,,,7,276
+Germany,00276-0008,public,town,4,0,0,,,8,276
+Germany,00276-0009,public,city,2,0,1,,,9,276
+Germany,00276-0010,public,town,3,0,0,,,10,276
+Germany,00276-0011,public,small town,6,0,0,,,11,276
+Germany,00276-0015,public,town,5,0,0,,,15,276
+Germany,00276-0016,public,city,8,0,1,,,16,276
+Germany,00276-0018,public,town,3,0,0,,,18,276
+Germany,00276-0021,public,town,2,0,0,,,21,276
+Germany,00276-0022,public,town,5,0,0,,,22,276
+Germany,00276-0023,public,small town,3,0,0,,,23,276
+Germany,00276-0024,public,"village, hamlet or rural area",2,0,0,,,24,276
+Germany,00276-0025,public,town,3,0,0,,,25,276
+Germany,00276-0026,public,city,5,0,1,,,26,276
+Germany,00276-0027,public,small town,4,0,0,,,27,276
+Germany,00276-0030,public,small town,3,0,0,,,30,276
+Germany,00276-0031,private,town,1,1,0,,,31,276
+Germany,00276-0032,public,town,5,0,0,,,32,276
+Germany,00276-0033,public,town,4,0,0,,,33,276
+Germany,00276-0034,public,city,8,0,1,,,34,276
+Germany,00276-0037,public,small town,1,0,0,,,37,276
+Germany,00276-0038,public,small town,5,0,0,,,38,276
+Germany,00276-0039,public,city,8,0,1,,,39,276
+Germany,00276-0042,public,city,7,0,1,,,42,276
+Germany,00276-0043,public,city,7,0,1,,,43,276
+Germany,00276-0044,public,town,1,0,0,,,44,276
+Germany,00276-0045,public,city,7,0,1,,,45,276
+Germany,00276-0047,private,city,6,1,1,,,47,276
+Germany,00276-0048,public,town,1,0,0,,,48,276
+Germany,00276-0050,public,city,2,0,1,,,50,276
+Germany,00276-0051,public,city,1,0,1,,,51,276
+Germany,00276-0052,public,town,3,0,0,,,52,276
+Germany,00276-0053,public,town,2,0,0,,,53,276
+Japan,00392-0001,public,relatively urban,Shizuoka-city,0,1,,411,1,392
+Japan,00392-0002,public,relatively urban,Shizuoka-city,0,1,,483,2,392
+Japan,00392-0003,public,relatively urban,Shizuoka-city,0,1,,203,3,392
+Japan,00392-0004,public,relatively rural,Shizuoka-city,0,0,,277,4,392
+Japan,00392-0005,public,relatively urban,Shizuoka-city,0,1,,468,5,392
+Japan,00392-0006,public,relatively urban,Shizuoka-city,0,1,,689,6,392
+Japan,00392-0007,public,relatively urban,Shizuoka-city,0,1,,754,7,392
+Japan,00392-0008,public,relatively urban,Shizuoka-city,0,1,,383,8,392
+Japan,00392-0009,public,relatively rural,Shizuoka-city,0,0,,666,9,392
+Japan,00392-0010,public,relatively rural,Shizuoka-city,0,0,,385,10,392
+Japan,00392-0011,public,relatively rural,Shizuoka-city,0,0,,385,11,392
+Japan,00392-0012,public,relatively rural,Shizuoka-city,0,0,,17,12,392
+Japan,00392-0013,public,relatively urban,Shizuoka-city,0,1,,581,13,392
+Japan,00392-0014,public,relatively rural,Shizuoka-city,0,0,,63,14,392
+Japan,00392-0015,public,relatively rural,Shizuoka-city,0,0,,8,15,392
+Japan,00392-0016,public,relatively urban,Shizuoka-city,0,1,,721,16,392
+Japan,00392-0017,public,relatively urban,Shizuoka-city,0,1,,555,17,392
+Japan,00392-0018,public,relatively urban,Shizuoka-city,0,1,,265,18,392
+Japan,00392-0019,public,relatively urban,Shizuoka-city,0,1,,491,19,392
+Japan,00392-0020,public,relatively urban,Shizuoka-city,0,1,,563,20,392
+Japan,00392-0021,public,relatively urban,Shizuoka-city,0,1,,448,21,392
+Japan,00392-0022,public,relatively urban,Shizuoka-city,0,1,,614,22,392
+Japan,00392-0023,public,relatively urban,Shizuoka-city,0,1,,664,23,392
+Japan,00392-0024,public,relatively urban,Shizuoka-city,0,1,,241,24,392
+Japan,00392-0025,public,relatively urban,Shizuoka-city,0,1,,313,25,392
+Japan,00392-0026,public,relatively urban,Shizuoka-city,0,1,,706,26,392
+Japan,00392-0027,public,relatively urban,Shizuoka-city,0,1,,171,27,392
+Japan,00392-0028,public,relatively urban,Shizuoka-city,0,1,,420,28,392
+Japan,00392-0029,public,relatively urban,Shizuoka-city,0,1,,250,29,392
+Japan,00392-0030,public,relatively urban,Shizuoka-city,0,1,,527,30,392
+Japan,00392-0031,public,relatively urban,Shizuoka-city,0,1,,695,31,392
+Japan,00392-0032,public,relatively urban,Shizuoka-city,0,1,,383,32,392
+Japan,00392-0033,public,relatively urban,Shizuoka-city,0,1,,506,33,392
+Japan,00392-0034,public,relatively urban,Shizuoka-city,0,1,,272,34,392
+Japan,00392-0035,public,relatively rural,Shizuoka-city,0,0,,222,35,392
+Japan,00392-0036,public,relatively urban,Shizuoka-city,0,1,,282,36,392
+Japan,00392-0038,public,relatively rural,Shizuoka-city,0,0,,50,38,392
+Japan,00392-0039,public,relatively rural,Shizuoka-city,0,0,,295,39,392
+Japan,00392-0040,public,relatively rural,Shizuoka-city,0,0,,170,40,392
+Japan,00392-0041,public,relatively urban,Toda-city,0,1,,744,41,392
+Japan,00392-0042,public,relatively urban,Toda-city,0,1,,351,42,392
+Japan,00392-0043,public,relatively urban,Toda-city,0,1,,265,43,392
+Japan,00392-0044,public,relatively urban,Toda-city,0,1,,475,44,392
+Japan,00392-0045,public,relatively urban,Toda-city,0,1,,861,45,392
+Japan,00392-0046,public,relatively urban,Toda-city,0,1,,604,46,392
+Japan,00392-0047,public,relatively urban,Kumagaya-city,0,1,,319,47,392
+Japan,00392-0048,public,relatively urban,Kumagaya-city,0,1,,664,48,392
+Japan,00392-0049,public,relatively urban,Kumagaya-city,0,1,,273,49,392
+Japan,00392-0050,public,relatively urban,Kumagaya-city,0,1,,494,50,392
+Japan,00392-0051,public,relatively urban,Kumagaya-city,0,1,,394,51,392
+Japan,00392-0052,public,relatively rural,Kumagaya-city,0,0,,203,52,392
+Japan,00392-0053,public,relatively rural,Kumagaya-city,0,0,,88,53,392
+Japan,00392-0054,public,relatively urban,Kumagaya-city,0,1,,130,54,392
+Japan,00392-0055,public,relatively rural,Kumagaya-city,0,0,,151,55,392
+Japan,00392-0056,public,relatively urban,Kumagaya-city,0,1,,507,56,392
+Japan,00392-0057,public,relatively rural,Kumagaya-city,0,0,,153,57,392
+Japan,00392-0058,public,relatively urban,Kumagaya-city,0,1,,303,58,392
+Japan,00392-0059,public,relatively rural,Kumagaya-city,0,0,,266,59,392
+Japan,00392-0060,public,relatively urban,Kumagaya-city,0,1,,354,60,392
+Japan,00392-0061,public,relatively rural,Kumagaya-city,0,0,,209,61,392
+Japan,00392-0062,public,relatively rural,Kumagaya-city,0,0,,260,62,392
+Japan,00392-0063,national,,Bunkyo-ku,0,,,463,63,392
+Japan,00392-0064,national,,Setagaya-ku,0,,,459,64,392
+Japan,00392-0065,national,,Mito-city,0,,,461,65,392
+Japan,00392-0066,national,,Ciba-city,0,,,455,66,392
+Japan,00392-0067,national,,Bunkyo-ku,0,,,600,67,392
+Japan,00392-0068,national,,Yokohama-city,0,,,513,68,392
+Japan,00392-0069,national,,Bunkyo-ku,0,,,346,69,392
+Japan,00392-0070,national,,Maebashi-city,0,,,405,70,392
+Japan,00392-0071,national,,Hamamatsu-city,0,,,346,71,392
+Japan,00392-0072,national,,Shimada-city,0,,,347,72,392
+Japan,00392-0073,national,,Utsunomiya-city,0,,,463,73,392
+Japan,00392-0074,national,,Saitama-city,0,,,513,74,392
+Mexico,00484-0001,Other states - Public - Technical,URBANA,AGUASCALIENTES,0,1,31,,1,484
+Mexico,00484-0002,Other states - Public - Technical,URBANA,AGUASCALIENTES,0,1,32,,2,484
+Mexico,00484-0003,Other states - Public - General,URBANA,BAJA CALIFORNIA,0,1,42,,3,484
+Mexico,00484-0005,Other states - Public - General,URBANA,BAJA CALIFORNIA,0,1,30,,5,484
+Mexico,00484-0006,Other states - Private,URBANA,BAJA CALIFORNIA,1,1,10,,6,484
+Mexico,00484-0007,Other states - Private,URBANA,BAJA CALIFORNIA,1,1,10,,7,484
+Mexico,00484-0008,Other states - Public - Technical,URBANA,BAJA CALIFORNIA SUR,0,1,37,,8,484
+Mexico,00484-0009,Other states - Public - General,URBANA,COAHUILA DE ZARAGOZA,0,1,28,,9,484
+Mexico,00484-0010,Other states - Public - Technical,URBANA,COAHUILA DE ZARAGOZA,0,1,40,,10,484
+Mexico,00484-0011,Other states - Public - General,URBANA,COAHUILA DE ZARAGOZA,0,1,71,,11,484
+Mexico,00484-0012,Other states - Public - Technical,URBANA,COLIMA,0,1,34,,12,484
+Mexico,00484-0013,Other states - Public - Technical,URBANA,COLIMA,0,1,34,,13,484
+Mexico,00484-0014,Four States - Private,URBANA,CHIAPAS,1,1,23,,14,484
+Mexico,00484-0015,Other states - Public - General,URBANA,CHIHUAHUA,0,1,45,,15,484
+Mexico,00484-0016,Other states - Public - General,URBANA,CHIHUAHUA,0,1,46,,16,484
+Mexico,00484-0017,Other states - Public - General,URBANA,CHIHUAHUA,0,1,14,,17,484
+Mexico,00484-0018,Other states - Public - Technical,RURAL,CHIHUAHUA,0,0,11,,18,484
+Mexico,00484-0019,Other states - Private,URBANA,CHIHUAHUA,1,1,7,,19,484
+Mexico,00484-0021,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,38,,21,484
+Mexico,00484-0022,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,34,,22,484
+Mexico,00484-0023,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,34,,23,484
+Mexico,00484-0024,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,29,,24,484
+Mexico,00484-0025,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,29,,25,484
+Mexico,00484-0026,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,42,,26,484
+Mexico,00484-0027,Other states - Public - Technical,URBANA,DISTRITO FEDERAL,0,1,32,,27,484
+Mexico,00484-0028,Other states - Private,URBANA,DISTRITO FEDERAL,1,1,32,,28,484
+Mexico,00484-0029,Other states - Public - General,URBANA,DURANGO,0,1,32,,29,484
+Mexico,00484-0030,Other states - Public - Technical,URBANA,DURANGO,0,1,35,,30,484
+Mexico,00484-0031,Other states - Public - General,URBANA,DURANGO,0,1,34,,31,484
+Mexico,00484-0033,Other states - Public - General,URBANA,GUANAJUATO,0,1,27,,33,484
+Mexico,00484-0034,Other states - Public - Technical,URBANA,GUANAJUATO,0,1,39,,34,484
+Mexico,00484-0035,Other states - Public - General,URBANA,GUANAJUATO,0,1,45,,35,484
+Mexico,00484-0036,Other states - Private,URBANA,GUANAJUATO,1,1,13,,36,484
+Mexico,00484-0037,Four States - Public - General,URBANA,GUERRERO,0,1,27,,37,484
+Mexico,00484-0038,Four States - Public - Technical,URBANA,GUERRERO,0,1,29,,38,484
+Mexico,00484-0040,Four States - Public - Technical,URBANA,GUERRERO,0,1,30,,40,484
+Mexico,00484-0042,Other states - Public - General,URBANA,HIDALGO,0,1,25,,42,484
+Mexico,00484-0043,Other states - Public - General,URBANA,JALISCO,0,1,21,,43,484
+Mexico,00484-0044,Other states - Public - Technical,URBANA,JALISCO,0,1,10,,44,484
+Mexico,00484-0045,Other states - Public - Technical,URBANA,JALISCO,0,1,28,,45,484
+Mexico,00484-0046,Other states - Public - General,URBANA,JALISCO,0,1,38,,46,484
+Mexico,00484-0047,Other states - Public - General,URBANA,JALISCO,0,1,68,,47,484
+Mexico,00484-0049,Other states - Private,URBANA,JALISCO,1,1,15,,49,484
+Mexico,00484-0050,Other states - Public - Technical,URBANA,MEXICO,0,1,22,,50,484
+Mexico,00484-0051,Other states - Public - Technical,URBANA,MEXICO,0,1,33,,51,484
+Mexico,00484-0052,Other states - Public - Technical,RURAL,MEXICO,0,0,11,,52,484
+Mexico,00484-0053,Other states - Public - General,URBANA,MEXICO,0,1,12,,53,484
+Mexico,00484-0054,Other states - Public - General,URBANA,MEXICO,0,1,28,,54,484
+Mexico,00484-0056,Other states - Public - General,URBANA,MEXICO,0,1,6,,56,484
+Mexico,00484-0057,Other states - Public - General,URBANA,MEXICO,0,1,21,,57,484
+Mexico,00484-0058,Other states - Public - General,URBANA,MEXICO,0,1,24,,58,484
+Mexico,00484-0059,Other states - Public - General,URBANA,MEXICO,0,1,10,,59,484
+Mexico,00484-0060,Other states - Public - General,RURAL,MEXICO,0,0,24,,60,484
+Mexico,00484-0061,Other states - Private,URBANA,MEXICO,1,1,11,,61,484
+Mexico,00484-0062,Four States - Public - General,URBANA,MICHOACAN DE OCAMPO,0,1,37,,62,484
+Mexico,00484-0064,Four States - Private,URBANA,MICHOACAN DE OCAMPO,1,1,14,,64,484
+Mexico,00484-0065,Four States - Private,URBANA,MICHOACAN DE OCAMPO,1,1,9,,65,484
+Mexico,00484-0066,Other states - Public - General,URBANA,MORELOS,0,1,32,,66,484
+Mexico,00484-0067,Other states - Public - General,URBANA,MORELOS,0,1,32,,67,484
+Mexico,00484-0068,Other states - Public - Technical,URBANA,NAYARIT,0,1,25,,68,484
+Mexico,00484-0069,Other states - Public - Technical,URBANA,NAYARIT,0,1,25,,69,484
+Mexico,00484-0070,Other states - Public - General,URBANA,NUEVO LEON,0,1,26,,70,484
+Mexico,00484-0071,Other states - Public - Technical,URBANA,NUEVO LEON,0,1,27,,71,484
+Mexico,00484-0072,Other states - Public - Technical,URBANA,NUEVO LEON,0,1,27,,72,484
+Mexico,00484-0073,Other states - Public - General,URBANA,NUEVO LEON,0,1,42,,73,484
+Mexico,00484-0074,Other states - Public - General,RURAL,NUEVO LEON,0,0,10,,74,484
+Mexico,00484-0075,Other states - Public - General,URBANA,QUERETARO,0,1,21,,75,484
+Mexico,00484-0076,Other states - Public - Technical,RURAL,QUERETARO,0,0,22,,76,484
+Mexico,00484-0078,Other states - Public - General,URBANA,SAN LUIS POTOSI,0,1,60,,78,484
+Mexico,00484-0079,Other states - Public - General,URBANA,SAN LUIS POTOSI,0,1,61,,79,484
+Mexico,00484-0080,Other states - Public - Technical,URBANA,SAN LUIS POTOSI,0,1,23,,80,484
+Mexico,00484-0082,Other states - Private,URBANA,SAN LUIS POTOSI,1,1,30,,82,484
+Mexico,00484-0083,Other states - Public - General,URBANA,SINALOA,0,1,34,,83,484
+Mexico,00484-0084,Other states - Public - Technical,URBANA,SINALOA,0,1,32,,84,484
+Mexico,00484-0085,Other states - Public - Technical,URBANA,SINALOA,0,1,31,,85,484
+Mexico,00484-0086,Other states - Public - General,URBANA,SONORA,0,1,41,,86,484
+Mexico,00484-0087,Other states - Public - Technical,URBANA,SONORA,0,1,30,,87,484
+Mexico,00484-0089,Other states - Private,URBANA,TABASCO,1,1,21,,89,484
+Mexico,00484-0090,Other states - Public - General,URBANA,TAMAULIPAS,0,1,25,,90,484
+Mexico,00484-0092,Other states - Public - Technical,URBANA,TAMAULIPAS,0,1,22,,92,484
+Mexico,00484-0093,Other states - Public - Technical,URBANA,TLAXCALA,0,1,33,,93,484
+Mexico,00484-0094,Other states - Public - Technical,URBANA,TLAXCALA,0,1,32,,94,484
+Mexico,00484-0095,Other states - Public - General,URBANA,VERACRUZ DE IGNACIO DE LA LLAVE,0,1,32,,95,484
+Mexico,00484-0096,Other states - Public - General,URBANA,VERACRUZ DE IGNACIO DE LA LLAVE,0,1,21,,96,484
+Mexico,00484-0097,Other states - Public - Technical,URBANA,VERACRUZ DE IGNACIO DE LA LLAVE,0,1,26,,97,484
+Mexico,00484-0098,Other states - Public - Technical,URBANA,VERACRUZ DE IGNACIO DE LA LLAVE,0,1,26,,98,484
+Mexico,00484-0099,Other states - Public - General,URBANA,YUCATAN,0,1,40,,99,484
+Mexico,00484-0100,Other states - Public - Technical,URBANA,YUCATAN,0,1,28,,100,484
+Mexico,00484-0101,Other states - Private,URBANA,YUCATAN,1,1,40,,101,484
+Mexico,00484-0102,Other states - Public - General,URBANA,ZACATECAS,0,1,25,,102,484
+Mexico,00484-0103,Other states - Public - General,URBANA,ZACATECAS,0,1,24,,103,484
+Mexico,00484-0203,Other states - Private,URBANA,BAJA CALIFORNIA,1,1,10,,203,484
+Mexico,00484-0208,Other states - Public - General,URBANA,DISTRITO FEDERAL,0,1,50,,208,484
+Mexico,00484-0215,Other states - Public - General,URBANA,GUANAJUATO,0,1,45,,215,484
+Mexico,00484-0220,Other states - Public - General,URBANA,HIDALGO,0,1,25,,220,484
+Mexico,00484-0221,Other states - Public - General,URBANA,JALISCO,0,1,29,,221,484
+Mexico,00484-0230,Other states - Public - General,URBANA,MEXICO,0,1,16,,230,484
+Mexico,00484-0243,Other states - Public - General,URBANA,SAN LUIS POTOSI,0,1,15,,243,484
+Mexico,00484-0305,Other states - Public - General,URBANA,PUEBLA,0,1,26,,305,484
+Mexico,00484-0306,Other states - Public - Technical,URBANA,PUEBLA,0,1,33,,306,484
+Mexico,00484-0307,Other states - Private,URBANA,PUEBLA,1,1,24,,307,484
+Mexico,00484-0311,Other states - Private,URBANA,QUERETARO,1,1,11,,311,484
+Mexico,00484-0312,Other states - Public - General,URBANA,TAMAULIPAS,0,1,46,,312,484
+Madrid,00724-0001,Concertado,urban,"Madrid-Oeste - Escorial, El",0,1,37,,1,724
+Madrid,00724-0002,PÃºblico,urban,Madrid-Capital,0,1,58,,2,724
+Madrid,00724-0005,PÃºblico,urban,Madrid-Capital,0,1,29,,5,724
+Madrid,00724-0006,PÃºblico,urban,Madrid-Capital,0,1,32,,6,724
+Madrid,00724-0008,Concertado,urban,Madrid-Oeste - Guadarrama,0,1,45,,8,724
+Madrid,00724-0009,PÃºblico,urban,Madrid-Capital,0,1,16,,9,724
+Madrid,00724-0011,PÃºblico,urban,Madrid-Oeste - Boadilla del Monte,0,1,69,,11,724
+Madrid,00724-0012,Concertado,urban,Madrid-Capital,0,1,22,,12,724
+Madrid,00724-0013,PÃºblico,urban,Madrid-Oeste - Hoyo de Manzanares,0,1,26,,13,724
+Madrid,00724-0014,Concertado,urban,Madrid-Capital,0,1,,,14,724
+Madrid,00724-0016,Concertado,urban,Madrid-Oeste - Torrelodones,0,1,28,,16,724
+Madrid,00724-0017,Concertado,urban,Madrid-Capital,0,1,26,,17,724
+Madrid,00724-0020,PÃºblico,urban,Madrid-Sur - Getafe,0,1,58,,20,724
+Madrid,00724-0021,Concertado,urban,Madrid-Capital,0,1,26,,21,724
+Madrid,00724-0022,PÃºblico,urban,Madrid-Oeste - Cercedilla,0,1,40,,22,724
+Madrid,00724-0023,PÃºblico,urban,Madrid-Este - Rivas-Vaciamadrid,0,1,,,23,724
+Madrid,00724-0024,Concertado,urban,Madrid-Capital,0,1,,,24,724
+Madrid,00724-0025,Concertado,urban,Madrid-Capital,0,1,50,,25,724
+Madrid,00724-0026,Concertado,urban,Madrid-Capital,0,1,,,26,724
+Madrid,00724-0027,Concertado,urban,Madrid-Oeste - San Lorenzo de El Escorial,0,1,32,,27,724
+Madrid,00724-0029,Concertado,urban,Madrid-Capital,0,1,29,,29,724
+Madrid,00724-0030,Privado,urban,Madrid-Oeste - Galapagar,1,1,24,,30,724
+Madrid,00724-0031,PÃºblico,urban,Madrid-Capital,0,1,77,,31,724
+Madrid,00724-0032,PÃºblico,urban,Madrid-Norte - Guadalix de la Sierra,0,1,,,32,724
+Madrid,00724-0033,Concertado,urban,Madrid-Sur - TorrejÃ³n de la Calzada,0,1,22,,33,724
+Madrid,00724-0035,Privado,urban,Madrid-Capital,1,1,29,,35,724
+Madrid,00724-0036,Concertado,urban,Madrid-Sur - AlcorcÃ³n,0,1,,,36,724
+Madrid,00724-0037,PÃºblico,urban,Madrid-Capital,0,1,33,,37,724
+Madrid,00724-0038,PÃºblico,urban,Madrid-Capital,0,1,46,,38,724
+Madrid,00724-0041,Concertado,urban,Madrid-Capital,0,1,35,,41,724
+Madrid,00724-0042,Concertado,urban,Madrid-Capital,0,1,30,,42,724
+Madrid,00724-0044,Concertado,urban,Madrid-Capital,0,1,12,,44,724
+Madrid,00724-0046,PÃºblico,urban,Madrid-Sur - Getafe,0,1,54,,46,724
+Madrid,00724-0047,Concertado,urban,"Madrid-Oeste - Rozas de Madrid, Las",0,1,,,47,724
+Madrid,00724-0048,Concertado,urban,Madrid-Capital,0,1,32,,48,724
+Madrid,00724-0049,PÃºblico,urban,Madrid-Oeste - Majadahonda,0,1,56,,49,724
+Madrid,00724-0050,PÃºblico,urban,Madrid-Oeste - Collado Villalba,0,1,46,,50,724
+Madrid,00724-0051,Concertado,urban,Madrid-Capital,0,1,51,,51,724
+Madrid,00724-0052,PÃºblico,urban,Madrid-Norte - Alcobendas,0,1,47,,52,724
+Madrid,00724-0053,PÃºblico,urban,Madrid-Norte - San SebastiÃ¡n de los Reyes,0,1,41,,53,724
+Madrid,00724-0054,PÃºblico,urban,Madrid-Capital,0,1,33,,54,724
+Madrid,00724-0055,Concertado,urban,Madrid-Capital,0,1,35,,55,724
+Madrid,00724-0056,PÃºblico,urban,Madrid-Sur - AlcorcÃ³n,0,1,32,,56,724
+Madrid,00724-0057,PÃºblico,urban,Madrid-Sur - LeganÃ©s,0,1,28,,57,724
+Madrid,00724-0058,Concertado,urban,Madrid-Capital,0,1,23,,58,724
+Madrid,00724-0059,Concertado,urban,Madrid-Capital,0,1,42,,59,724
+Madrid,00724-0060,Privado,urban,Madrid-Norte - Alcobendas,1,1,11,,60,724
+Madrid,00724-0061,PÃºblico,urban,Madrid-Capital,0,1,59,,61,724
+Madrid,00724-0062,Concertado,urban,Madrid-Capital,0,1,10,,62,724
+Madrid,00724-0064,Privado,urban,Madrid-Oeste - Moralzarzal,1,1,,,64,724
+Madrid,00724-0065,Concertado,urban,Madrid-Capital,0,1,18,,65,724
+Madrid,00724-0066,PÃºblico,urban,Madrid-Capital,0,1,91,,66,724
+Madrid,00724-0068,Concertado,urban,Madrid-Capital,0,1,12,,68,724
+Madrid,00724-0069,Concertado,urban,Madrid-Este - AlcalÃ¡ de Henares,0,1,42,,69,724
+Madrid,00724-0070,Concertado,urban,Madrid-Capital,0,1,13,,70,724
+England,00826-0001,Converter,Rural town and fringe,County Durham,0,0,,1385,1,826
+England,00826-0002,Converter,Urban major conurbation,London,0,1,,1513,2,826
+England,00826-0003,Community School,,,0,,,,3,826
+England,00826-0004,Converter,Urban city and town,West Midlands,0,1,,1218,4,826
+England,00826-0005,Academy Sponsor,Urban city and town,West Midlands,0,1,,1355,5,826
+England,00826-0006,Converter,Urban city and town,West Sussex,0,1,,1469,6,826
+England,00826-0007,Converter,Urban major conurbation,Cheshire,0,1,,1351,7,826
+England,00826-0008,Converter,Urban city and town,Gloucestershire,0,1,,1382,8,826
+England,00826-0009,Converter,Urban city and town,Hampshire,0,1,,1252,9,826
+England,00826-0012,Converter,Rural town and fringe,Lincolnshire,0,0,,1144,12,826
+England,00826-0015,Academy Sponsor,Urban city and town,County Durham,0,1,,1240,15,826
+England,00826-0019,Community School,Urban city and town,Somerset,0,1,,1327,19,826
+England,00826-0020,Converter,Rural town and fringe,Cheshire,0,0,,1299,20,826
+England,00826-0021,Converter,Rural town and fringe,Kent,0,0,,2025,21,826
+England,00826-0022,Converter,Rural town and fringe,Staffordshire,0,0,,1583,22,826
+England,00826-0025,Converter,Urban city and town,Berkshire,0,1,,1138,25,826
+England,00826-0028,Converter,Urban major conurbation,Cheshire,0,1,,1046,28,826
+England,00826-0029,Converter,Urban major conurbation,Greater Manchester,0,1,,1283,29,826
+England,00826-0030,Converter,Urban city and town,Shropshire,0,1,,576,30,826
+England,00826-0031,Community School,Urban major conurbation,London,0,1,,1170,31,826
+England,00826-0032,Converter,Urban city and town,Cornwall,0,1,,691,32,826
+England,00826-0033,Foundation,,,0,,,,33,826
+England,00826-0034,Converter,Urban city and town,Lancashire,0,1,,1733,34,826
+England,00826-0037,Converter,Urban major conurbation,Surrey,0,1,,1590,37,826
+England,00826-0038,Converter,Urban major conurbation,West Midlands,0,1,,1448,38,826
+England,00826-0039,Converter,Urban city and town,North Yorkshire,0,1,,891,39,826
+England,00826-0043,Converter,Urban major conurbation,Tyne and Wear,0,1,,1308,43,826
+England,00826-0045,Converter,Rural town and fringe,Wiltshire,0,0,,1662,45,826
+England,00826-0046,Converter,Urban city and town,Staffordshire,0,1,,1099,46,826
+England,00826-0048,Community School,Urban major conurbation,West Midlands,0,1,,1806,48,826
+England,00826-0052,Converter,Urban city and town,Staffordshire,0,1,,,52,826
+England,00826-0053,Converter,Rural town and fringe,Dorset,0,0,,,53,826
+England,00826-0054,Converter,Urban major conurbation,County Durham,0,1,,,54,826
+England,00826-0055,Academy Sponsor,Urban city and town,Lincolnshire,0,1,,1339,55,826
+England,00826-0056,Converter,Urban city and town,Dorset,0,1,,,56,826
+England,00826-0057,Converter,Urban city and town,Cheshire,0,1,,1591,57,826
+England,00826-0058,Converter,Urban major conurbation,Cheshire,0,1,,837,58,826
+England,00826-0059,Academy Sponsor,Rural town and fringe,Cumbria,0,0,,1237,59,826
+England,00826-0060,Converter,Rural town and fringe,Lincolnshire,0,0,,1450,60,826
+England,00826-0061,Community School,Urban major conurbation,Cheshire,0,1,,1995,61,826
+England,00826-0062,Academy Sponsor,Urban city and town,Essex,0,1,,1533,62,826
+England,00826-0063,Converter,Urban city and town,Buckinghamshire,0,1,,1304,63,826
+England,00826-0064,Converter,Urban city and town,County Durham,0,1,,1492,64,826
+England,00826-0065,Converter,Rural hamlet and isolated dwellings,Gloucestershire,0,0,,855,65,826
+England,00826-0067,Converter,Rural town and fringe,Devon,0,0,,1184,67,826
+England,00826-0068,Converter,Urban minor conurbation,South Yorkshire,0,1,,2087,68,826
+England,00826-0070,Converter,Rural town and fringe,Bedfordshire,0,0,,1983,70,826
+England,00826-0071,Converter,Urban major conurbation,Tyne and Wear,0,1,,1445,71,826
+England,00826-0072,Converter,Urban major conurbation,London,0,1,,1514,72,826
+England,00826-0073,Converter,Urban city and town,Kent,0,1,,1241,73,826
+England,00826-0074,Converter,Rural town and fringe,Lancashire,0,0,,936,74,826
+England,00826-0075,Converter,Urban city and town,Surrey,0,1,,1265,75,826
+England,00826-0078,Community School,Rural hamlet and isolated dwellings,East Sussex,0,0,,1439,78,826
+England,00826-0079,Converter,Rural town and fringe,Northamptonshire,0,0,,1388,79,826
+England,00826-0106,Converter,Urban city and town,Leicestershire,0,1,,1729,106,826
+England,00826-0115,Foundation (Academy Sponsor),Rural town and fringe,Lincolnshire,0,0,,624,115,826
+England,00826-0129,Converter,Urban city and town,North Yorkshire,0,1,,1042,129,826
+England,00826-0130,Converter,Urban city and town,Essex,0,1,,2102,130,826
+England,00826-0140,Community School,Urban major conurbation,Merseyside,0,1,,1511,140,826
+England,00826-0143,Converter,Urban city and town,Lincolnshire,0,1,,1449,143,826
+England,00826-0166,Converter,Urban major conurbation,Cheshire,0,1,,1302,166,826
+England,00826-0167,Academy Sponsor,Urban city and town,Lincolnshire,0,1,,1806,167,826
+England,00826-0168,Voluntary Aided,Urban major conurbation,Cheshire,0,1,,1394,168,826
+England,00826-0169,Converter,Urban major conurbation,Lancashire,0,1,,1683,169,826
+England,00826-0183,Converter,Urban city and town,Cheshire,0,1,,1926,183,826
+England,00826-0184,Converter,Urban city and town,Worcestershire,0,1,,1111,184,826
+England,00826-0191,Converter,Rural town and fringe,Northamptonshire,0,0,,890,191,826
+England,00826-0193,Converter,Urban city and town,Staffordshire,0,1,,1167,193,826
+England,00826-0196,Voluntary Aided,Urban major conurbation,Greater Manchester,0,1,,986,196,826
+England,00826-0198,Converter,Rural town and fringe,Devon,0,0,,1376,198,826
+England,00826-0199,Converter,Urban city and town,Cheshire,0,1,,1567,199,826
+England,00826-0201,Voluntary Aided,Urban major conurbation,Merseyside,0,1,,906,201,826
+England,00826-0216,Converter,Urban city and town,Cornwall,0,1,,1421,216,826
+England,00826-0217,Converter,Urban city and town,Bristol,0,1,,1287,217,826
+England,00826-0276,Academy Sponsor,Urban city and town,Lancashire,0,1,,1170,276,826
+England,00826-0278,Converter,Urban major conurbation,London,0,1,,1235,278,826
+England,00826-0282,Converter,Urban city and town,Somerset,0,1,,1241,282,826
+England,00826-0307,Converter,Urban city and town,West Midlands,0,1,,886,307,826
