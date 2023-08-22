@@ -12,7 +12,7 @@
 		This teacher-by-lesson-level file includes subtopic coverage and lesson length data from the teacher logs. 
 5. Video component rating file (https://www.oecd.org/education/school/GTI-VidComp-Codebook.pdf): 
 		This teacher-by-video-by-rater-level file includes rating data for video components, and component segment-level derived variables used in our analysis.
-6. Video indicator rating file (https://www.oecd.org/education/school/GTI-VidComp-Codebook.pdf): 
+6. Video indicator rating file (https://www.oecd.org/education/school/GTI-VidInd-Codebook.pdf): 
 		This teacher-by-video-by-rater-level file includes rating data for video indicators, and indicator segment-level derived variables used in our analysis.
 7. Artefact rating file (https://www.oecd.org/education/school/GTI-Artefact-Codebook.pdf): 
 		This teacher-by-artefact set-by-rater-level file includes rating data for classroom artefacts.
