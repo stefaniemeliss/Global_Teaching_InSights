@@ -1,6 +1,7 @@
 # Global Teaching InSights
 
-Files in the Dataset (https://www.oecd.org/edu/school/GTI%20Data%20csv.zip)
+## Files in the Dataset (https://www.oecd.org/edu/school/GTI%20Data%20csv.zip)
+
 1. Student-level file (https://www.oecd.org/education/school/GTI-Student-Codebook.pdf): 
 		This student-level file includes all data from the student pre-questionnaire, student post-questionnaire, student achievement pretest, and student  achievement posttest, as well as the student-level derived variables used in our analysis.
 2. Teacher-level file (https://www.oecd.org/education/school/GTI-Teacher_Codebook.pdf): 
