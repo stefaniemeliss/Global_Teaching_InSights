@@ -1,6 +1,6 @@
 # Global Teaching InSights
 
-<iframe width="560" height="315" src='https://dbdiagram.io/e/65b2719bac844320aeb89c6b/65b278beac844320aeb93b21'> </iframe>
+(Data Diagram)[https://dbdiagram.io/d/GTI-65b2719bac844320aeb89c6b]
 
 ## Files in the Dataset (https://www.oecd.org/edu/school/GTI%20Data%20csv.zip)
 
