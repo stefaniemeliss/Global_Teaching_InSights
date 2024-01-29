@@ -1,5 +1,7 @@
 # Global Teaching InSights
 
+(Data Diagram)[https://dbdiagram.io/d/GTI-65b2719bac844320aeb89c6b]
+
 ## Files in the Dataset (https://www.oecd.org/edu/school/GTI%20Data%20csv.zip)
 
 1. Student-level file (https://www.oecd.org/education/school/GTI-Student-Codebook.pdf): 
