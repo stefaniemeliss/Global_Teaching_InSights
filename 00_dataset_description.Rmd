@@ -1,0 +1,204 @@
+---
+title: "GTI Data Overview"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+rm(list=ls())
+```
+
+https://dbdiagram.io/d/GTI-65b2719bac844320aeb89c6b
+
+Contents  
+
+[Identification variables](#idvars)  
+[Administrative variables](#adminvars)  
+[Student-level variables](#studvars)  
+[Teacher-level variables](#teachvars)  
+[School-level variables](#schoolvars)  
+
+
+### Identification variables {#idvars}
+
+Throughout our data files, we use a consistent identification (ID) assignment scheme. Each country/economy, school, teacher, and student is assigned a unique ID, according to the following naming convention:
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/idvars.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+### Administrative variables {#adminvars}
+
+Observations in the dataset contain some administrative variables where applicable. For example, these indicate the date an instrument or video was taken, time taken to complete an instrument, absence, and inclusion in the original files.
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/adminvars.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+### Student-level variables {#studvars}
+
+The student-level file contains data from the student pre-questionnaire, the student post-questionnaire, the pretest, and the posttest. One observation in the dataset (which is one row in the file) includes all of the data collected from these four instruments for one student.  
+
+The student pre-questionnaire variables (SQA[*]) include student background characteristics, experience in mathematics, confidence, goals, behaviours, interests, views of teachers’ practices, and content exposure.  
+
+The student post-questionnaire (SQB[*]) variables include students’ experiences specifically relating to the unit on quadratic equations. This includes views of teachers’ practices during the unit, confidence in the unit content, interest in the unit content, and content exposure.  
+
+The student pretest variables include raw responses to each question5 (in the form STA01 for question 1, for example), and corresponding derived scores for each question (in the form STA_SCORE01 for question 1, for example). The full set of raw responses for each country is presented first, followed by the item response theory (IRT) scores.  
+
+The student posttest variables include raw responses to each question (in the form STB01 for question 1, for example) and corresponding derived scores for each question (in the form STB_SCORE01 for question 1, for example). The full set of raw responses for each country is presented first, followed by the item response theory (IRT) scores.  
+
+Derived variables for the student-level file are included below, with variables used in the regression analyses marked with an asterisk. Scales calculated by averaging multiple responses are recorded as “missing” if fewer than half of the constituent responses are missing.  
+
+```{r, echo = F, results='asis'}
+# read in data dict
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+
+### Teacher-level variables {#teachvars}
+
+The teacher-level file contains data from the teacher pre-questionnaire, teacher post-questionnaire, and teacher logs, as well as derived variables from the video indicator, video component, and artefact datasets that are used in the analysis. Each observation in the dataset (which is one row in the file) includes all data collected from these instruments for one teacher.  
+
+The teacher pre-questionnaire variables (TQA[*]) include teaching practices, teaching values, perceptions of classroom atmosphere, perceptions of limitations, personal relationship with teaching, job satisfaction, and time commitment to teaching.  
+
+The teacher post-questionnaire variables (TQB[*]) include education, qualification, experience, teaching practices specifically relating to the lesson on quadratic equations, perceptions of classroom atmosphere during the quadratic equations unit, emotional state during the quadratic equations unit, reactivity to filming, and content knowledge.  
+
+Derived variables from the teacher questionnaires in the teacher-level file include the following:
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/teacher_file_variables_quest.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Derived variables for subtopic coverage from the **teacher log** were calculated by taking the weighted sum of subtopic coverage ratings, where a lesson was counted with weight 1 if the subtopic was covered fully, weight 0.5 if the subtopic was covered to a minor extent, and weight 0 if the subtopic was not covered at all. These variables are defined as follows:
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/teacher_file_variables_tl.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Derived variables also include indices for **opportunity to learn (OTL)**. There are three versions of each index: one based on teacher log responses, one based on student post-questionnaire responses, and one based on artefact ratings. These variables are named with a two- or three-part naming convention, indicating the type of index (OTL), the instrument the index is based on (TL, SQB, or AR), and the specific subtopic for the index (FUNCTIONS, REASONING, APPLIED, or ALGEBRA), if applicable. OTL_TL variables are defined as the weighted count of the lessons documented in the teacher log which cover the rerspective type of OTL. A lesson was counted with weight 1 if the subtopic was given major focus (score = 2), with weight 0.5 if the subtopic was given minor focus (score = 1), and with weight 0 otherwise. OTL_SQB variables are defined as class-level means of the variables related to each subtopic. Specifically, the OTL variables are defined as follows:
+
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/teacher_file_variables_otl.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Derived variables from video and artefact data include teachers’ scores for domains, components, and indicators (in the case of videos but not artefacts). *Domain scores are averaged across components for the same domain, ratings for the same segment, segments for the same lesson, and then lessons for the same teacher.* Typically, this means averaging across two ratings per segment, three to four segments per lesson, and two lessons per teacher. Our derived variables include abbreviated codes for the domains, components, and indicators, explained in the sections below.  
+
+Derived variables for video component scores take the form **VCOMP_[component]** where “component” is an alphanumeric code, composed of a two-letter code denoting the domain followed by a three-character code denoting the specific component:  
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.table("misc/teacher_file_variables_vcomp.txt", header = T)
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+
+Derived variables for video indicator scores take the form **VIND_[indicator]** where “indicator” is an alphanumeric code, composed of a two-letter code denoting the domain, a three-character code denoting the specific indicator, and a 3-6 letter code indicating the specific aggregation method used (PCT, MAX, MIN, LESAVG, LESAVGNO1). PCT denotes the average percentage of segments the code is present (rating is greater than 1), averaged over raters and lessons; MAX denotes the average maximum rating for a teacher’s lessons, averaged over raters and lessons; MIN denotes the average minimum rating for a teacher’s lessons, averaged over raters and lessons ; LESAVG denotes the average lesson rating for a teacher; LESAVGNO1 denotes the average lesson rating for a teacher excluding cases where the rating is equal to 1, which denotes the code is not present.
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.table("misc/teacher_file_variables_vind.txt", header = T)
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Derived variables for artefact component scores take the form **ACOMP_[component]** where “component” is an alphabetic code denoting the component.
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.table("misc/teacher_file_variables_acomp.txt", header = T)
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Derived variables for video domain scores take the form **VDOMAIN_[domain]** where “domain” is a two-letter code denoting the domain. We provide separate domain score variables for both the three domain structure and the six domain structure. The variables for the **three domain structure** are used in the primary student outcomes regressions, and are described in the table below:
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.table("misc/teacher_file_variables_vdomain3.txt", header = T)
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+The variables for the **six domain structure** are described below:
+
+```{r, echo = F, results='asis'}
+# tmp <- read.delim("VDOMAIN_AR.txt", header = F)
+# 
+# mat1 <- reticulate::array_reshape(tmp, dim = c(7,3))
+# 
+# df <- data.frame(mat1)
+# names(df) <- c("Variable", "Domain", "Calculation")
+# 
+# write.table(df, "teacher_file_variables_vdomain6.txt", row.names = F)
+
+
+# read in data dict
+tmp <- read.table("misc/teacher_file_variables_vdomain6.txt", header = T)
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Note: The variables VDOMAIN_CLASSMAN is identical to VDOMAIN_CM and VDOMAIN_SOCIALEMO is identical to VDOMAIN_SE. These variables are replicated in order to aid users in differentiating between the 3 domain and 6 domain structure.  
+
+
+### School-level variables {#schoolvars}
+
+The school-level file contains data collected from Statistics Canada, the school sampling resolution, and directly from the countries/economies themselves. Each observation in the file includes all data collected from these sources for one school. The variables we include are:
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/school_file_variables.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
