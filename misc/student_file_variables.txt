@@ -1,0 +1,118 @@
+SQA23;Variable derived from raw responses to SQA23 (recorded in SQA23_c). Calculated by cleaning SQA23_c responses. This derived variable gives the student’s mark in mathematics in the last school report.
+SA_INTGRADE;Derived variable for the grade the student is currently attending at school. Calculated by harmonizing the responses to SQA01 by country to the PISA equivalent grade level. See table 1.9.1 for harmonization rules.
+SA_AGE;Derived variable for the age of the student at the time of the student pre-questionnaire. Calculated by comparing the date of the pre-questionnaire with the birth date of the student, top and bottom coded if age is calculated to be less than 10 or over 22.
+SA_FEMALE*;Derived indicator for students identifying as female. SA_FEMALE=1 if SQA_03=1, and zero otherwise. The exception here is for K-S-T (Japan), where the response options were reversed, so this variable equals 1 if SQA03=2 in K-S-T (Japan) only, and zero otherwise.
+SA_GENDER;Single item indicator the gender of the student. Calculated as SA_GENDER=1 if the student is female and SA_GENDER=2 if the student is male.
+SA_IMMIG_1;Derived indicator for whether the student is a first generation immigrant. Calculated as SA_IMMIG_1=1 if SQA_04Y=0, and SA_IMMIG_1=0 otherwise.
+SA_IMMIG_2;Derived indicator for whether the student is a second generation immigrant. Calculated as SA_IMMIG_2=1 if SQA_04M=1 and SQA_04F=1, and SA_IMMIG_2=0 otherwise. If information for one parent is missing, we calculate SA_IMMIG_2 using just the information for the parent with non-missing data.
+SA_IMMIG_I*;Derived indicator for whether the student has any immigrant background. Calculated as SA_IMMIG_I=1 if SA_IMMIG_1=1 or SA_IMMIG_2=1.
+SA_IMMIG_N;Derived indicator for whether the student is native to the participating country or economy. Calculated as SA_IMMIG_N=1 if SA_IMMIG_1=0 and SA_IMMIG_2=0.
+SA_LANGHOME;Single item indicator for whether the language spoken at the student’s home is the same language as the assessment. Calculated as SA_LANGHOME=1 if this is the case, and SA_LANGHOME=0 otherwise.
+SA_SELFCON;Scale measuring student self-concept in mathematics in general, calculated as the mean of SQA06A to SQA06F.
+SA_LEARNGOAL;Scale measuring student learning goal orientation in mathematics, calculated as the mean of SQA07A to SQA07C.
+SA_INSTMOT;Scale measuring student instrumental motivation in mathematics, calculated as the mean of SQA08A to SQA08D.
+SA_PERSEVERE;Scale measuring student effort and perseverance in mathematics, calculated as the mean of SQA09A to SQA09D.
+SA_TESTANX;Scale measuring student text anxiety in mathematics, calculated as the mean of SQA10A to SQA10C.
+SA_HISTTEACHER;Single item indicator for previous exposure to the same teacher, based on SQA11.
+SA_SINT_PREV;Single item scale measuring students’ situational interest in mathematics, based on their previous year teacher, as recorded in SQA, based on SQA12D.
+SA_PINT_CURR;Scale measuring students’ personal interest in mathematics, based on their current year teacher, as recorded in SQA. Calculated as the mean of SQA14A to SQA14C using a 1-4 scale.
+SA_SINT_CURR;Single item scale measuring students’ situational interest in mathematics, based on their current year teacher, as recorded in SQA, based on SQA14D.
+SA_GENSELFEFF_CURR;Scale measuring students’ general self-efficacy in mathematics, based on their current year teacher, as recorded in SQA, standardized using the average of country-specific means and standard deviations. Calculated as the mean of SQA15A to SQA15E using a 1-4 scale.
+SA_OTL;Scale measuring student perception of overall opportunity to learn mathematical tasks in general, calculated as the total of SQA16A1 to SQA16J1.
+SA_EFFICACY;Scale measuring student self-efficacy with mathematical tasks in general, calculated as the mean of SQA16A2 to SQA16J2.
+SA_USECONT;Scale measuring the student’s use of content-related structure during mathematics instruction, calculated as the mean of SQA17A to SQA17C.
+SA_USECOGACT;Scale measuring the student’s actual cognitive engagement in mathematics class, calculated as the mean of SQA17D to SQA17F.
+SA_USESELFDET;Scale measuring the student’s experience of autonomy, competence, and social relatedness during mathematics instruction, calculated as the mean of SQA17G to SQA17I.
+SA_USETOT;Scale measuring the student’s use of time on task, calculated as the mean of SQA17J to SQA17L.
+SA_CLARITY;Scale measuring student perception of clarity of instruction during the unit on quadratic equations, calculated as the mean of SQA18A to SQA18D.
+SA_COGACT;Scale measuring student perception of the teacher's ability to elicit cognitive activation during the unit on quadratic equations, calculated as the mean of SQA18E to SQA18H.
+SA_DISCOURSE;Scale measuring student perception of the teacher's use of discourse in mathematics in general, calculated as the mean of SQA18I to SQA18K.
+SA_ADAPT;Scale measuring student perception of the teacher's adaptation of instruction to student needs in mathematics in general, calculated as the mean of SQA19A to SQA19E.
+SA_CLASSMAN;Scale measuring student perception of the teacher's level of classroom management in mathematics in general, calculated as the mean of SQA20A to SQA20J.
+SA_CM_DISRUPT;Scale measuring student perception of classroom disruptions and teacher's reaction to them. Calculated as the mean of SQA20A to SQA20C.
+SA_CM_TEACHMAN;Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQA20F, SQA20G, SQA20I, and SQA20J.
+SA_TESUP;Scale measuring student perception of teacher support in mathematics in general, calculated as the mean of SQA21A to SQA21C.
+SA_SUPCOM;Scale measuring student perception of teacher support for competence in mathematics in general, calculated as the mean of SQA21D to SQA21G.
+SA_SUPAUT;Scale measuring student perception of teacher support for autonomy in mathematics in general, calculated as the mean of SQA21H to SQA21K.
+SA_REL_STUDTEACH;Scale measuring student perception of student-teacher relationship, calculated as the mean of SQA22A to SQA22E.
+SA_REL_STUDSTUD;Scale measuring student perception of student-student relationships, calculated as the mean of SQA22F to SQA22I.
+SA_TESTDIFF;Single item scale measuring student perception of the difficulty of the pre-test, calculated based on SQA24.
+SA_TESTMOT;Single item scale measuring student motivation on the pre-test, calculated based on SQA24.
+SA_TESTASP;Single item scale measuring student aspiration on the pre-test, calculated based on SQA26.
+SA_PARED*;Derived variable for parents’ education.
+SA_HOMEPOS_IRT*;Derived variable for students’ home possessions using an IRT graded response model.
+SA_NUMQMISS;Derived variable that counts the number of questionnaire items with missing responses for the student.
+SB_SELFCON;Scale measuring student self-concept during the unit on quadratic equations, calculated as the mean of SQB01A to SQB01F.
+SB_SINT_CURR;Single item scale measuring students’ situational interest in mathematics, based on their current year teacher, as recorded in SQB, based on SQB03D.
+SB_LOSSINST;Single item scale measuring loss of individual learning time during the unit on quadratic equations, based on SQB04.
+SB_OUT_ASSIGNSELF;Single item scale measuring average hours per week spent on assigned, self-controlled out of school learning on quadratic equations, based on SQB05A.
+SB_OUT_ASSIGNSUP;Single item scale measuring average hours per week spent on assigned, supervised out of school learning on quadratic equations, based on SQB05B.
+SB_OUT_ADD;Single item scale measuring average hours per week spent on additional out of school study on quadratic equations, based on SQB05C.
+SB_OUT_OTHER;Single item scale measuring average hours per week spent on other subjects, based on SQB05D.
+SB_OUT_TOTAL;Scale measuring total number of average hours per week spent on out of school learning on quadratic equations, calculated as the total of SQB05A, SQB05B, and SQB05C.
+SB_USECONT;Scale measuring the student’s use of content-related structure during mathematics instruction during the unit on quadratic equations, calculated as the mean of SQB06A to SQB06C.
+SB_USECOGACT;Scale measuring the student’s actual cognitive engagement in mathematics class during the unit on quadratic equations, calculated as the mean of SQB06D to SQB06F.
+SB_USESELFDET;Scale measuring the student’s experience of autonomy, competence, and social relatedness during mathematics instruction during the unit on quadratic equations, calculated as the mean of SQB06G to SQB06I.
+SB_USETOT;Scale measuring the student’s use of time on task during the unit on quadratic equations, calculated as the mean of SQB06J to SQB06L.
+SB_OTL;Scale measuring student perception of overall opportunity to learn during the unit on quadratic equations, calculated as the mean of SQB07EA to SQB07EK.
+SB_OTL_FUNCTION;Scale measuring student perception of opportunity to use quadratic functions. Calculated as the sum of SQB07EA and SQB07EK.
+SB_OTL_ALGEBRA;Scale measuring student perception of opportunity to learn algebraic operations. Calculated as the sum of SQB07EB to SQB07EF.
+SB_OTL_REASON;Scale measuring student perception of opportunity to learn reasoning about different types of quadratic equations. Calculated as the sum of SQB07EG and SQB07EH.
+SB_OTL_APPLIED;Scale measuring student perception of opportunity to apply quadratic equations to real world contexts. Calculated as the sum of SQB07EI and SQB07EJ.
+SB_EFFICACY;Scale measuring student self-efficacy with mathematical tasks during the unit on quadratic equations, calculated as the mean of SQB07CA to SQB07CK.
+SB_CLARITY;Scale measuring student perception of clarity of instruction during the unit on quadratic equations, calculated as the mean of SQB08A to SQB08D.
+SB_COGACT;Scale measuring student perception of teacher's ability to elicit cognitive activation during the unit on quadratic equations, calculated as the mean of SQB08E to SQB08H.
+SB_CE_COGACT;Scale measuring student perception of teacher's ability to elicit cognitive activation in mathematics class, but a subscale of SB_COGACT excluding item SQB08F. Calculated as the mean of SQB08E, SQB08G, SQB08H.
+SB_DISCOURSE;Scale measuring student perception of teacher's use of discourse during the unit on quadratic equations, calculated as the mean of SQB08I to SQB08K.
+SB_MEANING;Scale measuring student perception of teacher's focus on meaning during the unit on quadratic equations, calculated as the mean of SQB09A to SQB09D.
+SB_EXPL_PROC;Scale measuring student perception of teacher’s focus on explaining procedures during the unit on quadratic equations, calculated as the mean of SQB09A to SQB09C.
+SB_ADAPT;Scale measuring student perception of teacher's adaptation of instruction to student needs during the unit on quadratic equations, calculated as the mean of SQB10A to SQB10E.
+SB_CLASSMAN;Scale measuring student perception of teacher's level of classroom management during the unit on quadratic equations, calculated as the mean of SQB11A to SQB11J.
+SB_CM_DISRUPT;Scale measuring student perception of classroom disruptions and teacher's reaction to them. Calculated as the mean of SQB11A to SQB11C.
+SB_CM_TEACHMAN;Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQB11F, SQB11G, SQB11I, and SQB11J.
+SB_TESUP;Scale measuring student perception of teacher support during the unit on quadratic equations, calculated as the mean of SQB12A to SQB12C.
+SB_SUPCOM;Scale measuring student perception of teacher support for competence during the unit on quadratic equations, calculated as the mean of SQB12D to SQB12G.
+SB_SUPAUT;Scale measuring student perception of the teacher’s support for autonomy during the unit on quadratic equations, calculated as the mean of SQB12H to SQB12K.
+SB_REL_STUDTEACH;Scale measuring student perception of student-teacher relationship, calculated as the mean of SQB13A to SQB13E.
+SB_REL_STUDSTUD;Scale measuring student perception of student-student relationships, calculated as the mean of SQB13F to SQB13I.
+SB_EXPECT;Scale measuring student perception of high expectations for students, calculated as the mean of SQB14A to SQB14D.
+SB_ASSESS_CHECK;Single item scale measuring whether the teacher assessed student learning by having individual students answer questions in front of the class during the unit on quadratic equations, based on SQB15A.
+SB_ASSESS_SELFEV;Single item scale measuring whether the teacher assessed student learning by student self-evaluation during the unit on quadratic equations, based on SQB15B.
+SB_ASSESS_OBS;Single item scale measuring whether the teacher assessed student learning by teacher observation during the unit on quadratic equations, based on SQB15C.
+SB_FEEDBACK;Scale measuring student perception of level of feedback received from teacher. Calculated as the mean of SQB16A to SQB16D.
+SB_TEACHENTHUS;Scale measuring student perception of teacher enthusiasm, calculated as the mean of SQB17A to SQB17H.
+SB_REACTIVITY_TEACH;Derived variable for student perception of the teacher’s reactivity to videographing, calculated as the mean of SQB18A to SQB18G.
+SB_REACTIVITY_STUD;Derived variable for the student’s reactivity to videographing, calculated as the mean of SQB18H to SQB18K.
+SB_TESTDIFF;Single item scale measuring student perception of the difficulty of the post-test, calculated based on SQB19.
+SB_TESTMOT;Single item scale measuring student motivation on the post-test, calculated based on SQB20.
+SB_TESTASP;Single item scale measuring student aspiration on the post-test, calculated based on SQB21.
+SB_NUMQMISS;Derived variable for the number of questions with missing responses.
+STA_SCOREXX;Derived indicator for whether the student answered pretest question XX correctly, where “XX” takes on the values 01 through 30. Calculated as STA_SCOREXX=1 if the response to STAXX is correct, and STA_SCOREXX=0 otherwise.
+STA_FEWITEMS;Derived indicator for whether the student answered five or fewer items on the pretest. Calculated as STA_FEWITEMS=1 if STA_NMISS ≥ 25, and STA_FEWITEMS=0 otherwise.
+STA_NMISS;Derived variable for number of missing responses to the pretest. Calculated as the number of missing items of STA01 to STA30.
+STA_IRTSCORE;Derived variable for pretest IRT score (weight likelihood estimate) from a multi-group IRT model.
+STA_SE_IRTSCORE;Derived variable for standard error (SE) for pretest IRT score.
+STA_TOTALSCORE;Derived variable for total pretest score. Calculated as the sum of all STA_SCOREXX values.
+STA_PROPCORRECTSCORE;Derived variable for proportion of pretest questions answered correctly. Calculated as STA_TOTALSCORE / 30.
+STA_NOTE;Note about whether any items were excluded from the pretest scores (IRT score, total score, proportion correct score).
+STB_SCOREXX;Derived indicator for whether the student answered posttest question XX correctly, where “XX” takes on the values 01 through 25. Calculated as STB_SCOREXX=1 if the response to STBXX is correct, and STB_SCOREXX=0 otherwise.
+STB_FEWITEMS;Derived indicator for whether the student answered five or fewer items on the posttest. Calculated as STB_FEWITEMS=1 if STB_NMISS ≥ 20, and STB_FEWITEMS=0 otherwise.
+STB_NMISS;Derived variable for number of missing responses to the posttest. Calculated as the number of missing items of STB01 to STB25.
+STB_IRTSCORE;Derived variable for posttest IRT score (weight likelihood estimate) from multi-group IRT model.
+STB_SE_IRTSCORE;Derived variable for standard error (SE) for posttest IRT score.
+STB_TOTALSCORE;Derived variable for total posttest score. Calculated as the sum of all STB_SCOREXX values, excluding item 20. Item 20 was excluded from the posttest scores due to poor performance across several countries/economies.
+STB_PROPCORRECTSCORE;Derived variable for proportion of retained posttest questions answered correctly (excludes item 20). Calculated as STB_TOTALSCORE / 24.
+STB_NOTE;Note about whether any items were excluded from the posttest scores (IRT score, total score, proportion correct score). One item (item 20) was excluded from the posttest scores due to poor performance across several countries/economies.
+CLASS_PRE_PINT*;Derived variable for the average of PRE_PINT for all students in the class, excluding the individual student.
+CLASS_PRE_GENSELFEFF*;Derived variable for the average of PRE_GENSELFEFF for all students in the class, excluding the individual student.
+CLASS_PRE_TEST*;Derived variable for the average of PRE_TEST for all students in the class, excluding the individual student.
+CLASS_SA_IMMIG_I*;Derived variable for the average of SA_IMMIG_I for all students in the class, excluding the individual student.
+CLASS_SA_FEMALE*;Derived variable for the average of SA_FEMALE for all students in the class, excluding the individual student.
+CLASS_SA_PARED*;Derived variable for the average of SA_PARED for all students in the class, excluding the individual student.
+CLASS_SA_HOMEPOS_IRT*;Derived variable for the average of SA_HOMEPOS_IRT for all students in the class, excluding the individual student.
+PRE_PINT*;Derived variable for students’ personal interest in mathematics, based on their previous year teacher, as recorded in SQA. Calculated as the mean of SQA12A to SQA12C using a 1-4 scale.
+PRE_GENSELFEFF*;Derived variable for students’ general self-efficacy in mathematics, based on their previous year teacher, as recorded in SQA. Calculated as the mean of SQA13A to SQA13E using a 1-4 scale.
+PRE_TEST*;Standardized form of STA_IRTSCORE, standardized using the average of country-specific means and standard deviations. This measure uses a 100-300 scale, with 200 representing the average pre-test score across all countries in the sample with a standard deviation of 25 points.
+POST_GENSELFEFF*;Derived variable for students’ general self-efficacy in mathematics, based on their current year teacher, as recorded in SQB. Calculated as the mean of SQB02A to SQB02E using a 1-4 scale.
+POST_PINT*;Derived variable for students’ personal interest in mathematics, based on their current year teacher, as recorded in SQB. Calculated as the mean of SQB03A to SQB03C using a 1-4 scale.
+POST_TEST*;Standardized form of STB_IRTSCORE, standardized using the average of country-specific means and standard deviations. This measure uses a 100-300 scale, with 200 representing the average post-test score across all countries in the sample with a standard deviation of 25 points.

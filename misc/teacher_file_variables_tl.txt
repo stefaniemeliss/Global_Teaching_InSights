@@ -1,0 +1,10 @@
+TL03_SUM;Subtopic coverage rating for handling expressions.
+TL04_SUM;Subtopic coverage rating for binomial formulas.
+TL05_SUM;Subtopic coverage rating for introducing some type of quadratic equations.
+TL06A_SUM;Subtopic coverage rating for solving quadratic equations by completing the square.
+TL06B_SUM;Subtopic coverage rating for solving quadratic equations by factorizing.
+TL06C_SUM;Subtopic coverage rating for solving quadratic equations using the quadratic formula.
+TL06D_SUM;Subtopic coverage rating for solving quadratic equations by graphical representation.
+TL07_SUM;Subtopic coverage rating for discussing different cases of quadratic equations.
+TL08_SUM;Subtopic coverage rating for quadratic functions.
+TL09_SUM;Subtopic coverage rating for applications.

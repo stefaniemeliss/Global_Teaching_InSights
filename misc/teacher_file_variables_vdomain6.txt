@@ -1,0 +1,8 @@
+"Variable" "Domain" "Calculation"
+"VDOMAIN_AR" "Assessment and Response to Student Understanding" "Average of VCOMP_AR1ES, VCOMP_AR2TF, VCOMP_AR3AI"
+"VDOMAIN_CE" "Cognitive Engagement" "Average of VCOMP_CE2MA, VCOMP_CE3US, VCOMP_CM1RT"
+"VDOMAIN_CM" "Classroom Management" "Average of VCOMP_CM1RT, VCOMP_CM2MN, and VCOMP_3DS (identical to VDOMAIN_CLASSMAN)"
+"VDOMAIN_DC" "Discourse" "Average of VCOMP_DC1ND, VCOMP_DC2QT, VCOMP_DC3EP"
+"VDOMAIN_QS" "Quality of Subject Matter" "Average of VCOMP_QS1EC, VCOMP_QS2PG (excludes VCOMP_QS3CT)"
+"VDOMAIN_SE" "Social-Emotional Support" "Average of VCOMP_SE1RP and VCOMP_SE2EW (excludes VCOM_SE3RT) (identical to VDOMAIN_SOCIALEMO)"
+"VDOMAIN_TOT" "Total domain score" "Average of VCOMP_AR1ES, VCOMP_AR2TF, VCOMP_AR3AI, VCOMP_CE2MA, VCOMP_CE3US, VCOMP_CM1RT, VCOMP_CM1RT, VCOMP_CM2MN, VCOMP_3DS, VCOMP_DC1ND, VCOMP_DC2QT, VCOMP_DC3EP, VCOMP_QS1EC, VCOMP_QS2PG, VCOMP_SE1RP and VCOMP_SE2EW"

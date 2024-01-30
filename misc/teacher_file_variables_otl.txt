@@ -1,0 +1,14 @@
+OTL_TL_FUNCTIONS;Weighted index of OTL for using quadratic functions, based on the teacher log. Calculated as the weighted count of TL06D and TL08.
+OTL_TL_ALGEBRA;Weighted index of OTL for algebraic operations, based on the teacher log. Calculated as the weighted count of TL03, TL04, TL06A, TL06B, and TL06C.
+OTL_TL_REASONING;Weighted index of OTL for reasoning about different types of quadratic equations, based on the teacher log. Calculated as the weighted count of TL07.
+OTL_TL_APPLIED;Weighted index of OTL for applying quadratic equations to real world contexts, based on the teacher log. Calculated as the weighted count of TL09.
+OTL_SQB;Class-level mean for OTL related to the focal unit, based on the student post-questionnaire. Calculated as class-level mean of SQB07EA_rec to SQB07EK_rec.
+OTL_SQB_FUNCTIONS;Class-level mean for OTL for using quadratic functions, based on the student post-questionnaire. Calculated as class-level mean of SQB07EA_rec, SQB07EK_rec.
+OTL_SQB_ALGEBRA;Class-level mean for OTL for algebraic operations, based on the student post-questionnaire. Calculated as class-level mean of SQB07EB_rec, SQB07EC_rec, SQB07ED_rec, SQB07EE_rec, SQB07EF_rec.
+OTL_SQB_REASONING;Class-level mean for OTL for reasoning about different types of quadratic equations, based on the student post-questionnaire. Calculated as class-level mean of SQB07EG_rec, SQB07EH_rec.
+OTL_SQB_APPLIED;Class-level mean for OTL for applying quadratic equations to real world contexts, based on the student post-questionnaire. Calculated as class-level mean of SQB07EI_rec, SQB07_EJ_rec.
+OTL_AR;Summative index of OTL related to the focal unit, based on classroom artefact ratings. Calculated as mean of FACTOR_EXP_RATE to APPLY_REAL_WORLD_RATE.
+OTL_AR_FUNCTIONS;Summative index of OTL for using quadratic functions, based on classroom artefact ratings. Calculated as mean of SQE_FIND_ROOT_RATE, EXPLORING_FUNCT_RATE.
+OTL_AR_ALGEBRA;Summative index of OTL for algebraic operations, based on classroom artefact ratings. Calculated as mean of FACTOR_EXP_RATE, SQE_COMP_SQUARE_RATE, SQE_FACTORIZING_RATE, SQE_QUADRATIC_RATE.
+OTL_AR_REASONING;Summative index of OTL for reasoning about different types of quadratic equations, based on classroom artefact ratings. Calculated as mean of DIFF_CASE_RATE, EXAMINING_REL_RATE.
+OTL_AR_APPLIED;Summative index of OTL for applying quadratic equations to real world contexts, based on classroom artefact ratings. Takes on the value of APPLY_REAL_WORLD_RATE.

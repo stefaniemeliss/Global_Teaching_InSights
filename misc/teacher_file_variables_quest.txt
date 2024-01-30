@@ -1,0 +1,109 @@
+TA_SELFEFF;Scale measuring the teacher’s perceived self-efficacy. Calculated as the mean of TQA11A to TQA11L if at least six of these values are nonmissing, and missing otherwise.
+TA_LOADTEACH;Single item scale measuring the teacher’s workload teaching mathematics to the target class, based on TQA01A.
+TA_LOADPREP;Single item scale measuring the teacher’s workload preparing to teach mathematics to the target class, based on TQA01B.
+TA_LOADOTHER;Single item scale measuring the teacher’s workload teaching the target class in other (non-mathematics) subjects, based on TQA01C.
+TA_LESSDUR;Single item scale measuring the duration of a mathematics lesson in general, based on TQA02.
+TA_OTL;Scale measuring opportunity-to-learn for mathematical tasks, focusing on prerequisites necessary for the understanding of quadratic equations, calculated as the total of TQA03A to TQA03E.
+TA_CLARITY;Scale measuring the teacher’s perception of clarity instruction when teaching the target class in mathematics, calculated as the mean of TQA04A to TQA04D.
+TA_COGACT;Scale measuring the teacher’s perception of cognitive activation of the target class in mathematics, calculated as the mean of TQA04E to TQA04H.
+TA_DISCOURSE;Scale measuring the teacher’s perception of discourse in the target class in mathematics, calculated as the mean of TQA04I to TQA04K.
+TA_MEANING;Scale measuring the teacher’s perception of focus on meaning in the target class in mathematics, calculated as the mean of TQA05A to TQA05D.
+TA_ADAPT;Scale measuring the teacher’s perception of adaption of instruction to student understanding in the target class in mathematics, calculated as the mean of TQA06A to TQA06E.
+TA_CLASSMAN;Scale measuring the teacher’s perception of classroom management in the target class in mathematics, calculated as the mean of TQA07A to TQA07J.
+TA_CM_DISRUPT;Scale measuring the teacher’s perception of classroom disruptions in the target class in mathematics, calculated as the mean of TQA07A to TQA07C.
+TA_CM_TEACHMAN;Scale measuring the teacher’s perception of the teacher’s management of classroom disruptions, calculated as the mean of TQA07F, TQA07G, TQA07I, and TQA07J.
+TA_TESUP;Scale measuring the teacher’s perception of teacher support in the target class in mathematics, calculated as the mean of TQA08A to TQ08C.
+TA_SUPCOM;Scale measuring the teacher’s perception of support for competence in the target class in mathematics, calculated as the mean of TQA08D to TQ08G.
+TA_SUPAUT;Scale measuring the teacher’s perception of support for autonomy in the target class in mathematics, calculated as the mean of TQA08H to TQ08K.
+TA_REL_STUDTEACH;Scale measuring the teacher’s perception of student-teacher relationships in the target class in mathematics, calculated as the mean of TQA09A to TQ09E.
+TA_TEACHER_ENTHUSIASM;Scale measuring teacher enthusiasm, calculated as the mean of TQA10A to TQA10H.
+TA_ENTHUSTEACH;Scale measuring the teacher's enthusiasm for teaching the target class in mathematics, calculated as the mean of TQA10A to TQA10D.
+TA_ENTHUSMATH;Scale measuring the teacher's enthusiasm for the subject of mathematics, calculated as the mean of TQA10E to TQA10H.
+TA_SELFEFF_CLASSMAN;Scale measuring the teacher’s perceived self-efficacy in classroom management in teaching mathematics in the target class, calculated as the mean of TQA11D, TQA11F, TQA11H, and TQA11I.
+TA_SELFEFF_INST;Scale measuring the teacher’s perceived self-efficacy in instruction in teaching mathematics in the target class, calculated as the mean of TQA11C, TQA11J, TQA11K, and TQA11L.
+TA_SELFEFF_ENG;Scale measuring the teacher’s perceived self-efficacy in student engagement in teaching mathematics in the target class, calculated as the mean of TQA11A, TQA11B, TQA11E, and TQA11G.
+TA_ENJOY;Scale measuring the teacher’s enjoyment when teaching mathematics in the target class, calculated as the mean of TQA12A, TQA12J, TQA12L, and TQA12I.
+TA_ANGER;Scale measuring the teacher’s anger when teaching mathematics in the target class, calculated as the mean of TQA12B, TQA12C, TQA12K, and TQA12G.
+TA_ANXIETY;Scale measuring the teacher’s anxiety when teaching mathematics in the target class, calculated as the mean of TQA12D, TQA12E, TQA12F, and TQA12H.
+TA_IMPMOT;Derived variable for the importance of the goal of motivation for the unit on quadratic equations, calculated as the total of TQA13A, TQA13B, TQA13C, and TQA13D.
+TA_IMPVAL;Derived variable for the importance of the goal of values for the unit on quadratic equations, calculated as the total of TQA13D, TQA13E, TQA13H, and TQA13G.
+TA_IMPAPP;Derived variable for the importance of the goal of application for the unit on quadratic equations, calculated as the total of TQA13C, TQA13G, TQA13H, and TQA13I.
+TA_IMPTR;Derived variable for the importance of the goal of thinking for the unit on quadratic equations, calculated as the total of TQA13B, TQA13F, TQA13H, and TQA13J.
+TA_IMPKS;Derived variable for the importance of the goal of knowledge for the unit on quadratic equations, calculated as the total of TQA13A, TQA13E, TQA13I, and TQA13J.
+TA_LIMITATIONS;Scale measuring the extent to which the teacher believes that student background factors hinder instruction, calculated as the mean of TQA14A to TQA14G.
+TA_RESPONSIBILITY;Scale measuring the teacher’s feeling of responsibility for teaching and for student motivation and achievement, calculated as the mean of TQA15A to TQA15I.
+TA_RESPMOT;Scale measuring the teacher’s feeling of responsibility for student motivation, calculated as the mean of TQA15I, TQA15E, and TQA15D.
+TA_RESPACHIEV;Scale measuring the teacher’s feeling of responsibility for student achievement, calculated as the mean of TQA15A, TQA15B, and TQA15C.
+TA_RESPTEACH;Scale measuring the teacher’s feeling of responsibility for teaching, calculated as the mean of TQA15F, TQA15G, and TQA15H.
+TA_GENSELFEFF;Scale measuring the teacher’s general feelings of self-eefficacy, calculated as the mean of TQA16A to TQA16F.
+TA_GENSELFEFF_CLASSMAN;Scale measuring the teacher’s self-efficacy in classroom management in general, calculated as the mean of TQA16D and TQA16E.
+TA_GENSELFEFF_INST;Scale measuring the teacher’s self-efficacy in instruction in general, calculated as the mean of TQA16C and TQA16F.
+TA_GENSELFEFF_ENG;Scale measuring the teacher’s self-efficacy in student engagement in general, calculated as the mean of TQA16A and TQA16B.
+TA_CONBELIEFS;Scale measuring the extent to which the teacher holds constructivist beliefs, calculated as the mean of TQA17A to TQA17D.
+TA_COLLAB;Scale measuring teacher collaboration, calculated as the mean of TQA18A to TQA18D.
+TA_AUTONOMY;Scale measuring classroom autonomy, calculated as the mean of TQA19A to TQA19F.
+TA_FREQUVID;Single item scale measuring the frequency of being videotaped, based on TQA20.
+TA_FREQOBS_YEAR;Single item scale measuring the frequency of being observed in a typical school year, based on TQA21A.
+TA_FREQVID_YEAR;Single item scale measuring the frequency of being videotaped in a typical school year, based on TQA21B.
+TA_JOB_SATISFACTION;Scale measuring the teacher’s overall job satisfaction, calculated as the mean of TQA22A to TQA22J.
+TA_SATSCHOOL;Scale measuring the teacher’s job satisfaction regarding the specific school, calculated as the mean of TQA22C, TQA22E, TQA22G, and TQA22I.
+TA_SATPROF;Scale measuring the teacher’s job satisfaction regarding the profession, calculated as the mean of TQA22A, TQA22B, TQA22D,TQA22F, TQA22H, and TQA22J.
+TA_EXPL_PROC;Scale measuring teacher perception of the teacher’s focus on explaining procedures during the unit on quadratic equations, calculated as the mean of TQA05A to TQA05C.
+TQB22_X_SCORE;Derived indicator for whether the response to post-questionnaire question 22_X is correct. The correct answers to parts 1-4 are: 3, 3, 2, 1, respectively. Thus, if TQB22_1==3, then TQB22_1_SCORE=1. If TQB22_2==3, then TQB22_2_SCORE=1. If TQB22_3==2, then TQB22_3_SCORE=1. If TQB22_4==1, then TQB22_4_SCORE=1. Otherwise, TQB22_X_SCORE = 0 or 9999 (missing).
+TB_FEMALE;Derived indicator for teachers identifying as female. Calculated as 1 if TQB01=1, and 0 otherwise.
+TB_QUALIFICATION;Single item scale measuring the teacher’s highest level of formal qualification. Combines separate binary indicators for teacher’s qualification into a categorical variable. Takes on the value of TQB03, after recoding.
+TB_QUAL_TECHSCHL;Single item indicator for whether the teacher’s highest level of education attained is a technical degree. Calculated as 1 if TQB03=2, and 0 otherwise, after recoding.
+TB_QUAL_UNDERGRAD;Single item indicator for whether the teacher’s highest level of education attained is an undergraduate degree. Calculated as 1 if TQB03=3, and 0 otherwise, after recoding.
+TB_QUAL_MASTERS;Single item indicator for whether the teacher’s highest level of education attained is a masters’ degree. Calculated as 1 if TQB03=4, and 0 otherwise, after recoding.
+TB_QUAL_DOCTORATE;Single item indicator for whether the teacher’s highest level of education attained is a doctorate degree. Calculated as 1 if TQB03=5, and 0 otherwise, after recoding.
+TB_TEACHQUAL;Single item scale measuring how the teacher received his or her teaching qualifications. Takes on the value of TQB04, after recoding.
+TB_OTT1;Derived indicator for whether the teacher was trained through standard, in-service, or work-based teacher training (originally trained teacher: strict definition). Calculated as 1 if TQB_04=2 in all countries/economies except for Germany*, 1 if TQB04=1 in Germany*, and 0 otherwise.7
+TB_OTT2;Derived indicator for whether the teacher was trained through standard teacher training (originally trained teacher: wide definition). Calculated as 1 if TQB_04 = (2 or 3 or 4) in all countries/economies except for Germany*, 1 if TQB04 = 1 in Germany*, and 0 otherwise.8
+TB_TEACHQUAL_1;Derived indicator for whether the teacher received his or her teaching qualifications through a standard teacher education or training program at an educational institute which is eligible to train or educate teachers. Calculated as 1 if TQB04=1, and 0 otherwise, after recoding.
+TB_TEACHQUAL_2;Derived indicator for whether the teacher received his or her teaching qualifications by attending an in-service teacher education or training program. Calculated as 1 if TQB04=2, and 0 otherwise, after recoding.
+TB_TEACHQUAL_3;Derived indicator for whether the teacher received his or her teaching qualifications by attending a work-based teacher education or training program. Calculated as 1 if TQB_04=3, and 0 otherwise, after recoding.
+TB_TEACHQUAL_4; Derived indicator for whether the teacher received his or her teaching qualifications through training in another pedagogical profession. Calculated as 1 if TQB04=4, and 0 otherwise, after recoding. 
+TB_TEACHQUAL_5;Derived indicator for whether the teacher received his or her teaching qualifications through means not covered in TB_TEACHQUAL_1 to TB_TEACHQUAL_4. Calculated as 1 if TQB04=5, and 0 otherwise, after recoding.
+TB_EDUMATH;Single item indicator for whether the teacher’s mathematics education or training included mathematics courses equivalent to those required for a degree in mathematics. Takes on the value of TQB05A.
+TB_EDUTEACH;Single item indicator for whether the teacher’s mathematics education or training included courses on how to teach mathematics. Takes on the value of TQB05B, after recoding.
+TB_EDUPRACT;Single item indicator for whether the teacher’s mathematics education or training included practice teaching mathematics. Takes on the value of TQB05C, after recoding.
+TB_WORKEXP;Single item scale measuring work experience of the teacher. Takes on the value of TQB06.
+TB_PLANTIME_V1;Single item scale measuring the number of minutes teacher spent planning for the first videotaped lesson, based on TQB07A.
+TB_PLANTIME_V2;Single item scale measuring the number of minutes teacher spent planning for the second videotaped lesson, based on TQB07B.
+TB_CLARITY;Scale measuring the teacher’s perception of clarity instruction when teaching the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB08A to TQB08D.
+TB_COGACT;Scale measuring the teacher’s perception of cognitive activation of the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB08E to TQB08H.
+TB_DISCOURSE;Scale measuring the teacher’s perception of discourse in the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB08I to TQB08K.
+TB_EXPL_PROC;Scale measuring teacher perception of the teacher’s focus on explaining procedures during the unit on quadratic equations, calculated as the mean of TQB09A to TQB09C.
+TB_MEANING;Scale measuring the teacher’s perception of focus on meaning in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB09A to TQB09D.
+TB_ADAPT;Scale measuring the teacher’s perception of adaption of instruction to student understanding in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB10A to TQB10E.
+TB_CLASSMAN;Scale measuring the teacher’s perception of classroom management in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB11A to TQB11J.
+TB_CM_TEACHMAN;Scale measuring the teacher’s perception of the teacher’s management of classroom disruptions, calculated as the mean of TQB11F, TQB11G, TQB11I, and TQB11J.
+TB_TESUP;Scale measuring the teacher’s perception of teacher support in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB12A to TQB12C.
+TB_SUPCOM;Scale measuring the teacher’s perception of support for competence in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB12D to TQB12G.
+TB_SUPAUT;Scale measuring the teacher’s perception of support for autonomy in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB12H to TQB12K.
+TB_REL_STUDTEACH;Scale measuring the teacher’s perception of student-teacher relationships in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB13A to TQB13E.
+TB_CM_DISRUPT;Scale measuring the teacher’s perception of classroom disruptions, calculated as the mean of TQB11A to TQB11C.
+TB_ASSESS_OWN;Single item scale measuring whether the teacher administered their own assessment of student learning during the unit on quadratic equations, based on TQB14A.
+TB_ASSESS_CHECK;Single item scale measuring whether the teacher assessed student learning by having individual students answer questions in front of the class during the unit on quadratic equations, based on TQB14B.
+TB_ASSESS_SELFEV;Single item scale measuring whether the teacher assessed student learning by student self-evaluation during the unit on quadratic equations, based on TQB14C.
+TB_ASSESS_OBS;Single item scale measuring whether the teacher assessed student learning by teacher observation during the unit on quadratic equations, based on TQB14D.
+TB_HOMEWORK;Single item scale measuring the frequency of homework assignments, based on TQB15.
+TB_ENTHUSTEACH;Scale measuring the teacher's enthusiasm for teaching the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB16A to TQB16D.
+TB_SELFEFF;Scale measuring the teacher’s overall perceived self-efficacy in teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB17A to TQB17L.
+TB_SELFEFF_ENG;Scale measuring the teacher’s perceived self-efficacy in student engagement in teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB17A, TQB17B, TQB17E, and TQB17G.
+TB_SELFEFF_INST;Scale measuring the teacher’s perceived self-efficacy in instruction in teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB17C, TQB17J, TQB17K, and TQB17L.
+TB_SELFEFF_CLASSMAN;Scale measuring the teacher’s perceived self-efficacy in classroom management in teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB17D, TQB17F, TQB17H, and TQB17I.
+TB_ENJOY;Scale measuring the teacher’s enjoyment when teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB18A, TQB18J, TQB18L, and TQB18I.
+TB_ANGER;Scale measuring the teacher’s anger when teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB18B, TQB18C, TQB18K, and TQB18G.
+TB_ANXIETY;Scale measuring the teacher’s anxiety when teaching mathematics in the target class during the unit on quadratic equations, calculated as the mean of TQB18D, TQB18E, TQB18F, and TQB18H.
+TB_REACTIVITY;Derived variable for the teacher’s reactivity to videographing, calculated as the mean of TQB19A to TQB19M.
+TB_TYPVID1;Single item scale measuring the teacher’s perception of the typicality of the first videotaped lesson, based on TQB20A.
+TB_TYPVID2;Single item scale measuring the teacher’s perception of the typicality of the second videotaped lesson, based on TQB20B.
+TB_GOALACHIEV;Derived variable for the teacher’s perception of the achievement of the learning goals of the videotaped lessons and unit, calculated as the total of TQB21A to TQB21E.
+TB_KNOWLEDGE;Scale measuring the extent to which the teacher holds knowledge as it is used in practice, calculated as the total of TQB22_1_SCORE, TQB22_2_SCORE, TQB22_3_SCORE, and TQB22_4_SCORE
+TB_DESIRABILITY;Derived variable for the teacher’s perception of the social desirability of the teaching profession, calculated as the mean of TQB23A to TQB23D.
+CLASS_SIZE_QUES;Derived variable giving the size of the teacher’s class based on the number of students giving consent to the questionnaire.
+CLASS_SIZE_TEST;Derived variable giving the size of the teacher’s class based on the number of students giving consent to the test.
+CLASS_SIZE_VIDEO;Derived variable giving the size of the teacher’s class based on the number of students giving consent to the video.
+CLASS_SIZE_FULL9;Derived variable giving the size of the teacher’s class based on the number of students recorded in the student sampling resolution.
+CLASS_SIZE_ALL;Derived variable giving the size of the teacher’s class based on the number of students giving consent to the questionnaire, test, and video.

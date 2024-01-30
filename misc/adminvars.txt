@@ -1,0 +1,11 @@
+COUNTRY;Variable giving the name of the country to which the record belongs.
+CONSENT_QUES_N_STU_RES;Indicates that the student consented in the student sampling resolution to the questionnaire portion of the study.
+CONSENT_TEST_N_STU_RES;Indicates that the student consented in the student sampling resolution to the test portion of the study.
+CONSENT_VIDEO_N_STU_RES;Indicates that the student consented in the student sampling resolution to the video portion of the study.
+IN_ANALYSIS_outcome;Indicates that the observation is included in the primary student outcome regression analyses. There are three IN_ANALYSIS flags corresponding to the three primary student outcomes of interest: TEST (test scores), PINT (personal interest in math), and GENSELFEFF (general self-efficacy).
+MIDDROP;Indicates that the student dropped out midway through the study.
+ABSENT_instrument;Indicates that the student was marked absent when the instrument was administered. This variable is included for the following instruments: SQA (student pre-questionnaire), SQB (student post-questionnaire), STA (student pretest), STB (student posttest).
+DATE_instrument;Date the instrument was administered, in the form DD/MM/YY. This variable is included for the following instruments: SQA (student pre-questionnaire), SQB (student post-questionnaire), STA (student pretest), STB (student posttest), TQA (teacher pre-questionnaire), TQB (teacher post-questionnaire). Note that variables DATE_SQA_2, DATE_SQA_3, DATE_SQB_2, and DATE_SQB_3 apply only to data from K-S-T (Japan) because these student questionnaires were administered in multiple sections there.
+Instrument_STARTTIME;Start time of instrument administration.
+Instrument_ENDTIME;End time of instrument administration.
+MINUTES_instrument;Minutes taken to complete the instrument. This variable is included for the following instruments: SQA (student pre-questionnaire), SQB (student post-questionnaire).

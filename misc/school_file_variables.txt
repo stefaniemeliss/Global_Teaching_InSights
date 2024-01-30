@@ -1,0 +1,7 @@
+SCHOOL_CLASSIFICATION;Whether the school is public, private, or some other classification.
+URBANICITY;Population density of the region served by the school.
+REGION;Name or code of the region served by the school.
+PRIVATE;Indicates whether the school is private.
+URBAN;Indicates whether the school is in an urban setting.
+TEACH_NUM;Total number of teachers of record at the school.
+STUD_NUM;Total number of students enrolled at the school.
