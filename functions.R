@@ -114,8 +114,9 @@ table_desc <- function(data = df, group_var = "group", dep_var = "variable"){
   out$vars <- NULL
   rownames(out)[1] <- "all"
   # print output
-  print(kableExtra::kbl(out, caption = "Descriptives for whole sample and within each country") %>%
-          kable_styling(bootstrap_options = c("striped", "hover", "condensed")))
-  cat('\n\n<!-- -->\n\n')
-  
+  kbl(out, caption = "Descriptives for whole sample and within each country") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>% 
+    htmltools::HTML() %>% 
+    print
+  cat("\n")
 }
