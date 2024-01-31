@@ -134,7 +134,8 @@ plot_scatter <- function(data = df, xvar = x, yvar = y,
     stat_smooth(formula = y ~ x, method = "lm", fullrange = T, se = T, alpha=0.2, color = dominant_col) + 
     # add regression coefficient
     ggpubr::stat_cor(method = "pearson", cor.coef.name = "r",
-                     p.accuracy = 0.001, r.accuracy = 0.01) +
+                     p.accuracy = 0.001, r.accuracy = 0.01,
+                     geom = "label") +
     # add theme
     theme +
     # determine titles
