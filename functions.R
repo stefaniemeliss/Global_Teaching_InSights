@@ -67,7 +67,7 @@ plot_raincloud <- function(data = df, xvar = x, yvar = y,
     stat_summary(fun="mean", geom = "point", col = dominant_col) + 
     stat_summary(fun.data = mean_se, geom = "errorbar", width = .05, col = dominant_col) +    
     # add rain
-    ggdist::stat_dots(side = "left", dotsize = 0.3, justification = 1.1, binwidth = .1, col = nondominant_col, fill = nondominant_col) + 
+    ggdist::stat_dots(side = "left", dotsize = 0.1, justification = 1.1, binwidth = .1, col = nondominant_col, fill = nondominant_col) + 
     
     # determine titles
     ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab(paste0(ylab)) +
@@ -98,7 +98,6 @@ plot_raincloud <- function(data = df, xvar = x, yvar = y,
   if (!is.null(yintercept)) {
     plot <- plot + geom_hline(yintercept = yintercept, linetype="dashed")
   }
-  
   
   print(plot)
 }
