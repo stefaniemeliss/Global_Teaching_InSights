@@ -1,0 +1,867 @@
+---
+title: "GTI Data Exploration"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(ggplot2)
+library(GGally)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+```
+
+```{r, include=F}
+stud <- read.csv("data_raw/GTI-Student-Data.csv")
+group <- "COUNTRY"
+```
+
+
+Contents  
+
+[Test scores](#test)  
+[Self-concept in mathmatics](#selfcon)  
+[Interest in mathmatics](#int)  
+[Self-efficacy](#effi)  
+[Intercorrelation](#cor)  
+
+
+# Test scores {#test}
+
+### Pre-test
+  
+* **STA_IRTSCORE**: Derived variable for pretest IRT score (weight likelihood estimate) from a multi-group IRT model. Data also includes **STA_SE_IRTSCORE**: Derived variable for standard error (SE) for pretest IRT score.  
+* **STA_PROPCORRECTSCORE**: Derived variable for proportion of pretest questions answered correctly. Calculated as STA_TOTALSCORE / 30.
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "STA_IRTSCORE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "STA_PROPCORRECTSCORE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "STA_IRTSCORE"
+y_var <- "STA_PROPCORRECTSCORE"
+x_lab <- x_var
+y_lab <- y_var
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_all <- plt_all + coord_cartesian(ylim = c(0,1))
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  coord_cartesian(ylim = c(0,1)) +
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+### Post-test
+  
+* **STB_IRTSCORE**: Derived variable for posttest IRT score (weight likelihood estimate) from multi-group IRT model. Data also includes **STB_SE_IRTSCORE**: Derived variable for standard error (SE) for posttest IRT score.  
+* **STB_PROPCORRECTSCORE**: Derived variable for proportion of pretest questions answered correctly. Calculated as STA_TOTALSCORE / 30.  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "STB_IRTSCORE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "STB_PROPCORRECTSCORE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "STB_IRTSCORE"
+y_var <- "STB_PROPCORRECTSCORE"
+x_lab <- x_var
+y_lab <- y_var
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_all <- plt_all + coord_cartesian(ylim = c(0,1))
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  coord_cartesian(ylim = c(0,1)) +
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+### Correlation between pre- and post-test
+
+##### IRT scores
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "STA_IRTSCORE"
+y_var <- "STB_IRTSCORE"
+x_lab <- "IRT score pre-test"
+y_lab <- "IRT score post-test"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Proportion correct 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "STA_PROPCORRECTSCORE"
+y_var <- "STB_PROPCORRECTSCORE"
+x_lab <- "proportion of correct answers pre-test"
+y_lab <- "proportion of correct answers post-test"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+> When looking at the scatterplots showing the pre- and post-test IRT scores, a pattern emerges whereby some observations (i.e., those with the highest theta estimates) seem to be "cut off" from the other observations. Importantly, Colombia does not seem to be affected by this. The pattern does not emerge when plotting the proportion of correct answers against each other. This suggests that some items in the tests had high difficulty. As such, answering them correctly would increase the theta estimate substantially, thereby creating the gap. 
+
+
+# Self-concept in mathmatics {#selfcon}
+
+* **SA_SELFCON**: Scale measuring student self-concept in mathematics in general, calculated as the mean of SQA06A to SQA06F using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***The following questions focus on how you view and experience learning mathematics. Your learning in mathematics***
+    - Learning advanced mathematics topics would be easy for me.  
+    - I can usually give good answers to test questions on mathematic topics.  
+    - I learn mathematic topics quickly.
+    - Mathematic topics are easy for me.  
+    - When I am being taught mathematics, I can understand the concepts very well.  
+    - I can easily understand new ideas in mathematics.  
+* **SB_SELFCON**: Scale measuring student self-concept during the unit on quadratic equations, calculated as the mean of SQB01A to SQB01F using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***You have just finished the unit on the topic of quadratic equations (approximately the last x lessons). Your view and experience as an important actor in classroom is of vital interest for us. Your learning during the unit on the topic of quadratic equations***
+    - Learning about quadratic equations was easy for me.  
+    - I was able to give good answers to questions on the topic of quadratic equations.  
+    - I learned about quadratic equations quickly.  
+    - Quadratic equations were easy for me.  
+    - When I was taught the topic of quadratic equations, I could understand the concepts very well.  
+    - I could easily understand new ideas regarding quadratic equations.  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_SELFCON"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_SELFCON"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_SELFCON"
+y_var <- "SB_SELFCON"
+x_lab <- "Self-concept pre"
+y_lab <- "Self-concept post"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+# Interest in mathmatics {#int}
+
+* **PRE_PINT**: Derived variable for students’ personal interest in mathematics, based on their *previous year teacher*, as recorded in SQA. Calculated as the mean of SQA12A to SQA12C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Please think about the time when you were taught by your PREVIOUS mathematics teacher (the teacher you had before your current mathematics teacher): how did you think about mathematics back then?***   
+    - I was interested in mathematics.  
+    - I often thought that what we were talking about in my mathematics class was interesting.  
+    - After mathematics class I was often already curious about the next mathematics class.  
+    - I wanted to deal more intensively with some topics discussed in my mathematics class. **[THIS ITEM MEASURES SITUATIONAL INTEREST AND IS NOT INCLUDED IN THE MEAN PROVIDED.]**  
+* **SA_PINT_CURR**: Scale measuring students’ personal interest in mathematics, based on their *current year teacher*, as recorded in SQA. Calculated as the mean of SQA14A to SQA14C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Now think about the time you are being taught by your CURRENT mathematics teacher: How do you feel about mathematics?***   
+    - I am interested in mathematics.  
+    - I often think that what we are talking about in my mathematics class is interesting.  
+    - After mathematics class I am often already curious about the next mathematics class.  
+    - I would like to deal more intensively with some topics discussed in my mathematics class. **[THIS ITEM MEASURES SITUATIONAL INTEREST AND IS NOT INCLUDED IN THE MEAN PROVIDED.]**  
+* **POST_PINT**: Derived variable for students’ personal interest in mathematics, based on their current year teacher, as recorded in SQB. Calculated as the mean of SQB03A to SQB03C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***How did you think about mathematics during the unit on quadratic equations?***   
+    - I was interested in the topic of quadratic equations.  
+    - I often thought that what we were talking about in my mathematics class during the unit on quadratic equations was interesting.  
+    - After my mathematics class on the topic of quadratic equations I was often already curious about the next mathematics class.  
+    - I wanted to deal more intensively with the topic of quadratic equations discussed in my mathematics <class>. **[THIS ITEM MEASURES SITUATIONAL INTEREST AND IS NOT INCLUDED IN THE MEAN PROVIDED.]**  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "PRE_PINT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_PINT_CURR"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "POST_PINT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+##### Correlation between both measures from the pre questionnaire
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "PRE_PINT"
+y_var <- "SA_PINT_CURR"
+x_lab <- "Personal interest pre (previous teacher)"
+y_lab <- "Personal interest pre (current teacher)"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  #coord_cartesian(ylim = c(0,5)) +
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+  
+> Overall, personal interest does not seem to be highly correlated when rated with respect to current vs. previous teacher. This could suggest that personal interest in mathmatics is a malleable concept that can differ between teachers/academic years. To further disentangle the effects of teacher and academic year, we used information from the item SQA11. 
+  
+Question: **Since when have you had your CURRENT mathematics teacher?** *Just include the time you have had your current teacher continuously up until this school year (don’t include the time you had the current teacher in earlier school years followed by different teachers).*  
+  
+* This school year  
+* Last school year  
+* Before the last school year  
+  
+The dataset also contains a derived variable **SA_HISTTEACHER**. The variable is coded as 1 if the student indicated that they already had their current teacher in the last <school year> or the year before last. In other cases, the variable is coded as 0.
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+
+# recode previous teacher history variable
+stud[, "SQA11_recode"] <- ifelse(stud[, "SQA11"] == 1, "this year", 
+                                 ifelse(stud[, "SQA11"] == 2, "last year", 
+                                        ifelse(stud[, "SQA11"] == 3, "before last year", NA)))
+stud[, "SA_HISTTEACHER_recode"] <- ifelse(stud[, "SA_HISTTEACHER"] == 0, "no previous history", 
+                                 ifelse(stud[, "SA_HISTTEACHER"] == 1, "previous history", NA))
+
+# generate subset of data for which previous teacher history is available
+tmp <- stud[!is.na(stud[, "SQA11_recode"] ), ]
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = tmp,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp1 <- plt_all + 
+  facet_wrap(. ~ SQA11_recode, ncol = 1)
+# print plot
+plt_grp1
+
+# make nicer
+plt_grp2 <- plt_all + 
+  facet_wrap(. ~ SA_HISTTEACHER_recode, ncol = 1)
+# print plot
+plt_grp2
+
+```
+
+> Correlations between personal interest rated for current and previous teacher seem to be numerically higher if the students have been taught by their current teacher already for more than a year.  
+
+
+##### Correlation between pre- and post-questionnaire measures
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "PRE_PINT"
+y_var <- "POST_PINT"
+x_lab <- "Personal interest pre (previous teacher)"
+y_lab <- "Personal interest post"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_PINT_CURR"
+y_var <- "POST_PINT"
+x_lab <- "Personal interest pre (current teacher)"
+y_lab <- "Personal interest post"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+> Numerically, correlations seem to be higher if the measurement of personal interest taken at post-test is correlated with ratings of personal interest with respect to the **current teacher** rather than the previous teacher. 
+
+
+# Self-efficacy {#effi}
+
+### General self-efficacy  
+  
+* **PRE_GENSELFEFF**: Derived variable for students’ general self-efficacy in mathematics, based on their *previous year teacher*, as recorded in SQA. Calculated as the mean of SQA13A to SQA13E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***Again, please think about the time when you were taught by your PREVIOUS mathematics teacher.How did you feel about mathematics back then?***   
+    - I believed I would receive an excellent grade in mathematics.  
+    - I was confident I could understand the most difficult material on mathematics.  
+    - I was confident I could an excellent job on the mathematics assignments and tests.  
+    - I expected to do well in mathematics.  
+    - I was confident I could master the mathematics skills being taught.  
+* **SA_GENSELFEFF_CURR**: Scale measuring students’ general self-efficacy in mathematics, based on their *current year teacher*, as recorded in SQA, standardized using the average of country-specific means and standard deviations. Calculated as the mean of SQA15A to SQA15E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***Again, please think about the time since you have had your CURRENT mathematics teacher: how do you feel about mathematics?***  
+    - I believe I will receive an excellent grade in mathematics.  
+    - I'm confident I can understand the most difficult material on mathematics.  
+    - I'm confident I can do an excellent job on the mathematics assignments and tests.  
+    - I expect to do well in mathematics.  
+    - I'm confident I can master the mathematics skills being taught.  
+* **POST_GENSELFEFF**: Derived variable for students’ general self-efficacy in mathematics, based on their current year teacher, as recorded in SQB. Calculated as the mean of SQB02A to SQB02E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***How did you feel about mathematics during the unit on the topic of <quadratic equations>?***   
+    - I believed I would receive an excellent <grade> for the topic of <quadratic equations>.  
+    - I was confident I could understand the most difficult material during the unit on <quadratic equations>.  
+    - I was confident I could do an excellent job on the assignments and tests during the unit on <quadratic equations>.  
+    - I expected to do well in quadratic equations.  
+    - I was confident I could master the skills being taught during the unit on <quadratic equations>.   
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "PRE_GENSELFEFF"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_GENSELFEFF_CURR"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "POST_GENSELFEFF"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+##### Correlation between both measures from the pre questionnaire
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "PRE_GENSELFEFF"
+y_var <- "SA_GENSELFEFF_CURR"
+x_lab <- x_var
+y_lab <- y_var
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  #coord_cartesian(ylim = c(0,5)) +
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+  
+> Overall, general self-efficacy seems highly correlated when rated with respect to current vs. previous teacher. This could suggest that general self-efficacy in mathmatics is a fairly stable concept and fairly independent of the specific teacher. Alternatively, there could be a bias in the responses due to the retrospective nature of the report. 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+stud[, "SQA11_recode"] <- ifelse(stud[, "SQA11"] == 1, "this year", 
+                                 ifelse(stud[, "SQA11"] == 2, "last year", 
+                                        ifelse(stud[, "SQA11"] == 3, "before last year", NA)))
+
+stud[, "SA_HISTTEACHER_recode"] <- ifelse(stud[, "SA_HISTTEACHER"] == 0, "no previous history", 
+                                 ifelse(stud[, "SA_HISTTEACHER"] == 1, "previous history", NA))
+
+
+tmp <- stud[!is.na(stud[, "SQA11_recode"] ), ]
+
+
+# input vars
+x_var <- "PRE_GENSELFEFF"
+y_var <- "SA_GENSELFEFF_CURR"
+x_lab <- x_var
+y_lab <- y_var
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = tmp,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp1 <- plt_all + 
+  facet_wrap(. ~ SQA11_recode, ncol = 1)
+# print plot
+plt_grp1
+
+# make nicer
+plt_grp2 <- plt_all + 
+  facet_wrap(. ~ SA_HISTTEACHER_recode, ncol = 1)
+# print plot
+plt_grp2
+
+```
+
+> Indeed, correlations between general self-efficacy rated for current and previous teacher seem to be numerically higher if the students have been taught by their current teacher already for more than a year.  
+
+
+##### Correlation between pre- and post-questionnaire measures
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "PRE_GENSELFEFF"
+y_var <- "POST_GENSELFEFF"
+x_lab <- "General self-efficacy pre (previous teacher)"
+y_lab <- "General self-efficacy post"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_GENSELFEFF_CURR"
+y_var <- "POST_GENSELFEFF"
+x_lab <- "General self-efficacy pre (current teacher)"
+y_lab <- "General self-efficacy post"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+> Numerically, correlations seem to be higher if the measurement of general self-efficacy taken at post-test is correlated with ratings of general self-efficacy with respect to the **current teacher** rather than the previous teacher. 
+
+### Self-efficacy with mathematical tasks
+
+* **SA_EFFICACY**: Scale measuring student self-efficacy with mathematical tasks in general, calculated as the mean of SQA16A2 to SQA16J2, rated on a scale from 1 (not at all confident) - 4 (very confident). Question: ***For each task please indicate how confident you feel about doing these tasks.***   
+    - Using a <train timetable> to work out how long it would take to get from one place to another.  
+    - Calculating how much cheaper a TV would be after a 30% discount.  
+    - Calculating how many square metres of tiles you need to cover a floor.  
+    - Solving an equation like 3x+5= 17.  
+    - Solving an equation like 2(x+3) = (x + 3) (x - 3).  
+    - Plotting the graph of y = x².  
+    - Solving a problem like x²−4=0 by inspection.  
+    - Finding all values of x for which(x−4)(x+5)=0.  
+    - Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like x²+6x+9=0.  
+    - Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+* **SB_EFFICACY**: Scale measuring student self-efficacy with mathematical tasks during the unit on quadratic equations, calculated as the mean of SQB07CA to SQB07CK, rated on a scale from 1 (not at all confident) - 4 (very confident). Question: ***For each task please indicate how confident you feel about doing these tasks.***  
+    - Plotting the graph of y = x².  
+    - Solving a problem like x²−4=0 by inspection.  
+    - Finding all values of x for which(x−4)(x+5)=0.  
+    - Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like x²+6x+9=0.  
+    - Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+    - Using different ways when solving a quadratic equation.  
+    - Explaining when a quadratic equation has one, two or no solutions.  
+    - Checking if an equation like 2x²+3x+1 has any real solution.  
+    - Calculating the highest point of a ball that is thrown diagonally into the air.  
+    - Calculating the distance a car has travelled after a certain time of acceleration.  
+    - Finding the roots of a quadratic function.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_EFFICACY"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_EFFICACY"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_EFFICACY"
+y_var <- "SB_EFFICACY"
+x_lab <- "Task-specific self-efficacy pre"
+y_lab <- "Task-specific self-efficacy post"
+
+# scatterplot all countries #
+main <- "Scatterplot showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+
+
+# Intercorrelation {#cor}
+
+> Given the sample size, all correlation coefficients are significant.  
+  
+Please note that some variables were renamed to reduce the width of the table.  
+  
+* ST[A/B]_PROPCORRECTSCORE = ST[A/B]_ACC  
+* [PRE/SA/POST]_GENSELFEFF[_CURRENT] = [PRE/SA/POST]_GENEFF[_CURRENT]  
+* ST[A/B]_EFFICACY = ST[A/B]_EFF  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=20, fig.height=20}
+vars <- c("S_ID", "COUNTRY",
+         "STA_IRTSCORE", "STA_PROPCORRECTSCORE",
+         "STB_IRTSCORE", "STB_PROPCORRECTSCORE",
+         "SA_SELFCON", "SB_SELFCON",
+         "PRE_PINT", "SA_PINT_CURR", "POST_PINT",
+         "PRE_GENSELFEFF", "SA_GENSELFEFF_CURR", "POST_GENSELFEFF",
+         "SA_EFFICACY", "SB_EFFICACY")
+
+desc <- stud[, vars[c(-1, -2)]]
+
+names(desc) <- gsub("SCORE", "", names(desc))
+names(desc) <- gsub("PROPCORRECT", "ACC", names(desc))
+names(desc) <- gsub("SELF", "", names(desc))
+names(desc) <- gsub("ICACY", "", names(desc))
+
+
+out <- round(psych::corr.test(desc)$r, 2)
+
+# print table
+kbl(out, caption = "Intercorrelations between student-level variables of interest") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  add_header_above(c(" " = 1, "Test" = 4, "Self-concept" = 2, "Personal interest" = 3, "Self-efficacy" = 5)) %>%
+  column_spec(1, border_right=T) %>%
+  column_spec(5, border_right=T) %>%
+  column_spec(7, border_right=T) %>%
+  column_spec(10, border_right=T) %>%
+  pack_rows("Test", 1, 4) %>%
+  pack_rows("Self-concept", 5, 6) %>%
+  pack_rows("Personal interest", 7, 9) %>%
+  pack_rows("Self-efficacy", 10, 14) 
+
+cat("\n\n")
+cat("### Correlation matrix")
+cat("\n")
+corrplot::corrplot(out, method = 'shade', addCoef.col = 'black', number.font = 2, type = 'lower', diag = T,
+                   tl.col = "black", col.lim = c(0,1), col = corrplot::COL1('YlOrRd', 200), number.cex = 1.5, tl.cex = 1.5, cl.cex = 1.5) 
+```
+
