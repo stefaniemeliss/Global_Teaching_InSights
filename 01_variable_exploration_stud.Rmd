@@ -393,7 +393,6 @@ plt_grp <- plot_scatter(data = stud,
                         title = main)
 # make nicer
 plt_grp <- plt_grp + 
-  #coord_cartesian(ylim = c(0,5)) +
   facet_wrap(. ~ get(group), ncol = 2)
 # print plot
 plt_grp
@@ -529,7 +528,7 @@ plt_grp
 
 ### General self-efficacy  
   
-* **PRE_GENSELFEFF**: Derived variable for students’ general self-efficacy in mathematics, based on their *previous year teacher*, as recorded in SQA. Calculated as the mean of SQA13A to SQA13E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***Again, please think about the time when you were taught by your PREVIOUS mathematics teacher.How did you feel about mathematics back then?***   
+* **PRE_GENSELFEFF**: Derived variable for students’ general self-efficacy in mathematics, based on their *previous year teacher*, as recorded in SQA. Calculated as the mean of SQA13A to SQA13E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***Again, please think about the time when you were taught by your PREVIOUS mathematics teacher. How did you feel about mathematics back then?***   
     - I believed I would receive an excellent grade in mathematics.  
     - I was confident I could understand the most difficult material on mathematics.  
     - I was confident I could an excellent job on the mathematics assignments and tests.  
@@ -541,12 +540,12 @@ plt_grp
     - I'm confident I can do an excellent job on the mathematics assignments and tests.  
     - I expect to do well in mathematics.  
     - I'm confident I can master the mathematics skills being taught.  
-* **POST_GENSELFEFF**: Derived variable for students’ general self-efficacy in mathematics, based on their current year teacher, as recorded in SQB. Calculated as the mean of SQB02A to SQB02E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***How did you feel about mathematics during the unit on the topic of <quadratic equations>?***   
-    - I believed I would receive an excellent <grade> for the topic of <quadratic equations>.  
-    - I was confident I could understand the most difficult material during the unit on <quadratic equations>.  
-    - I was confident I could do an excellent job on the assignments and tests during the unit on <quadratic equations>.  
+* **POST_GENSELFEFF**: Derived variable for students’ general self-efficacy in mathematics, based on their current year teacher, as recorded in SQB. Calculated as the mean of SQB02A to SQB02E using a 1 (not at all true of me) - 4 (extremely true of me) scale. Question: ***How did you feel about mathematics during the unit on the topic of quadratic equations?***   
+    - I believed I would receive an excellent <grade> for the topic of quadratic equations.  
+    - I was confident I could understand the most difficult material during the unit on quadratic equations.  
+    - I was confident I could do an excellent job on the assignments and tests during the unit on quadratic equations.  
     - I expected to do well in quadratic equations.  
-    - I was confident I could master the skills being taught during the unit on <quadratic equations>.   
+    - I was confident I could master the skills being taught during the unit on quadratic equations.   
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
 dv <- "PRE_GENSELFEFF"
@@ -604,7 +603,6 @@ plt_grp <- plot_scatter(data = stud,
                         title = main)
 # make nicer
 plt_grp <- plt_grp + 
-  #coord_cartesian(ylim = c(0,5)) +
   facet_wrap(. ~ get(group), ncol = 2)
 # print plot
 plt_grp
