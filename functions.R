@@ -112,6 +112,7 @@ table_desc <- function(data = df, group_var = "group", dep_var = "variable"){
   # edit output
   out$vars <- NULL
   rownames(out)[1] <- "all"
+  out <- round(out, 3)
   # print output
   kbl(out, caption = paste0("Descriptives of variable '", dep_var,"' for whole sample and within each country")) %>%
     kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>% 
