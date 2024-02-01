@@ -1,9 +1,3 @@
-# rain cloud plot
-
-# define variables for plotting
-ambition_coral <- "#E94B58"
-ambition_charcole <- "#2C3C3B"
-
 # ambition colours 2023 #
 navy = "#474C68"
 white = "#FFFFFF"
@@ -17,6 +11,10 @@ blue = "#006FB7"
 purple = "#6D2160"
 orange = "#EC642D"
 red = "#BF1C1D"
+
+# combine to palette
+ambition_palette <- c(cyan, coral, teal, purple, orange) # bright palette
+ambition_palette <- c(cyan, teal, purple, orange, green, red, yellow, blue) # 8 colours without coral
 
 # source: https://rdrr.io/cran/MESS/src/R/colorfunctions.R
 col.tint <- function(col, tint=.5) {
