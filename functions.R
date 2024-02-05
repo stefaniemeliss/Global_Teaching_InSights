@@ -140,7 +140,31 @@ plot_scatter <- function(data = df, xvar = x, yvar = y,
     # determine titles
     ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab(paste0(ylab)) 
 
-  
-
 }
 
+plot_scatter_jitter <- function(data = df, xvar = x, yvar = y,
+                         title = "",
+                         ylab = "",
+                         xlab = "") {
+  
+  # compute appropriate jitfer
+  
+  
+  # create rain cloud plot, adapted from: https://z3tt.github.io/Rainclouds/
+  plot <- 
+    # define variables to plot based on input
+    ggplot(data, aes(x = get(xvar), y = get(yvar))) +
+    # add points
+    geom_point(color = nondominant_col, position = position_jitter(seed = 123)) +
+    # add regression line
+    stat_smooth(formula = y ~ x, method = "lm", fullrange = T, se = T, alpha=0.2, color = dominant_col) + 
+    # add regression coefficient
+    ggpubr::stat_cor(method = "pearson", cor.coef.name = "r",
+                     p.accuracy = 0.001, r.accuracy = 0.01,
+                     geom = "label") +
+    # add theme
+    theme +
+    # determine titles
+    ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab(paste0(ylab)) 
+  
+}
