@@ -1,0 +1,20 @@
+Variable	Altname	Domain	Component	Explanation
+VCOMP_AR1ES	AR_ElicitThinking	Assessment and Response to Student Understanding	Eliciting Student Thinking	"Questions, prompts, and tasks elicit detailed student responses (written or spoken)."
+VCOMP_AR2TF	AR_Feedback	Assessment and Response to Student Understanding	Teacher Feedback	Teacher responds to students' thinking via feedback loops that are focused on why 1) the students' thinking is correct or incorrect or 2) ideas/procedures are the way they are.
+VCOMP_AR3AI	AR_AlignToStudents	Assessment and Response to Student Understanding	Aligning Instruction	The teacher uses students' contributions.
+VCOMP_CE1DS	CE_CognitiveDemand	Cognitive Engagement	Engagement in Cognitively Demanding Subject Matter	"Students regularly engage in analyses, creation, or evaluation work that is cognitively rich and requires thoughtfulness."
+VCOMP_CE2MA	CE_MultipleApproaches	Cognitive Engagement	Multiple Approaches	Students use multiple solution strategies and/or reasoning approaches.
+VCOMP_CE3US	CE_UnderstandProcesses	Cognitive Engagement	Understanding of Subject Matter	"Students engage in opportunities to understand the rationale(s) for subject matter procedures and processes. I.e., Students state the goals or properties of procedures and processes, state why a procedure or a solution is the way it is, or visually designate the elements or steps in a process or procedure."
+VCOMP_CM1RT	CM_Routines	Classroom Management	Routines	The classroom has routines for common managerial tasks that are organized and efficient.
+VCOMP_CM2MN	CM_Monitoring	Classroom Management	Monitoring	"The teacher monitors what is happening in the entire classroom (i.e., the teacher maintains physical proximity to students, scans the whole classroom, faces students, calls on a range of students, and notices student behavioral progress)."
+VCOMP_CM3DS	CM_Disruptions	Classroom Management	Disruptions	The teacher quickly and effectively deals with disruptions.
+VCOMP_DC1ND	DC_Discourse	Discourse	Nature of Discourse	Students have opportunities to participate in the classroom discourse.
+VCOMP_DC2QT	DC_Questioning	Discourse	Questioning	Questions request students engage in a range of types of cognitive reasoning.
+VCOMP_DC3EP	DC_Explanations	Discourse	Explanations	Teacher and students provide written and/or verbal explanations. Explanations are descriptions of why ideas or procedures are the way they are.
+VCOMP_QS1EC	QS_Connections	Quality of Subject Matter	Explicit Connections	"Teacher or students make explicit instructional connections between any two aspects of the subject matter. Aspects include subject matter ideas, procedures, perspectives, representations, or equations."
+VCOMP_QS2PG	QS_Generalizations	Quality of Subject Matter	Explicit Patterns and Generalizations	The teacher or students explicitly look for patterns in their work together. They also generalize from the specific work the students are working on to a foundational concept and/or definitions underlying the specific work.
+VCOMP_QS3CT	QS_Clarity	Quality of Subject Matter	Clarity	The extent to which the mathematical content around the learning goal of the lesson is presented clearly and students appear to follow along with the content of the lesson.
+VCOMP_SE1RP	SE_Respect	Social-Emotional Support	Respect	"Teacher and students demonstrate respect for one another by using any of the following types of behaviors: respectful language, listening to one another, using appropriate names, using a respectful tone of voice, and using traditional markers of manners."
+VCOMP_SE2EW	SE_Encouragement	Social-Emotional Support	Encouragement and Warmth	"The teacher and/or students provide encouragement to students throughout their work. (i.e., the teacher may reassure students when errors are made, make positive comments, compliment students' work)."
+VCOMP_SE3RT	SE_RiskTaking	Social-Emotional Support	Risk-taking	Students seek guidance.
+VCOMP_TOTC		Total	Total Component Score (Average of Individual Components)	
