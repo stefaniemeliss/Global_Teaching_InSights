@@ -66,6 +66,8 @@ Derived variables for the student-level file are included below, with variables 
 
 ```{r, echo = F, results='asis'}
 # read in data dict
+tmp <- read.delim("misc/student_file_variables.txt", sep = ";", header = F)
+names(tmp) <- c("Variable", "Notes")
 
 # print table
 kbl(tmp) %>%
@@ -124,7 +126,7 @@ Derived variables for video component scores take the form **VCOMP_[component]**
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.table("misc/teacher_file_variables_vcomp.txt", header = T)
+tmp <- read.table("misc/teacher_file_variables_vcomp.txt", header = T, sep = "\t")
 
 # print table
 kbl(tmp) %>%
