@@ -27,6 +27,14 @@ devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights
 
 ```
 
+```{css, echo=FALSE}
+img {
+  max-width:200%;
+  height: auto;
+}
+```
+
+
 ```{r, include=F}
 teach <- read.csv("data_raw/GTI-Teacher-Data.csv")
 stud <- read.csv("data_raw/GTI-Student-Data.csv")
@@ -119,7 +127,7 @@ plt
 
 To identify any patterns among the OTL as reported in the teacher log, a scatter and correlation matrix was created.  
 
-```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=12, fig.width=12}
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=10, fig.width=10}
 # change parameter for density plots
 custom_dens <- function(data, mapping, ...) {
   ggplot(data = data, mapping=mapping) +
@@ -495,7 +503,7 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
 
 The plots above showed that different data sources are if any mildly correlated with each other. Lastly, a scatterplot and correlation matrix of using the data for all categories and sources was created to determine whether including all the variables into the model would cause issues of multicollinearity.  
 
-```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=25, fig.width=25}
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=20, fig.width=20}
 # select relevant variables and save in a df
 tmp <- teach[, grep("T_ID|COUNTRY|_FUNCTIONS|_REASONING|_APPLIED|_ALGEBRA", names(teach))]
 
@@ -516,7 +524,7 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
 
 The components protocol involved rating three components per domain. All scores had a 4-point scale. The component scales were developed to mean that a segment assigned a rating of four was of higher quality than a segment assigned a 1. All scales were operationalised in the same way, which means it is expected that when looking across countries/economies, components generally would be positively correlated with one another and always be explainable by theory.
 
-In order to decrease the cognitive demand of rating and improve accuracy, each lesson was segmented into 16-minute segments. A description of how lessons were segmented when the lesson’s length was not a multiple of 16 minutes is provided in Annex A.2. Each of the 24 component codes were rated every 16 minutes by two randomly assigned raters. Each rater watched an entire lesson. Raters were not assigned to rate the same teacher more than once (within or across protocols) for their main study ratings.  
+In order to decrease the cognitive demand of rating and improve accuracy, each lesson was segmented into 16-minute segments. Each of the 24 component codes were rated every 16 minutes by two randomly assigned raters. Each rater watched an entire lesson. Raters were not assigned to rate the same teacher more than once (within or across protocols) for their main study ratings.  
   
 Classroom-level scores for any of the 24 component codes are derived by averaging over raters, segments, and lessons as described by the following sequence of steps:  
   
@@ -568,6 +576,8 @@ kbl(tmp) %>%
 ```
 
 The table below shows the descriptive statistics for all 18 video component scores, averaged across all teachers irrespective of country.  
+  
+It is important to note that for some/most components, the SD (and hence SE) as well as the range are fairly small. Based on how the classroom-level component scores are computed, a maximum range of 3 would be possible.
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
 # select relevant variables and save in a df
@@ -583,14 +593,14 @@ out$vars <- row.names(out)
 row.names(out) <- NULL
 names(out)[names(out)=="vars"] <- "Variable"
 
-out <- merge(key, out, by = "Variable")
+out <- merge(key, out, by.x = "Variable", sort = F)
 
 # print in markdown
 kbl(out, caption = "Descriptives of VCOMP* using whole dataset") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-Additionally, means and standard errors for each video componet score were computed separately for each country and plotted below.  
+Additionally, means and standard errors for each video component score were computed separately for each country and plotted below.  
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=10, fig.width=8}
 # compute descriptives for each country
@@ -600,7 +610,7 @@ out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, grou
 out <- Reduce(full_join,out)
 out$item <- rep(names(tmp)[c(-1, -2)], each = length(unique(tmp$COUNTRY)))
 names(out)[names(out)=="item"] <- "Variable"
-out <- merge(key, out, by = "Variable")
+out <- merge(key, out, by.x = "Variable", sort = F)
 
 out$vars <- NULL
 out[, c(-1, -2, -3)] <- round(out[, c(-1, -2, -3)], 3)
@@ -641,7 +651,7 @@ plt <- ggplot(data = out, aes(x = comp_no, y = mean, fill = group1)) +
   ) +
   scale_fill_manual(values = ambition_palette, name = "Country") + 
   facet_wrap(vars(domain), ncol = 1) +
-  xlab("Component") + ylab("Average VCOMP score") +
+  xlab("Component") + ylab("Classroom-level VCOMP score") +
   labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
   ggtitle("Video component score seperately for each country") +
   theme(axis.text.x = element_blank())
@@ -660,6 +670,21 @@ tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_AR", names(teach))]
 
 # rename variables
 names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# change parameter for density plots
+custom_dens <- function(data, mapping, ...) {
+  ggplot(data = data, mapping=mapping) +
+    geom_density(..., alpha = 0.5,linewidth = 1) +
+    scale_x_continuous(limits = c(1,4))
+}
+
+costum_points <- function(data,mapping){
+  ggplot(data = data, mapping = mapping)+
+    geom_point()+
+    scale_x_continuous(limits = c(1,4))+
+    scale_y_continuous(limits = c(1,4))
+}  
+
 
 # intercorrelation plot
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
@@ -760,7 +785,7 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
 
 ```
 
-```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=20, fig.height=20}
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=10, fig.height=10}
 # select relevant variables and save in a df
 tmp <- teach[, grep("T_ID|COUNTRY|VCOMP", names(teach))]
 # remove total score
@@ -799,7 +824,7 @@ cat("For the correlation matrix, data from all countries was pooled. If a p-valu
 corrplot(out, 
          p.mat = psych::corr.test(desc)$p, sig.level = .05, #insig = "p-value",
          method = 'shade', addCoef.col = 'black', number.font = 2, type = 'full', diag = T,
-         tl.col = "black", number.cex = 1.5, tl.cex = 1.5, cl.cex = 1.5) 
+         tl.col = "black", number.cex = 1, tl.cex = 1, cl.cex = 1) 
 
 
 ```
@@ -825,21 +850,6 @@ Further, the Clarity component of the Quality of Subject Matter had five negativ
 
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=30, fig.width=30}
-# change parameter for density plots
-custom_dens <- function(data, mapping, ...) {
-  ggplot(data = data, mapping=mapping) +
-    geom_density(..., alpha = 0.5,linewidth = 1) +
-    scale_x_continuous(limits = c(1,4))
-}
-
-costum_points <- function(data,mapping){
-  ggplot(data = data, mapping = mapping)+
-    geom_point()+
-    scale_x_continuous(limits = c(1,4))+
-    scale_y_continuous(limits = c(1,4))
-}  
-
-
 # intercorrelation plot
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points),
         showStrips = T) + 
@@ -850,3 +860,155 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
 
 </details>
 
+
+
+# Video indicator scores (VIND) {#VIND}
+
+The indicator codes are grouped roughly into five of the six teaching practice domains. There are no indicators for the Assessment of and Responses to Student Understanding domain. Unlike the components, which were all rated on a 1 to 4 scale, the rating scale varies across indicators from 1-2 to 1-4, as indicated by the “Max Rating” column.  
+  
+Indicators were not designed to be aggregated up to the domain level. They are not the same grain size as one another, nor are they on the same scales. Further, they reasonably might be associated with another domain than the domain into which they are grouped.  
+  
+To reduce cognitive load and to improve rating accuracy, each lesson was divided into eight-minute segments for rating indicators. Raters rated all indicator codes for each segment. 
+  
+In total, there are 38 classroom indicators. Indicators were aggregated to the teacher level in four different ways. For six indicators, more than one aggregration method was applied. The aggregation that may be more appropriate is denoted with asterisk/printed in boldThe table below shows the descriptive statistics for all 18 video component scores, averaged across all teachers irrespective of country.
+
+.  
+  
+Aggregation methods:  
+  
+* **Basic average**: The basic average followed the same aggregation method as for components:  
+  1. Average the two raters’ segment-level ratings for an indicator code for the same segment to obtain segment averages.  
+  2. Average over all the segment averages from step 1 for a single lesson to obtain a lesson average. (If a class only has one recorded lesson, use this score as the classroom score.)  
+  3. Average over the two lesson averages for a teacher to obtain the classroom-level score.  
+* **Percent present**: The percent present aggregation approach summarises the extent that an indicator code was used. It is the average percentage of lesson segments (over raters and lessons) that *a code was present or used*. The percent present aggregation method is only appropriate for indicator codes for which a rating of 1 indicates not present and all other ratings indicate some degree of use. Specifically, the percent present is found as follows:  
+  1. For a lesson, count the number of segments a rater did not assign a 1, which indicates “not present”. Divide this count by the total number of segments in the lesson to obtain the proportion present for a rater for a lesson. Multiply by 100 to transform the proportion to a percent.  
+  2. Average the two raters’ percentages present (from step 1) for a lesson to obtain the average percent present for the lesson. (If a class only has one recorded lesson, use this score as the classroom score.)  
+  3. Average the two lesson averages (from step 2) for a teacher to obtain the average percent present for the classroom.  
+* **Highest achieved**: The highest achieved aggregation approach describes the highest rating a classroom achieved for a lesson on average (over raters and lessons) for a particular indicator code. All of these codes are for practices that are rarely implemented in classrooms and not necessarily expected to be implemented throughout the entire lesson. Otherwise, if basic averages were used, then low ratings would likely dominate the averages and there would be little variance in the teacher scores, making it difficult to distinguish among teachers who used the practice at all in their lesson and those who never did. Specifically, the highest achieved classroom score is found as follows:  
+  1. For a lesson and a particular rater, identify the highest assigned rating over all segments.  
+  2. Average the two raters’ highest achieved lesson scores (from step 1) for the same lesson. (If a class only has one recorded lesson, use this score as the classroom score.)  
+  3. Average the two lesson highest achieved scores (from step 2) for a class to obtain the highest achieved score for the classroom.  
+* **Lowest achieved**: This aggregation approach is useful for indicator codes that tend to receive high ratings for all classes and lessons to be able to better distinguish among classrooms (i.e., accuracy to identify teachers who ever had inaccurate moments in their lesson). The lowest achieved aggregation approach is similar to the highest achieved aggregation approach, but instead of taking the highest rating for a lesson, the lowest rating is used, as described below:  
+  1. For a lesson and a particular rater, identify the lowest assigned rating over all segments.  
+  2. Average the two raters’ lowest achieved lesson scores (from step 1) for the same lesson. (If a teacher only has one lesson, use this score as the teacher score.)  
+  3. Average the two lesson lowest achieved scores (from step 2) for a class to obtain the lowest achieved score for the classroom.  
+  
+Derived variables for video indicator scores take the form **VIND[_indicator]**, where indicator is an alphanumeric code, composed of a two-letter code denoting the domain, a three-character code denoting the specific indicator, and a 3-6 letter code indicating the specific aggregation method used (PCT, MAX, MIN, LESAVG, LESAVGNO1).  
+  
+> Variable names follow the structure **VCOMP_[DOMAIN][INDICATOR][AGGREGATION METHOD]**.  
+  
+
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# read in data dict
+tmp <- read.delim("misc/teacher_file_variables_vind_explanation.txt", header = T)
+
+# create key
+key <- tmp[, c("Variable", "Altname", "Max.rating")]
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+The table below shows the descriptive statistics for all 44 video indicator scores, averaged across all teachers irrespective of country.  
+  
+It is important to note that for some indicators, the SD (and hence SE) as well as the range are fairly small. Because no common rating scale and aggregation method was applied across all indicators, the maximum rating that an indicator could have had at segment level was added. However, for those indicators that were aggregated as percentage present (i.e., those were the variable name ends in PCT), the maximum possible range is 0-1. The maximum possible aggregrated score is hence included in the table as well.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VIND", names(teach))]
+
+# reorder columns
+#tmp <- tmp[, c("T_ID", "COUNTRY", key$Variable)]
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out <- round(out, 3)
+
+out$vars <- row.names(out)
+row.names(out) <- NULL
+names(out)[names(out)=="vars"] <- "Variable"
+
+# add altname and max possible rating
+key$Max.value.agg <- ifelse(grepl("PCT", key$Variable), 1, key$Max.rating)
+out <- merge(key, out, by.x = "Variable", sort = F)
+
+# print in markdown
+kbl(out, caption = "Descriptives of VIND* using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Additionally, means and standard errors for each video component score were computed separately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=35, fig.width=6}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE, digits = 3))
+
+# transform out (list of data.frames) into df
+out <- data.table::rbindlist(out, idcol = "Variable")
+out <- merge(key, out, by.x = "Variable", sort = F)
+
+# make factor
+out$Altname_f <- factor(out$Altname, levels = c(key$Altname))
+key$Altname_f <- factor(key$Altname, levels = c(key$Altname))
+
+out$vars <- NULL
+
+# add domain column 
+out$domain <- substr(out$Variable, 6, 7)
+out$domain <- recode(out$domain, 
+                     AR = "Assessment and Response to Student Understanding", 
+                     CE = "Cognitive Engagement",
+                     CM = "Classroom Management",
+                     DC = "Discourse",
+                     QS = "Quality of Subject Matter",
+                     SE = "Social-Emotional Support"
+                     )
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
+  geom_hline(data = key, aes(yintercept = Max.value.agg), col = "black", type = "dashed") +
+  theme + 
+  scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
+  facet_wrap(vars(Altname_f), ncol = 1, scales = "free_y") +
+  xlab("Country") + ylab("Classroom-level VIND score") +
+  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("Video indicator score seperately for each country")
+
+plt
+
+```
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=22, fig.height=22}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VIND", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# remove T_ID and Country
+desc <- tmp[, c(-1, -2)]
+
+# reorder columns
+desc <- desc[, c(key$Altname)]
+
+# compute correlation matrix
+out <- round(psych::corr.test(desc)$r, 2)
+
+
+cat("\n\n")
+cat("##### Correlation matrix (all countries)")
+cat("\n")
+cat("For the correlation matrix, data from all countries was pooled. If a p-value is larger than 0.05, then the corresponding correlation value is crossed out. The upper triangular matrix was adjusted for multiple testing.\n")
+corrplot(out, 
+         p.mat = psych::corr.test(desc)$p, sig.level = .05, #insig = "p-value",
+         method = 'shade', addCoef.col = 'black', number.font = 2, type = 'full', diag = T,
+         tl.col = "black", number.cex = 1, tl.cex = 1, cl.cex = 1) 
+
+
+```
