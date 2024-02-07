@@ -1,20 +1,20 @@
-"Variable" "Domain" "Component"
-"VCOMP_AR1ES" "Assessment and Response to Student Understanding" "Eliciting Student Feedback"
-"VCOMP_AR2TF" "Assessment and Response to Student Understanding" "Teacher Feedback"
-"VCOMP_AR3AI" "Assessment and Response to Student Understanding" "Aligning Instruction"
-"VCOMP_CE1DS" "Cognitive Engagement" "Engagement in Cognitively Demanding Subject Matter"
-"VCOMP_CE2MA" "Cognitive Engagement" "Multiple Approaches"
-"VCOMP_CE3US" "Cognitive Engagement" "Understanding of Subject Matter"
-"VCOMP_CM1RT" "Classroom Management" "Routines"
-"VCOMP_CM2MN" "Classroom Management" "Monitoring"
-"VCOMP_CM3DS" "Classroom Management" "Disruptions"
-"VCOMP_DC1ND" "Discourse" "Nature of Discourse"
-"VCOMP_DC2QT" "Discourse" "Questioning"
-"VCOMP_DC3EP" "Discourse" "Explanations"
-"VCOMP_QS1EC" "Quality of Subject Matter" "Explicit Connections"
-"VCOMP_QS2PG" "Quality of Subject Matter" "Explicit Patterns and Generalizations"
-"VCOMP_QS3CT" "Quality of Subject Matter" "Clarity"
-"VCOMP_SE1RP" "Social-Emotional Support" "Respect"
-"VCOMP_SE2EW" "Social-Emotional Support" "Encouragement and Warmth"
-"VCOMP_SE3RT" "Social-Emotional Support" "Risk-taking"
-"VCOMP_TOTC" "Total" "Total Component Score (Average of Individual Components)"
+Variable	Domain	Component
+VCOMP_AR1ES	Assessment and Response to Student Understanding	Eliciting Student Thinking
+VCOMP_AR2TF	Assessment and Response to Student Understanding	Teacher Feedback
+VCOMP_AR3AI	Assessment and Response to Student Understanding	Aligning Instruction
+VCOMP_CE1DS	Cognitive Engagement	Engagement in Cognitively Demanding Subject Matter
+VCOMP_CE2MA	Cognitive Engagement	Multiple Approaches
+VCOMP_CE3US	Cognitive Engagement	Understanding of Subject Matter
+VCOMP_CM1RT	Classroom Management	Routines
+VCOMP_CM2MN	Classroom Management	Monitoring
+VCOMP_CM3DS	Classroom Management	Disruptions
+VCOMP_DC1ND	Discourse	Nature of Discourse
+VCOMP_DC2QT	Discourse	Questioning
+VCOMP_DC3EP	Discourse	Explanations
+VCOMP_QS1EC	Quality of Subject Matter	Explicit Connections
+VCOMP_QS2PG	Quality of Subject Matter	Explicit Patterns and Generalizations
+VCOMP_QS3CT	Quality of Subject Matter	Clarity
+VCOMP_SE1RP	Social-Emotional Support	Respect
+VCOMP_SE2EW	Social-Emotional Support	Encouragement and Warmth
+VCOMP_SE3RT	Social-Emotional Support	Risk-taking
+VCOMP_TOTC	Total	Total Component Score (Average of Individual Components)
