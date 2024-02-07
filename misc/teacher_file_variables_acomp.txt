@@ -1,12 +1,12 @@
-"Variable" "Domain" "Compenent"
-"ACOMP_CONN" "Quality of Subject Matter" "Mathematical connections"
-"ACOMP_EXPPATRN" "Quality of Subject Matter" "Patterns & generalizations"
-"ACOMP_REAL" "Quality of Subject Matter" "Real-world connections"
-"ACOMP_ASKING" "Discourse" "Questioning & explaining"
-"ACOMP_MUL" "Cognitive Engagement" "Use & compare multiple mathematical approaches"
-"ACOMP_EXPLEARN" "Quality of Subject Matter" "Plans & learning goals"
-"ACOMP_ADD" "Quality of Subject Matter" "Addressing diverse student needs"
-"ACOMP_OPP" "Cognitive Engagement" "Develop fluency with mathematical skills/procedures"
-"ACOMP_TECH" "Cognitive Engagement" "Use of technology to explore mathematical concepts or relationships"
-"ACOMP_ENCRG" "Assessment and Response to Student Understanding" "Encourage student self eval"
-"ACOMP_ACCURACY" "Quality of Subject Matter" "Accuracy of materials"
+Variable	Domain	Compenent
+ACOMP_ENCRG	Assessment and Response to Student Understanding	Encourage student self eval
+ACOMP_MUL	Cognitive Engagement	Use & compare multiple mathematical approaches
+ACOMP_OPP	Cognitive Engagement	Develop fluency with mathematical skills/procedures
+ACOMP_TECH	Cognitive Engagement	Use of technology to explore mathematical concepts or relationships
+ACOMP_ASKING	Discourse	Questioning & explaining
+ACOMP_CONN	Quality of Subject Matter	Mathematical connections
+ACOMP_EXPPATRN	Quality of Subject Matter	Patterns & generalizations
+ACOMP_REAL	Quality of Subject Matter	Real-world connections
+ACOMP_EXPLEARN	Quality of Subject Matter	Plans & learning goals
+ACOMP_ADD	Quality of Subject Matter	Addressing diverse student needs
+ACOMP_ACCURACY	Quality of Subject Matter	Accuracy of materials
