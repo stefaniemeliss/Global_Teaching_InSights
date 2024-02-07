@@ -511,3 +511,342 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
 
 
 
+
+# Video component scores (VCOMP) {#VCOMP}
+
+The components protocol involved rating three components per domain. All scores had a 4-point scale. The component scales were developed to mean that a segment assigned a rating of four was of higher quality than a segment assigned a 1. All scales were operationalised in the same way, which means it is expected that when looking across countries/economies, components generally would be positively correlated with one another and always be explainable by theory.
+
+In order to decrease the cognitive demand of rating and improve accuracy, each lesson was segmented into 16-minute segments. A description of how lessons were segmented when the lesson’s length was not a multiple of 16 minutes is provided in Annex A.2. Each of the 24 component codes were rated every 16 minutes by two randomly assigned raters. Each rater watched an entire lesson. Raters were not assigned to rate the same teacher more than once (within or across protocols) for their main study ratings.  
+  
+Classroom-level scores for any of the 24 component codes are derived by averaging over raters, segments, and lessons as described by the following sequence of steps:  
+  
+1. *Average the two raters’ segment-level ratings* for each segment to obtain *segment averages*.  
+2. *Average over the segment averages* for all segments associated with a lesson to obtain a *lesson average*. (If a teacher only had one lesson, use this score as the classroom-level score.)  
+3. *Average the two lesson averages* for a teacher to obtain the *classroom-level score*.  
+  
+Derived variables at classroom-level for video component scores take the form **VCOMP_[component]** where “component” is an alphanumeric code, composed of a two-letter code denoting the domain followed by a three-character code denoting the specific component.  
+  
+> Variable names follow the structure **VCOMP_[DOMAIN][1-3][COMPONENT]**.   
+  
+- AR = Assessment and Response to Student Understanding  
+  1. ES = Eliciting Student Feedback
+  2. TF = Teacher Feedback
+  3. AI = Aligning Instruction  
+- CE = Cognitive Engagement
+  1. DS = Engagement in Cognitively Demanding Subject Matter
+  2. MA = Multiple Approaches
+  3. US = Understanding of Subject Matter  
+- CM = Classroom Management  
+  1. RT = Routines
+  2. MN = Monitoring
+  3. DS = Disruptions  
+- DC = Discourse  
+  1. ND = Nature of Discourse
+  2. QT = Questioning
+  3. EP = Explanations  
+- QS = Quality of Subject Matter  
+  1. EC = Explicit Connections
+  2. PG = Explicit Patterns and Generalizations
+  3. CT = Clarity  
+- SE = Social-Emotional Support
+  1. RP = Respect
+  2. EW = Encouragement and Warmth
+  3. RT = Risk-taking  
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- read.delim("misc/teacher_file_variables_vcomp_explanation.txt", header = T)
+
+# create key
+key <- tmp[, c("Variable", "Altname")]
+key <- key[!key$Variable == "VCOMP_TOTC", ]
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+
+The table below shows the descriptive statistics for all 18 video component scores, averaged across all teachers irrespective of country.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP", names(teach))]
+# remove total score
+tmp[, grep("TOT", names(tmp))] <- NULL
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out <- round(out, 3)
+
+out$vars <- row.names(out)
+row.names(out) <- NULL
+names(out)[names(out)=="vars"] <- "Variable"
+
+out <- merge(key, out, by = "Variable")
+
+# print in markdown
+kbl(out, caption = "Descriptives of VCOMP* using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Additionally, means and standard errors for each video componet score were computed separately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=10, fig.width=8}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE))
+
+# transform out (list of data.frames) into df
+out <- Reduce(full_join,out)
+out$item <- rep(names(tmp)[c(-1, -2)], each = length(unique(tmp$COUNTRY)))
+names(out)[names(out)=="item"] <- "Variable"
+out <- merge(key, out, by = "Variable")
+
+out$vars <- NULL
+out[, c(-1, -2, -3)] <- round(out[, c(-1, -2, -3)], 3)
+
+# add domain column 
+out$domain <- substr(out$Variable, 7, 8)
+out$domain <- recode(out$domain, 
+                     AR = "Assessment and Response to Student Understanding", 
+                     CE = "Cognitive Engagement",
+                     CM = "Classroom Management",
+                     DC = "Discourse",
+                     QS = "Quality of Subject Matter",
+                     SE = "Social-Emotional Support"
+                     )
+# out$domain <- recode(out$domain, 
+#                      AR = "Assessment and Response to Student Understanding: 1ES / 2TF / 3AI", 
+#                      CE = "Cognitive Engagement: 1DS / 2MA / 3US",
+#                      CM = "Classroom Management: 1RT / 2MN / 3DS",
+#                      DC = "Discourse: 1ND / 2QT / 3EP",
+#                      QS = "Quality of Subject Matter: 1EC / 2PG / 3CT",
+#                      SE = "Social-Emotional Support: 1RP / 2EW / 3RT"
+#                      )
+out$comp_no <- substr(out$Variable, 9, 9)
+out$comp_name <- substr(out$Variable, 9, 11)
+
+# add cords for label
+out$y_cord <- 5
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = comp_no, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5, position = position_dodge(width=0.8)) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1, position = position_dodge(width=0.8)) +
+  theme + 
+  geom_label(
+    aes(x = comp_no, y = y_cord, label = Altname, group = comp_no),
+    check_overlap = T,
+    vjust = 0.5, fill = "white"
+  ) +
+  scale_fill_manual(values = ambition_palette, name = "Country") + 
+  facet_wrap(vars(domain), ncol = 1) +
+  xlab("Component") + ylab("Average VCOMP score") +
+  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("Video component score seperately for each country") +
+  theme(axis.text.x = element_blank())
+plt
+
+```
+
+To identify any patterns among the video component scores, scatterplot and correlation matrices are created for each domain separately, using all three component scores.  
+
+
+##### Assessment and Response to Student Understanding
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_AR", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix - Domain AR") + 
+  theme
+
+
+```
+
+##### Cognitive Engagement
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_CE", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix - Domain CE") + 
+  theme
+
+
+```
+
+##### Classroom Management
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_CM", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix - Domain CM") + 
+  theme
+
+
+```
+
+##### Discourse
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_DC", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix - Domain DC") + 
+  theme
+
+
+```
+
+##### Quality of Subject Matter
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_QS", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix - Domain QS") + 
+  theme
+
+
+```
+
+##### Social-Emotional Support
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP_SE", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix - Domain SE") + 
+  theme
+
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=20, fig.height=20}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|VCOMP", names(teach))]
+# remove total score
+tmp[, grep("TOT", names(tmp))] <- NULL
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# remove T_ID and Country
+desc <- tmp[, c(-1, -2)]
+
+# compute correlation matrix
+out <- round(psych::corr.test(desc)$r, 2)
+
+# # print table
+# kbl(out, caption = "Intercorrelations between video component scores across countries") %>%
+#   kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+#   add_header_above(c(" " = 1, "Domain AR" = 3, "Domain CE" = 3, "Domain CM" = 3, "Domain DC" = 3, "Domain QS" = 3, "Domain SE" = 3)) %>%
+#   column_spec(1, border_right=T) %>%
+#   column_spec(4, border_right=T) %>%
+#   column_spec(7, border_right=T) %>%
+#   column_spec(10, border_right=T) %>%
+#   column_spec(13, border_right=T) %>%
+#   column_spec(16, border_right=T) %>%
+#   pack_rows("Domain AR", 1, 3) %>%
+#   pack_rows("Domain CE", 4, 6) %>%
+#   pack_rows("Domain CM", 7, 9) %>%
+#   pack_rows("Domain DC", 10, 12) %>%
+#   pack_rows("Domain QS", 13, 15) %>%
+#   pack_rows("Domain SE", 16, 18)
+
+cat("\n\n")
+cat("##### Correlation matrix (all countries)")
+cat("\n")
+cat("For the correlation matrix, data from all countries was pooled. If a p-value is larger than 0.05, then the corresponding correlation value is crossed out. The upper triangular matrix was adjusted for multiple testing.\n")
+corrplot(out, 
+         p.mat = psych::corr.test(desc)$p, sig.level = .05, #insig = "p-value",
+         method = 'shade', addCoef.col = 'black', number.font = 2, type = 'full', diag = T,
+         tl.col = "black", number.cex = 1.5, tl.cex = 1.5, cl.cex = 1.5) 
+
+
+```
+
+
+The Technical Report [Chapter 19](https://web-archive.oecd.org/2021-03-10/578535-GTI-TechReport-Chapter19.pdf) describes that the large negative correlations (i.e., < -0.2) associated with the Risk Taking component of the Socio-Emotional Support domain suggest that Risk Taking may be functioning in an undesirable, inconsistently normative way across countries/economies.  
+
+<details>
+<summary> <b> Further elaboration on risk taking </b> </summary>
+
+
+"This is operationalised as being more able to be learners who seek guidance and/or voluntarily share their private mathematical thinking publicly in their classrooms. During development, the countries/economies and International Consortium noticed that sometimes the social norms in the classroom were consistent with this idea that more socially safe classrooms were characterised by students’ seeking guidance and sharing their ideas. There were however, some classrooms in which norms around classroom participation were teacher-centred and there were not opportunities for students to seek guidance or volunteer to share their thinking. For example, in these classrooms, the teacher might not have students raise their hands to seek guidance during pair or individual work and instead, the teacher would circulate and eventually check in with each student in the room. Students appeared to hold their questions until the teacher arrived at their desk. In classrooms where there was such a (reasonable) norm, there might be few opportunities for students to volunteer to share publicly or seek guidance, thus scoring low on Risk Taking, despite the classroom being a safe emotional space to take risks."
+
+</details>
+  
+Further, the Clarity component of the Quality of Subject Matter had five negative small negative correlations (i.e., < -0.10) with other components. On a theoretical level, clarity should not have negatively correlated with the other components and the pattern was inconsistent across countries. This divergent and moderately strong pattern indicates Clarity did not operate as intended at the global level and therefore, it was dropped for use in subsequent analyses and in the policy report.   
+
+> Of note: It appears as if for the Clarity component, the criteria was applied regardless of whether the correlations differ significantly from zero. As shown in the correlation matrix, most correlation coefficients < -0.1 are not significant when correcting for multiple testing.  
+
+
+<details>
+<summary> <b> Appendix: Scatterplot and correlation matrix of video component scores for all countries separately </b> </summary>
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=30, fig.width=30}
+# change parameter for density plots
+custom_dens <- function(data, mapping, ...) {
+  ggplot(data = data, mapping=mapping) +
+    geom_density(..., alpha = 0.5,linewidth = 1) +
+    scale_x_continuous(limits = c(1,4))
+}
+
+costum_points <- function(data,mapping){
+  ggplot(data = data, mapping = mapping)+
+    geom_point()+
+    scale_x_continuous(limits = c(1,4))+
+    scale_y_continuous(limits = c(1,4))
+}  
+
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points),
+        showStrips = T) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of video component scores") + 
+  theme
+```
+
+</details>
+
