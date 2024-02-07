@@ -1,0 +1,513 @@
+---
+title: "GTI Data Exploration"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(ggplot2)
+library(GGally)
+library(dplyr)
+library(corrplot)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+```
+
+```{r, include=F}
+teach <- read.csv("data_raw/GTI-Teacher-Data.csv")
+stud <- read.csv("data_raw/GTI-Student-Data.csv")
+group <- "COUNTRY"
+```
+
+
+# Contents  
+
+[Oppurtonity to learn (OTL)](#OTL)  
+[Video component scores (VCOMP)](#VCOMP)  
+[Video indicator scores (VIND)](#VIND)  
+
+
+# Opportunity to learn (OTL) {#OTL}
+
+Derived variables also include indices for opportunity to learn (OTL). There are three versions of each index: one based on teacher log responses (TL), one based on student post-questionnaire responses (SQB), and one based on artefact ratings (AR). 
+
+These variables are named with a two- or three-part naming convention, indicating the type of index (OTL), the instrument the index is based on (TL, SQB, or AR), and the specific subtopic for the index (FUNCTIONS, REASONING, APPLIED, or ALGEBRA), if applicable. 
+
+* FUNCTIONS = OTL for using quadratic functions  
+* REASONING = OTL for reasoning about different types of quadratic equations  
+* APPLIED = OTL for applying quadratic equations to real world contexts  
+* ALGEBRA = OTL for algebraic procedures  
+
+### OTL as reported in the teacher log  
+
+OTL_TL variables are defined as the weighted count of the lessons documented in the teacher log which cover the rerspective type of OTL. A lesson was counted with weight 1 if the subtopic was given major focus (score = 2), with weight 0.5 if the subtopic was given minor focus (score = 1), and with weight 0 otherwise. 
+
+* **TL03_SUM**: Subtopic coverage rating for handling expressions.  
+* **TL04_SUM**: Subtopic coverage rating for binomial formulas.  
+* **TL05_SUM**: Subtopic coverage rating for introducing some type of quadratic equations.  
+* **TL06A_SUM**: Subtopic coverage rating for solving quadratic equations by completing the square. 
+* **TL06B_SUM**: Subtopic coverage rating for solving quadratic equations by factorizing.  
+* **TL06C_SUM**: Subtopic coverage rating for solving quadratic equations using the quadratic formula.  
+* **TL06D_SUM**: Subtopic coverage rating for solving quadratic equations by graphical representation.  
+* **TL07_SUM**: Subtopic coverage rating for discussing different cases of quadratic equations.  
+* **TL08_SUM**: Subtopic coverage rating for quadratic functions.  
+* **TL09_SUM**: Subtopic coverage rating for applications.  
+
+The OTL_TL variables are a weighted sum of the subtopic coverage from the teacher log (see drop-down section below).  
+
+* **OTL_TL_FUNCTIONS**: Weighted index of OTL for using quadratic functions, based on the teacher log. *Calculated as the weighted count of TL06D and TL08*.
+* **OTL_TL_ALGEBRA**: Weighted index of OTL for algebraic operations, based on the teacher log. *Calculated as the weighted count of TL03, TL04, TL06A, TL06B, and TL06C*.
+* **OTL_TL_REASONING**: Weighted index of OTL for reasoning about different types of quadratic equations, based on the teacher log. *Calculated as the weighted count of TL07*.
+* **OTL_TL_APPLIED**: Weighted index of OTL for applying quadratic equations to real world contexts, based on the teacher log. *Calculated as the weighted count of TL09*.
+
+
+The table below shows the descriptive statistics for the four OTL categories, averaged across all teachers irrespective of country.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|OTL_TL", names(teach))]
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out$vars <- NULL
+out <- round(out, 3)
+
+# print in markdown
+kbl(out, caption = "Descriptives of OTL_TL* using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Additionally, means and standard errors for each OTL were computed separately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=5, fig.width=6}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE))
+
+# transform out (list of data.frames) into df
+out <- Reduce(full_join,out)
+out$item <- rep(names(tmp)[c(-1, -2)], each = length(unique(tmp$COUNTRY)))
+out$vars <- NULL
+out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
+  theme + 
+  scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
+  facet_wrap(vars(item), ncol = 1) +
+  xlab("Country") + ylab("Average OTL (based on teacher log)") +
+  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("OTL (source: teacher log) seperately for each country")
+
+plt
+```
+
+To identify any patterns among the OTL as reported in the teacher log, a scatter and correlation matrix was created.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=12, fig.width=12}
+# change parameter for density plots
+custom_dens <- function(data, mapping, ...) {
+  ggplot(data = data, mapping=mapping) +
+    geom_density(..., alpha = 0.5,linewidth = 1) +
+    scale_x_continuous(limits = c(0,13))
+}
+
+costum_points <- function(data,mapping){
+  ggplot(data = data, mapping = mapping)+
+    geom_point()+
+    scale_x_continuous(limits = c(0,13))+
+    scale_y_continuous(limits = c(0,13))
+}  
+
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL as reported in the teacher log") + 
+  theme
+```
+
+> The scatterplot matrix generated using the teacher log data as source suggests that overall, different OTL categories are positively correlated with each other.
+
+
+
+<details>
+<summary> <b> Appendix: Subtopic coverage from the teacher log </b> </summary>
+
+
+
+Derived variables for subtopic coverage from the teacher log were calculated by taking the weighted sum of subtopic coverage ratings, where a lesson was counted with weight 1 if the subtopic was covered fully, weight 0.5 if the subtopic was covered to a minor extent, and weight 0 if the subtopic was not covered at all.  
+
+* **TL03_SUM**: Subtopic coverage rating for handling expressions.  
+* **TL04_SUM**: Subtopic coverage rating for binomial formulas.  
+* **TL05_SUM**: Subtopic coverage rating for introducing some type of quadratic equations.  
+* **TL06A_SUM**: Subtopic coverage rating for solving quadratic equations by completing the square. 
+* **TL06B_SUM**: Subtopic coverage rating for solving quadratic equations by factorizing.  
+* **TL06C_SUM**: Subtopic coverage rating for solving quadratic equations using the quadratic formula.  
+* **TL06D_SUM**: Subtopic coverage rating for solving quadratic equations by graphical representation.  
+* **TL07_SUM**: Subtopic coverage rating for discussing different cases of quadratic equations.  
+* **TL08_SUM**: Subtopic coverage rating for quadratic functions.  
+* **TL09_SUM**: Subtopic coverage rating for applications.  
+
+Note: If rating is missing for one subtopic coverage, it is missing consistently for all. This suggests that the teacher log might be missing completely from those teachers.  
+
+The table below shows the descriptive statistics for each subtopic separately, averaged across all teachers irrespective of country.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|_SUM", names(teach))]
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out$vars <- NULL
+out <- round(out, 3)
+
+# print in markdown
+kbl(out, caption = "Descriptives of subtopic coverage using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Additionally, means and standard errors for each subtopic were computed seperately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=10, fig.width=6}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE))
+
+# transform out (list of data.frames) into df
+out <- Reduce(full_join,out)
+out$item <- rep(names(tmp)[c(-1, -2)], each = length(unique(tmp$COUNTRY)))
+out$vars <- NULL
+out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
+  theme + 
+  scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
+  facet_wrap(vars(item), ncol = 1) +
+  xlab("Country") + ylab("Average subtopic coverage (based on teacher log)") +
+  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("Subtopic coverage seperately for each country")
+
+plt
+```
+
+The above graph suggests that teachers in some countries have given higher ratings of subtopic coverage in the teacher log regardless of the specific subtopic. To further investigate this, a sum score was computed (**TL_SUM**). As shown below, the overall subtopic coverage varies substantially between countries.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv = "TL_SUM"
+tmp[, dv] <- rowSums(tmp[, c(-1, -2)])
+
+# generate and print descriptive tables to markdown
+table_desc(data = tmp,
+           group_var = group,
+           dep_var = dv)
+```
+
+
+To identify any patterns among the subtopic coverage, a scatter and correlation matrix was created.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=20, fig.width=20}
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of subtopic coverage") + 
+  theme
+```
+
+</details> 
+
+
+### OTL as reported by the students in the post-questionnaire  
+
+OTL_SQB variables are defined as class-level means of the variables related to each subtopic.  
+
+In the questionnaire, students were asked: ***For each task please indicate (yes or no) whether you encountered these types of mathematical tasks.***  
+
+* Plotting the graph of y = x².  
+* Solving a problem like x²−4=0 by inspection.  
+* Finding all values of x for which(x−4)(x+5)=0.  
+* Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like x²+6x+9=0.  
+* Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+* Using different ways when solving a quadratic equation.  
+* Explaining when a quadratic equation has one, two or no solutions.  
+* Checking if an equation like 2x²+3x+1 has any real solution.  
+* Calculating the highest point of a ball that is thrown diagonally into the air.  
+* Calculating the distance a car has travelled after a certain time of acceleration.  
+* Finding the roots of a quadratic function.  
+
+Depending on the OTL category, class-level means were calculated using different items.  
+
+* **OTL_SQB**: Class-level mean for OTL related to the focal unit, based on the student post-questionnaire. Calculated as class-level mean of SQB07EA_rec to SQB07EK_rec.
+* **OTL_SQB_FUNCTIONS**: Class-level mean for OTL for using quadratic functions, based on the student post-questionnaire. Calculated as class-level mean of SQB07EA_rec, SQB07EK_rec.
+* **OTL_SQB_ALGEBRA**: Class-level mean for OTL for algebraic operations, based on the student post-questionnaire. Calculated as class-level mean of SQB07EB_rec, SQB07EC_rec, SQB07ED_rec, SQB07EE_rec, SQB07EF_rec.
+* **OTL_SQB_REASONING**: Class-level mean for OTL for reasoning about different types of quadratic equations, based on the student post-questionnaire. Calculated as class-level mean of SQB07EG_rec, SQB07EH_rec.
+* **OTL_SQB_APPLIED**: Class-level mean for OTL for applying quadratic equations to real world contexts, based on the student post-questionnaire. Calculated as class-level mean of SQB07EI_rec, SQB07_EJ_rec.
+
+
+The table below shows the descriptive statistics for the four OTL categories, averaged across all teachers irrespective of country.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|OTL_SQB", names(teach))]
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out$vars <- NULL
+out <- round(out, 3)
+
+# print in markdown
+kbl(out, caption = "Descriptives of OTL_SQB* using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+> The table data suggests that for each item in the questionnaire, the answer was recoded to be 1 if the student encountered the oppurtunity (and 0 otherwise), then the class-level mean was calculated per item, before summing up the respective class-level means for all items that together contribute to an OTL category.  
+
+Additionally, means and standard errors for each OTL were computed separately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=5, fig.width=6}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE))
+
+# transform out (list of data.frames) into df
+out <- Reduce(full_join,out)
+out$item <- rep(names(tmp)[c(-1, -2)], each = length(unique(tmp$COUNTRY)))
+out$vars <- NULL
+out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
+  theme + 
+  scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
+  facet_wrap(vars(item), ncol = 1) +
+  xlab("Country") + ylab("Average OTL (based on SQB)") +
+  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("OTL (source: students) seperately for each country")
+
+plt
+```
+
+> Interestingly, the student perception seems less varied across countries than the teacher log data would suggest. 
+
+
+To identify any patterns among the OTL as reported by the students, a scatter and correlation matrix was created.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=12, fig.width=12}
+# change parameter for density plots
+custom_dens <- function(data, mapping, ...) {
+  ggplot(data = data, mapping=mapping) +
+    geom_density(..., alpha = 0.5,linewidth = 1)
+}
+
+costum_points <- function(data,mapping){
+  ggplot(data = data, mapping = mapping)+
+    geom_point()
+}  
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL as reported in the student questionnaire") + 
+  theme
+```
+
+> The scatterplot matrix generated using the student questionnaire response data as source suggests that there is a more mixed and nuanced pattern with respect to the question whether or not different OTL categories are  correlated with each other.
+
+
+### OTL as observed in the classroom artefact ratings
+
+All artefact sets were rated based on the presence of nine specific mathematical subtopics, aligned to the subtopics that were captured by student questionnaires and teacher logs. All components were scored dichotomously (1 = present, 0 = otherwise).  
+
+* **SQE_COMP_SQUARE_RATE**: Solving quadratic equations by completing the square  
+* **SQE_FACTORIZING_RATE**: Solving quadratic equations by factorising  
+* **SQE_QUADRATIC_RATE**: Deriving the quadratic formula or solving quadratic equations by using the quadratic formula  
+* **SQE_FIND_ROOT_RATE**: Solving quadratic equations by finding roots in a graphical representation  
+* **FACTOR_EXP_RATE**: Factoring expressions  
+* **DIFF_CASE_RATE**: Discussing different cases of ax2+bx+c depending on values of a,b and c  
+* **EXPLORING_FUNCT_RATE**: Exploring quadratic functions  
+* **EXAMINING_REL_RATE**: Examining the relationship between the value of the discriminant and the number of solutions to a quadratic equation  
+* **APPLY_REAL_WORLD_RATE**: Applying mathematics to real life situations  
+
+Classroom-level subtopic coverage scores were derived by averaging over raters and artefact sets. Score construction followed a two-step process: i) Average two raters' artefact-set level ratings to obtain artefact-set level average; ii) Average the artefact-set averages to obtain a classroom-level score.  
+
+The OTL_AR* indices are then computed by calculating the summative indecx for across different ratings.  
+
+* **OTL_AR**: Summative index of OTL related to the focal unit, based on classroom artefact ratings. Calculated as mean of FACTOR_EXP_RATE to APPLY_REAL_WORLD_RATE.
+* **OTL_AR_FUNCTIONS**: Summative index of OTL for using quadratic functions, based on classroom artefact ratings. Calculated as mean of SQE_FIND_ROOT_RATE, EXPLORING_FUNCT_RATE.
+* **OTL_AR_ALGEBRA**: Summative index of OTL for algebraic operations, based on classroom artefact ratings. Calculated as mean of FACTOR_EXP_RATE, SQE_COMP_SQUARE_RATE, SQE_FACTORIZING_RATE, SQE_QUADRATIC_RATE.
+* **OTL_AR_REASONING**: Summative index of OTL for reasoning about different types of quadratic equations, based on classroom artefact ratings. Calculated as mean of DIFF_CASE_RATE, EXAMINING_REL_RATE.
+* **OTL_AR_APPLIED**: Summative index of OTL for applying quadratic equations to real world contexts, based on classroom artefact ratings. Takes on the value of APPLY_REAL_WORLD_RATE.
+
+The table below shows the descriptive statistics for the four OTL categories, averaged across all teachers irrespective of country.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|OTL_AR", names(teach))]
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out$vars <- NULL
+out <- round(out, 3)
+
+# print in markdown
+kbl(out, caption = "Descriptives of OTL_AR* using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Additionally, means and standard errors for each OTL were computed separately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=5, fig.width=6}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE))
+
+# transform out (list of data.frames) into df
+out <- Reduce(full_join,out)
+out$item <- rep(names(tmp)[c(-1, -2)], each = length(unique(tmp$COUNTRY)))
+out$vars <- NULL
+out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
+  theme + 
+  scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
+  facet_wrap(vars(item), ncol = 1) +
+  xlab("Country") + ylab("Average OTL (based on AR)") +
+  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("OTL (source: artefact ratings) seperately for each country")
+
+plt
+```
+
+> Akin to the teacher log, there is a substantial amount of variation visible across countries. 
+
+
+To identify any patterns among the OTL based on the artefact ratings, a scatter and correlation matrix was created.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=12, fig.width=12}
+# change parameter for density plots
+custom_dens <- function(data, mapping, ...) {
+  ggplot(data = data, mapping=mapping) +
+    geom_density(..., alpha = 0.5,linewidth = 1)
+}
+
+costum_points <- function(data,mapping){
+  ggplot(data = data, mapping = mapping)+
+    geom_point()
+}  
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL based on the artefact ratings") + 
+  theme
+```
+
+> The scatterplot matrix generated using the artefact rating data as source suggests that there is a more mixed and nuanced pattern with respect to the question whether or not different OTL categories are  correlated with each other.  
+
+
+### Intercorrelation of OTL as rated in by different sources
+
+Below, scatterplot and correlation matrices are created for each category of OTL separately, using all three data sources.  
+
+##### Functions
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|_FUNCTIONS", names(teach))]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL for using quadratic functions") + 
+  theme
+
+
+```
+
+
+
+##### Reasoning
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|_REASON", names(teach))]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL for reasoning about different types of quadratic equations") + 
+  theme
+
+
+```
+
+##### Applied
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|_APPLIED", names(teach))]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL for applying quadratic equations to real world contexts") + 
+  theme
+
+
+```
+
+##### Algebra
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.height=6, fig.width=6}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|_ALGEBRA", names(teach))]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of OTL for algebraic procedures") + 
+  theme
+
+
+```
+
+##### All OTLs from all sources
+
+The plots above showed that different data sources are if any mildly correlated with each other. Lastly, a scatterplot and correlation matrix of using the data for all categories and sources was created to determine whether including all the variables into the model would cause issues of multicollinearity.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=25, fig.width=25}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|_FUNCTIONS|_REASONING|_APPLIED|_ALGEBRA", names(teach))]
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of all OTL") + 
+  theme
+
+
+```
+
+
+
+
