@@ -47,6 +47,7 @@ group <- "COUNTRY"
 [Oppurtonity to learn (OTL)](#OTL)  
 [Video component scores (VCOMP)](#VCOMP)  
 [Video indicator scores (VIND)](#VIND)  
+[Artefact component scores (ACOMP)](#ACOMP)  
 
 
 # Opportunity to learn (OTL) {#OTL}
@@ -893,7 +894,7 @@ Aggregation methods:
   2. Average the two raters’ lowest achieved lesson scores (from step 1) for the same lesson. (If a teacher only has one lesson, use this score as the teacher score.)  
   3. Average the two lesson lowest achieved scores (from step 2) for a class to obtain the lowest achieved score for the classroom.  
   
-Derived variables for video indicator scores take the form **VIND[_indicator]**, where indicator is an alphanumeric code, composed of a two-letter code denoting the domain, a three-character code denoting the specific indicator, and a 3-6 letter code indicating the specific aggregation method used (PCT, MAX, MIN, LESAVG, LESAVGNO1).  
+Derived variables for video indicator scores take the form **VIND[_indicator]**, where "indicator" is an alphanumeric code, composed of a two-letter code denoting the domain, a three-character code denoting the specific indicator, and a 3-6 letter code indicating the specific aggregation method used (PCT, MAX, MIN, LESAVG, LESAVGNO1).  
   
 > Variable names follow the structure **VCOMP_[DOMAIN][INDICATOR][AGGREGATION METHOD]**.  
   
@@ -971,12 +972,12 @@ out$domain <- recode(out$domain,
 plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
-  geom_hline(data = key, aes(yintercept = Max.value.agg), col = "black", type = "dashed") +
+  geom_hline(data = key, aes(yintercept = Max.value.agg), col = "grey", type = "dotted") +
   theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(Altname_f), ncol = 1, scales = "free_y") +
   xlab("Country") + ylab("Classroom-level VIND score") +
-  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE. Horizontal line shows maximum possible value.") + theme(plot.caption = element_text(hjust=0)) +
   ggtitle("Video indicator score seperately for each country")
 
 plt
@@ -1012,3 +1013,143 @@ corrplot(out,
 
 
 ```
+
+
+# Artefact component scores (ACOMP) {#ACOMP}
+
+The participating teachers in each country/economy were asked to collect artefacts from four days of instruction on quadratic equations. These lessons were then rated along eleven components of teaching, aligned to the domains of quality teaching in the Global Teaching InSights observation system. All components were scored on a 3-point scale, except for Accuracy of Materials, which was scored on a 2-point scale.  
+  
+In addition to the artefacts from four instructional days, teachers were asked to submit the unit assessment that covered the topic of quadratic equations. The unit assessment was rated on a subset of the components: Connecting Mathematical Representations, Explicit Patterns and Generalisations, Real-World Connections, Using Multiple Mathematical Methods and Asking for Explanations. Unit assessments were rated separately and unit assessment ratings were not included in the construction of all classroom-level scores.
+  
+Classroom-level component scores were derived by averaging over raters and artefact sets. Score construction followed a two-step process: i) average two raters' artefact-set level ratings to obtain artefact-set level component average scores; ii) average the artefact-set averages to obtain a classroom-level component score.  
+  
+Derived variables for artefact component scores take the form **ACOMP_[component]**, where “component” is an alphabetic code denoting the component.
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# read in data dict
+tmp <- read.delim("misc/teacher_file_variables_acomp_explanation.txt", header = T)
+
+# create key
+key <- tmp[, c("Variable", "Altname", "Max.Rating")]
+
+# print table
+kbl(tmp) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+The table below shows the descriptive statistics for all 11 artefact component scores, averaged across all teachers irrespective of country.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|ACOMP", names(teach))]
+
+# reorder columns
+#tmp <- tmp[, c("T_ID", "COUNTRY", key$Variable)]
+
+# compute descriptives
+out <- do.call("rbind", apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describe(x)))
+out <- round(out, 3)
+
+out$vars <- row.names(out)
+row.names(out) <- NULL
+names(out)[names(out)=="vars"] <- "Variable"
+
+# add altname 
+out <- merge(key, out, by.x = "Variable", sort = F)
+
+# print in markdown
+kbl(out, caption = "Descriptives of ACOMP* using whole dataset") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+Additionally, means and standard errors for each video component score were computed separately for each country and plotted below.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=9, fig.width=6}
+# compute descriptives for each country
+out <- apply(tmp[, c(-1, -2)], MARGIN = 2, function(x) psych::describeBy(x, group = tmp$COUNTRY, mat=TRUE, digits = 3))
+
+# transform out (list of data.frames) into df
+out <- data.table::rbindlist(out, idcol = "Variable")
+out <- merge(key, out, by.x = "Variable", sort = F)
+
+# make factor
+out$Altname_f <- factor(out$Altname, levels = c(key$Altname))
+key$Altname_f <- factor(key$Altname, levels = c(key$Altname))
+
+out$vars <- NULL
+
+# print in markdown
+plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
+  geom_bar(stat = "identity", width = 0.5) + 
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
+  geom_hline(data = key, aes(yintercept = Max.Rating), col = "grey", type = "dotted") +
+  theme + 
+  scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
+  facet_wrap(vars(Altname_f), ncol = 1) +
+  xlab("Country") + ylab("Classroom-level VIND score") +
+  labs(caption = "Error bars represent SE. Horizontal line shows maximum possible value.") + theme(plot.caption = element_text(hjust=0)) +
+  ggtitle("Artefact component score seperately for each country")
+
+plt
+
+```
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=7, fig.height=7}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|ACOMP", names(teach))]
+
+# rename variables
+names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
+
+# remove T_ID and Country
+desc <- tmp[, c(-1, -2)]
+
+# reorder columns
+desc <- desc[, c(key$Altname)]
+
+# compute correlation matrix
+out <- round(psych::corr.test(desc)$r, 2)
+
+
+cat("\n\n")
+cat("##### Correlation matrix (all countries)")
+cat("\n")
+cat("For the correlation matrix, data from all countries was pooled. If a p-value is larger than 0.05, then the corresponding correlation value is crossed out. The upper triangular matrix was adjusted for multiple testing.\n")
+corrplot(out, 
+         p.mat = psych::corr.test(desc)$p, sig.level = .05, #insig = "p-value",
+         method = 'shade', addCoef.col = 'black', number.font = 2, type = 'full', diag = T,
+         tl.col = "black", number.cex = 1, tl.cex = 1, cl.cex = 1) 
+
+
+```
+
+<details>
+<summary> <b> Appendix: Scatterplot and correlation matrix of artefact component scores for all countries separately </b> </summary>
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message = F, fig.height=20, fig.width=20}
+
+# change parameter for density plots
+custom_dens <- function(data, mapping, ...) {
+  ggplot(data = data, mapping=mapping) +
+    geom_density(..., alpha = 0.5,linewidth = 1) +
+    scale_x_continuous(limits = c(1,3))
+}
+
+costum_points <- function(data,mapping){
+  ggplot(data = data, mapping = mapping)+
+    geom_point()+
+    scale_x_continuous(limits = c(1,3))+
+    scale_y_continuous(limits = c(1,3))
+}  
+
+# intercorrelation plot
+ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points),
+        showStrips = T) + 
+  scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
+  ggtitle("Scatterplot and correlation matrix of artefact component scores") + 
+  theme
+```
+
+</details>
