@@ -1021,7 +1021,10 @@ The participating teachers in each country/economy were asked to collect artefac
   
 In addition to the artefacts from four instructional days, teachers were asked to submit the unit assessment that covered the topic of quadratic equations. The unit assessment was rated on a subset of the components: Connecting Mathematical Representations, Explicit Patterns and Generalisations, Real-World Connections, Using Multiple Mathematical Methods and Asking for Explanations. Unit assessments were rated separately and unit assessment ratings were not included in the construction of all classroom-level scores.
   
-Classroom-level component scores were derived by averaging over raters and artefact sets. Score construction followed a two-step process: i) average two raters' artefact-set level ratings to obtain artefact-set level component average scores; ii) average the artefact-set averages to obtain a classroom-level component score.  
+Classroom-level component scores were derived by averaging over raters and artefact sets. Score construction followed a two-step process:  
+  
+* average two raters' artefact-set level ratings to obtain artefact-set level component average scores  
+* average the artefact-set averages to obtain a classroom-level component score  
   
 Derived variables for artefact component scores take the form **ACOMP_[component]**, where “component” is an alphabetic code denoting the component.
   
