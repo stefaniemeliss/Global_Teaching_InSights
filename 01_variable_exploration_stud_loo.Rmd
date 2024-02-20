@@ -1,0 +1,328 @@
+---
+title: "Leave one out (LOO) means of student data"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(ggplot2)
+library(dplyr)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+```
+
+```{r, include=F}
+stud <- read.csv("data_raw/GTI-Student-Data.csv")
+group <- "COUNTRY"
+```
+
+
+Contents  
+
+[Test scores](#test)  
+[Self-concept in mathmatics](#selfcon)  
+[Interest in mathmatics](#int)  
+[Self-efficacy](#effi)  
+[Opportunities to Learn](#otl)  
+
+
+```{r working_chunk, echo=FALSE, eval=F}
+
+
+# compute LOO mean #
+
+# create tmp df with relevant columns
+tmp <- stud[, c("S_ID", "T_ID", "COUNTRY", dv)]
+
+new_var <- paste0("LOO_", dv)
+
+# add LOO mean
+tmp <- tmp %>% 
+  group_by(T_ID) %>%
+  # compute leave one out mean
+  mutate(new_var = (sum(get(dv), na.rm = T) - get(dv))/(n()-1),
+         n = n())
+
+names(tmp)[names(tmp) == "new_var"] <- new_var
+
+# make df (currently tbl)
+tmp <- as.data.frame(tmp)
+
+
+# generate and print descriptive tables to markdown
+table_desc(data = tmp,
+           group_var = group,
+           dep_var = new_var)
+
+
+# create plots #
+
+# input vars
+x_var = dv
+y_var = new_var
+x_lab <- paste(label, "RAW")
+y_lab <- paste(label, "LOO")
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = tmp,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = tmp,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+```
+
+
+# Test scores {#test}
+
+### Pre-test
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "STA_IRTSCORE"
+label <- "IRT score pre-test"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "STA_PROPCORRECTSCORE"
+label <- "Proportion of correct answers pre-test"
+
+<<working_chunk>>
+
+```
+
+### Post-test
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "STB_IRTSCORE"
+label <- "IRT score post-test"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "STB_PROPCORRECTSCORE"
+label <- "Proportion of correct answers post-test"
+
+<<working_chunk>>
+
+```
+
+
+# Self-concept in mathmatics {#selfcon}
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SA_SELFCON"
+label <- "Self-concept pre"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SB_SELFCON"
+label <- "Self-concept post"
+
+<<working_chunk>>
+
+```
+
+# Interest in mathmatics {#int}
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "PRE_PINT"
+label <- "Personal interest pre (previous teacher)"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SA_PINT_CURR"
+label <- "Personal interest pre (current teacher)"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "POST_PINT"
+label <- "Personal interest post"
+
+<<working_chunk>>
+
+```
+
+
+# Self-efficacy {#effi}
+
+### General self-efficacy  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "PRE_GENSELFEFF"
+label <- "General self-efficacy pre (previous teacher)"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SA_GENSELFEFF_CURR"
+label <- "General self-efficacy pre (current teacher)"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "POST_GENSELFEFF"
+label <- "General self-efficacy post"
+
+<<working_chunk>>
+
+```
+
+### Self-efficacy with mathematical tasks
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SA_EFFICACY"
+label <- "Task-specific self-efficacy pre"
+
+<<working_chunk>>
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SB_EFFICACY"
+label <- "Task-specific self-efficacy post"
+
+<<working_chunk>>
+
+```
+
+# Opportunities to learn {#otl}
+
+### Student perception of opportunity to use quadratic functions
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SB_OTL_FUNCTION"
+label <- "OTL Functions"
+
+<<working_chunk>>
+
+```
+
+### Student perception of opportunity to learn algebraic operations
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SB_OTL_ALGEBRA"
+label <- "OTL Algebra"
+
+<<working_chunk>>
+
+```
+
+
+### Student perception of opportunity to learn reasoning about different types of quadratic equations
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SB_OTL_REASON"
+label <- "OTL Reasoning"
+
+<<working_chunk>>
+
+```
+
+### Student perception of opportunity to apply quadratic equations to real world contexts
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define DV and label
+dv <- "SB_OTL_APPLIED"
+label <- "OTL Application"
+
+<<working_chunk>>
+
+```
+
+
+```{r, include=F}
+tmp <- stud[, grep("SQB07E", names(stud))]
+
+# replace all 9999 with NA
+tmp <- tmp %>%
+  mutate(across(where(is.integer), ~na_if(., 9999)))
+
+# recode values
+tmp2 <- tmp %>%
+  # replace all 9999 with NA
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>%
+  # recode all items (previously coded as 1 = YES and 2 = NO) to 1 = YES and 0 = NO
+  mutate(across(where(is.integer), ~recode(., `1` = 1, `2` = 0)))
+
+# compute scales #
+
+# SB_OTL_FUNCTION: Scale measuring student perception of opportunity to use quadratic functions. 
+
+
+# SB_OTL_ALGEBRA: Scale measuring student perception of opportunity to learn algebraic operations. 
+
+# SB_OTL_REASON: Scale measuring student perception of opportunity to learn reasoning about different types of quadratic equations. 
+
+# SB_OTL_APPLIED	Scale measuring student perception of opportunity to apply quadratic equations to real world contexts.
+
+```
+
