@@ -1,0 +1,107 @@
+---
+title: "Measurement invariance"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+
+library(lavaan)
+library(semPlot)
+library(semptools)
+library(semTools)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+```
+
+This work is based on the R tutorial for [Multiple-Group Confirmatory Factor Analysis (MG-CFA) by Hirschfeld and von Brachel](https://doi.org/10.7275/qazy-2946).
+
+## Conceptual introduction
+
+> A scale is said to have measurement invariance (also known as measurement equivalence) across groups if subjects with identical levels of the latent construct have the same expected raw-score on the measure.
+
+Measurement invariance required in order to be able to compare means and attribute differences therein to differences between groups.
+
+Two approaches to test for measurement invariance: SEM and IRT  
+
+in a measurement model in which 9 items load on three factors (3 items per factor),the SEM can translated to regression as 6 parameters are estimated:  
+
+1. a regression coefficient (e.g. the loading of test “x1” on factor visual “visual”)  
+2. a regression intercept  
+3. a regression residual variance  
+4. the means of the factors  
+5. the variances of the underlying factors  
+6. the covariances of the underlying factors  
+
+MG-CFA extends this framework as it allows to test whether these different regression parameters are equal in two or more groups.  
+
+#### Levels of measurement invariance
+
+1. configural invariance implies that the number of latent variables and the pattern of loadings of latent variables on indicators are similar across the groups 
+2. metric (or “weak“) invariance implies that the magnitude of the loadings is similar across the groups --> required in order to meaningfully compare the relationships between latent variables across different groups  
+3. scalar (or “strong”) invariance implies that not only the item loadings but also the item intercepts are similar across the groups --> implies that there are no systematic response biases and is required in order to meaningfully compare the means of latent variables across different groups  
+4. strict invariance implies that in addition to loadings and intercepts, the residual variances are similar across groups  
+
+#### Testing for measurement invariance
+
+Testing for measurement invariance consists of a series of model comparisons that define more and more stringent equality constraints
+
+1. baseline model is fit in which the loading pattern is similar in all groups but the magnitude of all parameters – loadings, intercepts, variances, etc. - may vary. Configural invariance exists if this baseline model has a good fit and the same loadings are significant in all groups  
+2. metric invariance model in which the factor loadings are constrained to be equal is fit to the data and the fit of this model is compared to the baseline model. Weak invariance exists if the fit of the metric invariance model is not substantially worse than the fit of the baseline model  
+3. scalar invariance model in which factor loadings and item intercepts are constrained to be equal is fit to the data and compared against the weak measurement invariance model. Again strong invariance exists if the fit of the scalar invariance model is not substantially worse than the fit of the weak invariance model  
+4. strict invariance model in which factor loadings, intercepts, and residual variances are constrained to be equal is fit to the data and compared to the strong measurement invariance model  
+
+
+#### Decision rules for invariance tests
+
+* imposing equality constraints will always result in a decrease in fit because less degrees of freedom are available --> raises the question whether a specific decrease in fit observed during the model comparisons is substantial or not  
+* chi-square tests to decide whether or not the increase in fit is substantial  
+* difference in fit indices to define invariance  
+* At present the inspection of changes in fit indices, specifically the difference in comparative fit index (CFI) (ΔCFI), seems the most widely used and empirically best supported criterion to define invariance (Chen, 2007; Cheung & Rensvold, 2002)  
+ΔCFI < .01 is chosen to decide whether a more constrained model, e.g. the weak-invariance model, shows a substantial decrease in model fit compared to a less constrained model, e.g. the baseline model.  
+
+## MG-CFA in R
+
+To determine measurement invariance, the R-packages lavaan, semTools, and semPlot are used.
+
+Running a MG-CFA analysis comprises 4 steps:  
+
+1. specifying a baseline model  
+* This entails specifying the model using lavaan’s model syntax, fitting the model to the data using the function cfa(), and inspecting the model with the functions summary(), moreFitIndices() and semPaths().  
+2. defining equality constraints  
+3. comparing the models  
+4. visualizing results  
+
+The table below gives an overview of the functions used and their most important parameters.
+
+```{r, echo = F, results='asis'}
+# read in data dict
+tmp <- structure(list(Function = c("cfa() ", "moreFitIndices() ", "semPaths() ", 
+                                   "Measurement Invariance() ", "inspect() ", "mgcfa.perm() "), 
+                      Explanation = c("Fits a model to data. The parameters group.equal and group.partial allow defining and relaxing constraints. ", 
+                                      "Gives several additional fit indices. ", "Plots structural models and estimates. ", 
+                                      "Performs a series of model comparisons for which chi-square and ΔCFI are reported. Allows relaxing constraints via the parameter group.partial. ", 
+                                      "Gives only part of the model summary so that these can be stored. ", 
+                                      "Performs a permutation test to estimate the distribution of ΔCFI for random groups."
+                      )), class = "data.frame", row.names = c(NA, -6L))
+
+# print table
+kbl(tmp, caption = "Important functions and parameters") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
