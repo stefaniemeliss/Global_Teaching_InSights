@@ -1,0 +1,207 @@
+---
+title: "Measurement invariance (MI): Non-cognitive Student Outcomes [3 COUNTRIES REMOVED]"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+
+library(mirt)
+library(ggmirt)
+
+library(plotly)
+
+library(lavaan)
+library(semPlot)
+library(semptools)
+library(semTools)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+# read in data
+all_data <- read.csv("data_raw/GTI-Student-Data.csv")
+
+# replace all 9999 with NA
+all_data <- all_data %>%
+  mutate(across(where(is.integer), ~na_if(., 9999)))
+
+# define list of countries
+countries <- unique(all_data$COUNTRY)
+
+combis <- combn(countries, 3)
+
+```
+
+
+```{r, echo = F, results='asis'}
+# determine unique variable names
+vars <- c(
+  # self-concept
+  "SELFCON_baseline",
+  "SELFCON_posttest",
+  # personal interest
+  "PINT_previous",
+  "PINT_current",
+  "PINT_posttest",
+  # all 4 interest items (personal + situational)
+  "INT_previous",
+  "INT_current",
+  "INT_posttest",
+  # general self-efficacy
+  "GENSELFEFF_previous",
+  "GENSELFEFF_current",
+  "GENSELFEFF_posttest",
+  # task-specific self- efficacy 
+  "EFFICACY_baseline",
+  "EFFICACY_posttest",
+  # MATCHED task-specific self- efficacy 
+  "EFFICACY_MATCHED_baseline",
+  "EFFICACY_MATCHED_posttest"
+)
+
+# determine items that are summed up to factor
+scales <- c(
+  # self-concept
+  paste0("SQA06", LETTERS[1:6],collapse = " + "),
+  paste0("SQB01", LETTERS[1:6],collapse = " + "),
+  # personal interest
+  paste0("SQA12", LETTERS[1:3],collapse = " + "),
+  paste0("SQA14", LETTERS[1:3],collapse = " + "),
+  paste0("SQB03", LETTERS[1:3],collapse = " + "),
+  # all 4 interest items (personal + situational)
+  paste0("SQA12", LETTERS[1:4],collapse = " + "),
+  paste0("SQA14", LETTERS[1:4],collapse = " + "),
+  paste0("SQB03", LETTERS[1:4],collapse = " + "),
+  # general self-efficacy
+  paste0("SQA13", LETTERS[1:5],collapse = " + "),
+  paste0("SQA15", LETTERS[1:5],collapse = " + "),
+  paste0("SQB02", LETTERS[1:5],collapse = " + "),
+  # task-specific self- efficacy 
+  paste0("SQA16", LETTERS[1:10],"2", collapse = " + "),
+  paste0("SQB07C", LETTERS[1:11], collapse = " + "),
+  # MATCHED task-specific self- efficacy 
+  paste0("SQA16", LETTERS[6:10],"2", collapse = " + "),
+  paste0("SQB07C", LETTERS[1:5], collapse = " + ")
+)
+
+
+# combine to df for checking
+df <- data.frame(vars, scales)
+df$models <- paste(vars, "=~", scales)
+```
+
+Based on the result that measurement invariance did not hold when using data from all 8 countries nor from only 7 or 6 countries, here the results are presented when systematically removing three countries at a time.  
+
+To determine measurement invariance (MI) for the questionnaire responses given by students, CFA was applied. More specifically, for each questionnaire scale, we first defined a CFA model where all items in the scale are loading on a single factor. All items were defined as being ordered categorical. 
+
+> factor =~ item_1 + item_2 + ... + item_n  
+
+For the multi-group CFA, the same model is fitted in all groups. To determine metric MI, a configural and a metric model were fitted and compared. The model fit incides and changes therein were summarised in a table.  
+
+The outlined procedure was followed for each questionnaire scale of interest. The results are shown below.  
+
+The tables below show the model comparison statistics and change in fit indices. If the change exceeded thresholds (i.e., **decrease in CFI of more than  -.02 and increase in RMSEA of more than .03**), this was highlighted in red. A separate table was created for the each possible removal of country.    
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# debug
+# vars <- vars[2]
+
+for (c in 1:ncol(combis)) {
+  
+  # determine which countries to remove
+  countries <- combis[,c]
+  
+  # remove data from country
+  stud <- all_data %>% 
+  filter(!COUNTRY %in% countries)
+  
+  # loop over all variables
+  for (v in 1:length(vars)) {
+    
+    # lavaan model formulation
+    model <- paste(vars[v], "=~", scales[v])
+    
+    # configural invariance #
+    
+    # fit CFA to test for configural invariance
+    config <- lavaan::cfa(model, ordered = T, data = stud, group = "COUNTRY")
+    
+    # metric invariance #
+    
+    metric <-lavaan::cfa(model, ordered = T, data = stud, group = "COUNTRY", group.equal = c("loadings"))
+    
+    # compare model fit
+    comp <- compareFit(list(config, metric))
+    
+    tmp <- slot(comp, "nested")
+    
+    tmp <- tmp[!is.na(tmp$`Df diff`),]
+    tmp$variable <- vars[v]
+    
+    tmp3 <- tmp[, c("variable",
+                    "Chisq diff", "Df diff", "Pr(>Chisq)")]
+    row.names(tmp3) <- NULL
+    names(tmp3) <- c("variable", 
+                     "chisq", "df", "pvalue")
+    
+    
+    tmp <- slot(comp, "fit.diff")
+    
+    tmp$variable <- vars[v]
+    tmp$model <- c("Δ_conf_metr")
+    
+    tmp4 <- tmp[, c("variable", 
+                    "cfi", "cfi.scaled", "cfi.robust",
+                    "tli", "tli.scaled", "tli.robust",
+                    "rmsea", "rmsea.scaled", "rmsea.robust")]
+    row.names(tmp4) <- NULL
+    
+    # merge 
+    tmp <- merge(tmp3, tmp4, by = c("variable"))
+    
+    
+    # combine all data in one output for extraction
+    if (v == 1) {
+      out <- tmp
+    } else {
+      out <- rbind(out, tmp)
+    }
+    
+  }
+  
+  
+  # define thresholds for highlighting
+  col.red <- which(out$cfi < -.02 | out$rmsea > .03)
+  
+  # print summary table
+  kbl(out, digits = 3, row.names = F,
+      caption = paste0("Metric vs. configural model (", paste(countries, collapse = "|"), " removed)")) %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+    kableExtra::column_spec(5, bold = TRUE) %>%
+    kableExtra::column_spec(11, bold = TRUE) %>%
+    row_spec(col.red, color = red) %>%
+    print()
+  cat("\n\n")
+  
+  
+}
+
+```
+
+
