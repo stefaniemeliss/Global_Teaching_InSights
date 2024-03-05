@@ -1,5 +1,5 @@
 ---
-title: "Measurement invariance (MI): Student Outcomes"
+title: "Measurement invariance (MI): Non-cognitive Student Outcomes (all 8 countries)"
 author: "Stef Meliss"
 date: "`r Sys.Date()`"
 output: html_document
@@ -20,13 +20,19 @@ library(kableExtra)
 library(dplyr)
 library(ggplot2)
 
+library(mirt)
+library(ggmirt)
+
+library(plotly)
+
 library(lavaan)
 library(semPlot)
 library(semptools)
 library(semTools)
 
 # load in functions
-devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+#devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
 
 # read in data
 stud <- read.csv("data_raw/GTI-Student-Data.csv")
@@ -37,7 +43,6 @@ stud <- stud %>%
 
 ```
 
-## GTI Data Non-cognitive Student Outcomes  
 
 ```{r, echo = F, results='asis'}
 # determine unique variable names
@@ -105,12 +110,12 @@ This model was first fitted on all available data across all countries, model fi
 Next, we fitted the model to each country separately to extract model fit indices for each country. These are summarised in a table.  
 
 For the multi-group CFA, the same model is fitted in all groups. To establish metric (or weak) MI,  the pattern of salient (non-zero) and non-salient (zero) loadings was compared across groups. This was done by extracting the p-values associated with each loading and binarising it through comparison against an alpha value of .05. In a next step, we checked whether  there is any variance in the binarised p values across countries for each item. If the variance was zero for each item, we can assume that the same pattern of salient and non-salient loadings occurs across countries.  
-  
+
 To determine MI, a configural, a metric and a scalar model were fitted and compared. The model fit incides and changes therein were summarised in a table.  
-  
+
 The outlined procedure was followed for each questionnaire scale of interest. The results are shown below.  
-  
-  
+
+
 
 
 ```{r, echo = F, results='asis', fig.align='center'}
@@ -160,7 +165,7 @@ for (v in 1:length(vars)) {
   tmp2$group <- "all"
   
   
-  cat("The model was then fitted separately for each country. Model fit indices are included in the table below. Data for a country is highlighted in blue if CFI or TLI are below .95 or if RMSEA is above .1.\n\n")
+  cat("The model was then fitted separately for each country. Model fit indices are included in the table below. Data for a country is **highlighted in blue if CFI or TLI are below .95 or if RMSEA is above .1**.\n\n")
   
   # baseline model fit in each country #
   
@@ -294,7 +299,7 @@ for (v in 1:length(vars)) {
                   "Chisq diff", "Df diff", "Pr(>Chisq)")]
   row.names(tmp3) <- NULL
   names(tmp3) <- c("variable", "model",
-                  "chisq", "df", "pvalue")
+                   "chisq", "df", "pvalue")
   
   
   tmp <- slot(comp, "fit.diff")
@@ -323,8 +328,8 @@ for (v in 1:length(vars)) {
     col.red <- col.red + nrow(tmp2)
   }
   
-    cat("Configural, metric and scalar invariance were modeled. The respective model fit indices are shown in the first three rows in the table below. If the configural model did not have good fit indices (i.e., CFI or TLI are below .95 or if RMSEA is above .1 ), this is nighlighted in blue. The last two rows show the model comparison statistics and change in fit indices. If the change exceeded thresholds (i.e., decrease in CFI of more than  -.02 and increase in RMSEA of more than .3), this was highlighted in red. \n\n")
-
+  cat("Configural, metric and scalar invariance were modeled. The respective model fit indices are shown in the first three rows in the table below. If the configural model did not have good fit indices (i.e., **CFI or TLI are below .95 or if RMSEA is above .1** ), this is nighlighted in blue. The last two rows show the model comparison statistics and change in fit indices. If the change exceeded thresholds (i.e., **decrease in CFI of more than  -.02 and increase in RMSEA of more than .03**), this was highlighted in red. \n\n")
+  
   
   # print table
   kbl(tmp, digits = 3,
@@ -354,3 +359,20 @@ for (v in 1:length(vars)) {
 
 ```
 
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# create summary
+out2 <- subset(out, model == "Δ_conf_metr")
+
+# define thresholds for highlighting
+col.red <- which(out2$cfi < -.02 | out2$rmsea > .03)
+
+# print summary
+  # print table
+  kbl(out2, digits = 3, row.names = F,
+      caption = "Does a metric model fit worse than a configural model?") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+    kableExtra::column_spec(6, bold = TRUE) %>%
+    kableExtra::column_spec(12, bold = TRUE) %>%
+    row_spec(col.red, color = red) 
+
+```
