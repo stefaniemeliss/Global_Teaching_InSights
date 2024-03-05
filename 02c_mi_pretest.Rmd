@@ -1,0 +1,358 @@
+---
+title: "Measurement invariance (MI): Student Pretest Outcomes"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+options(kableExtra.auto_format = FALSE)
+
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+
+library(mirt)
+library(ggmirt)
+
+library(lavaan)
+library(semPlot)
+library(semptools)
+library(semTools)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+#source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
+
+# read in data
+stud <- read.csv("data_raw/GTI-Student-Data.csv")
+
+# replace all 9999 with NA
+stud <- stud %>%
+  mutate(across(where(is.integer), ~na_if(., 9999)))
+
+```
+
+
+The *mirt* package (Chalmers, 2012) was used to specify a 2PL IRT model for the pretest data using the data from all countries.  
+
+## Basic model performance
+
+### Overall model fit
+
+```{r, echo = F}
+# get all columns including STA in their name
+dat <- stud[, grep("S_ID|COUNTRY|STA", names(stud))]
+# get scored pretest responses - only for those students that have enough valid responses (i.e., few responses == 0)
+dat <- stud[stud$STA_FEWITEMS == 0, grep("S_ID|COUNTRY|STA_SCORE", names(stud))]
+# shorten col names
+names(dat) <- gsub("STA_SCORE", "i", names(dat))
+
+# two-parameter-logistic (2-PL) multi-group IRT
+fit2PL <- mirt(data = dat[, grep("i", names(dat))], 
+               model = 1,  # unilateral model
+               itemtype = "2PL", 
+               optimizer = "nlminb",
+               verbose = FALSE)
+
+fit2PL
+
+```
+
+Below, the model fit is quantified using *M2*, a statistic designed to assess the fit of IRT models. The IRT model results in a significant M2 statistic, indicating that there is a significant difference between the model and the data. However, this is likely due to the sample size. All fit indices (e.g., RMSEA, CFI, TLI) are in normal ranges.
+
+```{r, echo = FALSE, result='asis'}
+M2(fit2PL) %>% 
+  kbl(digits = 3, caption = "Model fit - all countries") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+cat("\n")
+```
+
+### Model parameters
+
+The 2PL model takes item discrimination (first parameter: *a*) and item difficulty (second parameter: *b*) into account while guessing probability (third parameter: *c or g*) is held constant.  
+
+Parameter *a* represents the values of the *slope* and the values fairly evenly distributed in the 2PL model, yet larger values, i.e., steeper slopes are better at differentiating people as higher slope value indicate stronger relationships between item and latent trait.  
+
+The location or *difficulty parameter* (parameter *b*) is also listed for each item. Location parameters are interpreted as the value of theta that corresponds to a .50 probability of responding correctly at or above that location on an item. The location parameters show that the items cover a wide range of the latent trait in the negative, but not the positive direction.  
+
+```{r, echo = FALSE, result='asis'}
+params2PL <- coef(fit2PL, IRTpars = TRUE, simplify = TRUE)
+round(params2PL$items, 3) %>% # g = c = guessing parameter
+  kbl(caption = "Item parameters in each country") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F, fixed_thead = T) 
+cat("\n")
+```
+
+Item characteristic curves visualise the IRT parameters for each item to help understand the properties of each item. As illustrated below and in alignment with what has been said above, the items predominantly differentiate among the negative values of theta and particularly close to zero.  
+
+```{r, echo = F, fig.align='center'}
+plt <- tracePlot(fit2PL, theta_range = c(-6, 6), facet = F, legend = T) + ylab("P(Theta)") + xlab("Theta")
+plotly::ggplotly(plt)
+```
+
+Information curves (plotted below) refer to the ability of an item to estimate theta scores. 
+
+```{r, echo = F, fig.align='center'}
+plt <- itemInfoPlot(fit2PL, theta_range = c(-6, 6), legend = T) + ylab("I(Theta)") + xlab("Theta")
+plotly::ggplotly(plt)
+```
+
+### Item fits  
+
+As a first step, the so-called factor solution including factor loadings (F1) and the communalities (h2) were examined. Communalities are squared factor loadings and are interpreted as the variance accounted for in an item by the latent trait. Substantive relationship with the latent trait are defined as loadings > .50.  
+
+For the pretest, all loadings are larger than .50.
+
+```{r, echo = F}
+# Factor solution
+summary(fit2PL)
+```
+Next, item fit indices, i.e., S_X2 by Orlando and Thissen (2000) and the corresponding dfs, RMSEA and p-values, were accessed. This test should be non-significant to indicate good item fit. However, as shown below, the test is significant for most items. However, this could be due to the large sample size.  
+
+```{r, echo = FALSE, result='asis'}
+tmp <- itemfit(fit2PL)
+#adjust the S-X2 values for false-discovery
+tmp$p.adjust_bonf <- p.adjust(tmp$p.S_X2, method = 'bonferroni')
+
+tmp %>% 
+  kbl(digits = 3, caption = "Item fit - all countries") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+cat("\n")
+```
+
+Proponents of the “Rasch Model” often rather report infit and outfit statistics. Infit means inlier-sensitive or information-weighted fit. Outfit means outlier-sensitive fit. Roughly speaking the non-standardized values should be between .5 and 1.5 to not be degrading. The infit and outfit statistics lie within the acceptable range for all items.  
+
+```{r, echo=F, message = F}
+itemfitPlot(fit2PL)
+```
+## Invariance testing
+
+### Configural model
+
+```{r, echo = FALSE, fig.align='center'}
+config_nlminb <- multipleGroup(
+  data = dat[, grep("i", names(dat))], 
+  model = 1, # one factor model
+  group = dat$COUNTRY,
+  itemtype = "2PL",
+  # By default, the EM algorithm will use the 'BFGS' when there are no upper and lower bounds box-constraints and 'nlminb' when there are.
+  optimizer = "nlminb",
+  verbose = F
+)
+
+cat("Overall model fit")
+config_nlminb
+
+# create model plots
+plot(config_nlminb)
+plot(config_nlminb, type = 'info')
+plot(config_nlminb, type = 'trace')
+
+```
+> The items appear to be behaving differently for each group in the completely independent model. This is an indication that there are either population difference between the groups, the items are showing DIF, or both.
+
+
+
+
+
+```{r, echo = FALSE, result='asis'}
+# compute m2
+m2_config <- M2(config_nlminb)
+
+# create table
+m2_config %>% 
+  kbl(digits = 3, caption = "Configural model fit") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+
+cat("\n")
+```
+
+### Metric model
+
+```{r, echo = FALSE}
+metric_nlminb <- multipleGroup(
+  data = dat[, grep("i", names(dat))], 
+  model = 1, # one factor model
+  group = dat$COUNTRY,
+  itemtype = "2PL",
+  invariance=c('slopes'),
+  # By default, the EM algorithm will use the 'BFGS' when there are no upper and lower bounds box-constraints and 'nlminb' when there are.
+  optimizer = "nlminb",
+  verbose = F
+)
+
+cat("Overall model fit")
+metric_nlminb
+
+# plot model fits
+plot(metric_nlminb)
+plot(metric_nlminb, type = 'info')
+plot(metric_nlminb, type = 'trace')
+
+```
+
+```{r, echo = FALSE, result='asis'}
+# compute m2
+m2_metric <- M2(metric_nlminb)
+
+# create table
+m2_metric %>% 
+  kbl(digits = 3, caption = "Metric model fit") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) 
+
+cat("\n")
+```
+
+### Scalar model
+
+```{r, echo = FALSE}
+scalar_nlminb <- multipleGroup(
+  data = dat[, grep("i", names(dat))], 
+  model = 1, # one factor model
+  group = dat$COUNTRY,
+  itemtype = "2PL",
+  invariance=c('slopes', 'intercepts'),
+  # By default, the EM algorithm will use the 'BFGS' when there are no upper and lower bounds box-constraints and 'nlminb' when there are.
+  optimizer = "nlminb",
+  verbose = F
+)
+
+cat("Overall model fit")
+scalar_nlminb
+
+# plot model fits
+plot(scalar_nlminb)
+plot(scalar_nlminb, type = 'info')
+plot(scalar_nlminb, type = 'trace')
+
+```
+
+```{r, echo = FALSE, result='asis'}
+# compute m2
+m2_scalar <- M2(scalar_nlminb)
+
+# create table
+m2_scalar %>% 
+  kbl(digits = 3, caption = "Scalar model fit") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+
+cat("\n")
+```
+
+### Scalar model with free means and variances
+
+```{r, echo = FALSE}
+freegrp_nlminb <- multipleGroup(
+  data = dat[, grep("i", names(dat))], 
+  model = 1, # one factor model
+  group = dat$COUNTRY,
+  itemtype = "2PL",
+  invariance=c('slopes', 'intercepts', 'free_means', 'free_vars'),
+  # By default, the EM algorithm will use the 'BFGS' when there are no upper and lower bounds box-constraints and 'nlminb' when there are.
+  optimizer = "nlminb",
+  verbose = F
+)
+
+cat("Overall model fit")
+freegrp_nlminb
+
+# plot model fits
+plot(freegrp_nlminb)
+plot(freegrp_nlminb, type = 'info')
+plot(freegrp_nlminb, type = 'trace')
+
+```
+
+```{r, echo = FALSE, result='asis'}
+# compute m2
+m2_freegrp <- M2(freegrp_nlminb)
+
+# create table
+m2_scalar %>% 
+  kbl(digits = 3, caption = "Scalar model (free means and vars) fit") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+
+cat("\n")
+```
+
+
+### Model comparison
+
+```{r, echo = FALSE, result='asis'}
+anova(scalar_nlminb, metric_nlminb, config_nlminb) %>% 
+  kbl(caption = "Model comparison") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+
+anova(scalar_nlminb, freegrp_nlminb) %>% 
+  kbl(caption = "Model comparison") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+
+anova(freegrp_nlminb, config_nlminb) %>% 
+  kbl(caption = "Model comparison") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+
+```
+
+```{r, echo = FALSE, result='asis'}
+m2 <- rbind(m2_config, m2_metric, m2_scalar)
+
+# define threshold
+col.blue <- integer(0)
+# if CFI drops by more than .02 or if RMSEA increases by more than .03
+if (m2$CFI[1] < .95 | m2$TLI[1] < .95 | m2$RMSEA[1] > .1) {
+  # colour row blue
+  col.blue <- 1
+}
+
+tmp <- rbind(m2[2, ] - m2[1, ], # metric - config
+             m2[3, ] - m2[2, ] # scalar - config
+)
+
+# define thresholds for highlighting
+col.red <- which(tmp$CFI < -.02 | tmp$RMSEA > .03)
+
+
+# merge model data and model comparison data
+out <- rbind(m2, tmp)
+
+# adjust row numbers after merging
+if(length(col.red) != 0){
+  col.red <- col.red + nrow(m2)
+}
+
+# add model names as row names
+row.names(out) <- c(
+  "config",
+  "metric",
+  "scalar",
+  "Δ_conf_metr",
+  "Δ_metr_scal"
+)
+
+# print to markdown
+cat("Configural, metric and scalar invariance were modeled. The respective model fit indices are shown in the first three rows in the table below. If the configural model did not have good fit indices (i.e., **CFI or TLI are below .95 or if RMSEA is above .1** ), this is nighlighted in blue. The last two rows show the model comparison statistics and change in fit indices. If the change exceeded thresholds (i.e., **decrease in CFI of more than  -.02 and increase in RMSEA of more than .03**), this was highlighted in red.")
+
+
+# print table
+kbl(out, digits = 3,
+    caption = "Model fit indices and changes therein using data from all countries") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) %>%
+  kableExtra::column_spec(5, bold = TRUE) %>%
+  kableExtra::column_spec(ncol(out)+1, bold = TRUE) %>%
+  row_spec(col.blue, color = blue) %>%
+  row_spec(col.red, color = red) 
+
+
+```
+
