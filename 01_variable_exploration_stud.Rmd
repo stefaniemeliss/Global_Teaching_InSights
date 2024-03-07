@@ -1,5 +1,5 @@
 ---
-title: "GTI Data Exploration"
+title: "GTI Data Exploration: Student outcomes"
 author: "Stef Meliss"
 date: "`r Sys.Date()`"
 output: html_document
