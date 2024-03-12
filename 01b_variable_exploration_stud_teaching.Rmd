@@ -1,0 +1,1206 @@
+---
+title: "GTI Data Exploration: Student Ratings of Teaching"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(ggplot2)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+```
+
+```{r, include=F}
+stud <- read.csv("data_raw/GTI-Student-Data.csv")
+group <- "COUNTRY"
+```
+
+
+Contents  
+
+[Classroom management](#cm)  
+[Socio-emotional support](#se)  
+[Discourse](#dc)  
+[Quality of subject matter](#qs)  
+[Student cognitive engagement](#ce)  
+[Assessment of and response to student understanding](#ar)  
+[Additional factors](#af)  
+[Use of mathematics instruction by individual students](#ui)  
+[Intercorrelation](#cor)  
+
+
+# Classroom management {#cm}
+
+### Pre-questionnaire
+  
+* **SA_CM_DISRUPT**:	Scale measuring student perception of classroom disruptions and teacher’s reaction to them. Calculated as the mean of SQA20A to SQA20C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - When the lesson begins, our mathematics teacher has to wait quite a long time for us to quieten down.  
+  - We lose quite a lot of time because of students interrupting the lesson.  
+  - There is much disruptive noise in this classroom.  
+* **SA_CM_TEACHMAN**:	Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQA20F, SQA20G, SQA20I, and SQA20J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our teacher manages to stop disruptions quickly.  
+  - Our teacher reacts to disruptions in such a way that the students stop disturbing learning.  
+  - Our teacher is immediately aware of students doing something else.  
+  - Our teacher is aware of what is happening in the classroom, even if he or she is busy with an individual student.  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_CM_DISRUPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_CM_TEACHMAN"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+### Post-questionnaire
+  
+* **SB_CM_DISRUPT**:	Scale measuring student perception of classroom disruptions and teacher’s reaction to them. Calculated as the mean of SQB11A to SQB11C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - When the lessons began, our mathematics teacher had to wait quite a long time for us to quieten down.  
+  - We lost quite a lot of time because of students interrupting the lessons.  
+  - There was much disruptive noise in this classroom.  
+* **SA_CM_TEACHMAN**:	Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQB11F, SQB11G, SQB11I, and SQB11J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our teacher managed to stop disruptions quickly.  
+  - Our teacher reacted to disruptions in such a way that the students stopped disturbing learning.  
+  - Our teacher was immediately aware of students doing something else.  
+  - Our teacher was aware of what was happening in the classroom, even if he or she was busy with an individual student.  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SB_CM_DISRUPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_CM_TEACHMAN"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+
+### Correlation between pre- and post-questionnaire
+
+##### Disruptions
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_CM_DISRUPT"
+y_var <- "SB_CM_DISRUPT"
+x_lab <- "Disruptions Pre"
+y_lab <- "Disruptions Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Teacher’s classroom management 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_CM_TEACHMAN"
+y_var <- "SB_CM_TEACHMAN"
+x_lab <- "Teacher’s classroom management Pre"
+y_lab <- "Teacher’s classroom management Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+# Socio-emotional support {#se}
+
+### Pre-questionnaire
+  
+* **SA_TESUP**:	Scale measuring student perception of teacher support in mathematics in general, calculated as the mean of SQA21A to SQA21C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher gives extra help when we need it.  
+  - Our mathematics teacher continues teaching until we understand.  
+  - Our mathematics teacher helps us with our learning.  
+* **SA_SUPCOM**:	Scale measuring student perception of teacher support for competence in mathematics in general, calculated as the mean of SQA21D to SQA21G using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher makes me feel confident in my ability to do well in the course.  
+  - Our mathematics teacher listens to my view on how to do things.  
+  - I feel that our mathematics teacher understands me.  
+  - Our mathematics teacher makes me feel confident in my ability to learn the material.  
+* **SA_SUPAUT**:	Scale measuring student perception of teacher support for competence in mathematics in general, calculated as the mean of SQA21H to SQA21K using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher provides me with different alternatives (e.g. learning materials or tasks).  
+  - Our mathematics teacher encourages me to find the best way to proceed by myself.  
+  - Our mathematics teacher lets me work on my own.  
+  - Our mathematics teacher appreciates it when different solutions come up for discussion.  
+* **SA_REL_STUDTEACH**:	Scale measuring student perception of student-teacher relationship, calculated as the mean of SQA22A to SQA22E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I get along well with my mathematics teacher.  
+  - My mathematics teacher is interested in my well-being.  
+  - My mathematics teacher really listens to what I have to say.  
+  - My mathematics teacher treats me fairly.  
+  - My mathematics teacher makes me feel she/he really cares about me.  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_TESUP"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_SUPCOM"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_SUPAUT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_REL_STUDTEACH"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+### Post-questionnaire
+  
+* **SB_TESUP**:	Scale measuring student perception of teacher support during the unit on quadratic equations, calculated as the mean of SQB12A to SQB12C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher gave extra help when we needed it.  
+  - Our mathematics teacher continued teaching until we understood.  
+  - Our mathematics teacher helped us with our learning.  
+* **SB_SUPCOM**:	Scale measuring student perception of teacher support for competence during the unit on quadratic equations, calculated as the mean of SQB12D to SQB12G using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher made me feel confident in my ability to do well in the course.  
+  - Our mathematics teacher listened to my view on how to do things.  
+  - I felt that our mathematics teacher understood me.  
+  - Our mathematics teacher made me feel confident in my ability to learn the material.  
+* **SB_SUPAUT**:	Scale measuring student perception of the teacher’s support for autonomy during the unit on quadratic equations, calculated as the mean of SQB12H to SQB12K using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher provided me with different alternatives (e.g. learning materials or tasks).  
+  - Our mathematics teacher encouraged me to find the best way to proceed by myself.  
+  - Our mathematics teacher let me work on my own.  
+  - Our mathematics teacher appreciated it when different solutions came up for discussion.  
+* **SB_REL_STUDTEACH**:	Scale measuring student perception of student-teacher relationship, calculated as the mean of SQB13A to SQB13E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I got along well with my mathematics teacher.  
+  - My mathematics teacher was interested in my well-being.  
+  - My mathematics teacher really listened to what I had to say.  
+  - My mathematics teacher treated me fairly.  
+  - My mathematics teacher made me feel she/he really cared about me.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SB_TESUP"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_SUPCOM"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_SUPAUT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_REL_STUDTEACH"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+
+### Correlation between pre- and post-questionnaire
+
+##### Teacher's support
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_TESUP"
+y_var <- "SB_TESUP"
+x_lab <- "Teacher Support Pre"
+y_lab <- "Teacher Support Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Teacher’s support for competence 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_SUPCOM"
+y_var <- "SB_SUPCOM"
+x_lab <- "Teacher’s support for competence Pre"
+y_lab <- "Teacher’s support for competence Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+##### Teacher’s support for autonomy 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_SUPAUT"
+y_var <- "SB_SUPAUT"
+x_lab <- "Teacher’s support for autonomy Pre"
+y_lab <- "Teacher’s support for autonomy Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+##### Student teacher relationship 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_REL_STUDTEACH"
+y_var <- "SB_REL_STUDTEACH"
+x_lab <- "Student teacher relationship Pre"
+y_lab <- "Student teacher relationship Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+# Discourse {#dc}
+
+* **SA_DISCOURSE**:	Scale measuring student perception of the teacher’s use of discourse in mathematics in general, calculated as the mean of SQA18I to SQA18K using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often does your mathematics teacher do the following things?***  
+  - Our mathematics teacher gives us opportunities to explain our ideas.  
+  - Our mathematics teacher encourages us to question and critique arguments made by other students.  
+  - Our mathematics teacher requires us to engage in discussions among ourselves.  
+* **SB_DISCOURSE**:	Scale measuring student perception of teacher’s use of discourse during the unit on quadratic equations, calculated as the mean of SQB08I to SQB08K using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often did your mathematics teacher do the following things?***  
+  - Our mathematics teacher gave us opportunities to explain our ideas.  
+  - Our mathematics teacher encouraged us to question and critique arguments made by other students.  
+  - Our mathematics teacher required us to engage in discussions among ourselves.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_DISCOURSE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_DISCOURSE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_DISCOURSE"
+y_var <- "SB_DISCOURSE"
+x_lab <- "Discourse Pre"
+y_lab <- "Discourse Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+# Quality of subject matter {#qs}  
+
+### Pre-questionnaire
+
+* **SA_OTL**	Scale measuring student perception of overall opportunity to learn mathematical tasks in general, calculated as the total of SQA16A1 to SQA16J1. Question: ***For each task please indicate (yes or no) whether you encountered these types of mathematical tasks.***
+  - Using a train timetable to work out how long it would take to get from one place to another.  
+  - Calculating how much cheaper a TV would be after a 30% discount.  
+  - Calculating how many square metres of tiles you need to cover a floor.  
+  - Solving an equation like 3x+5= 17.  
+  - Solving an equation like 2(x+3) = (x + 3) (x - 3).  
+  - Plotting the graph of y = x².  
+  - Solving a problem like x²−4=0 by inspection.  
+  - Finding all values of x for which(x−4)(x+5)=0.  
+  - Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like x²+6x+9=0.  
+  - Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+* **SA_CLARITY**:	Scale measuring student perception of clarity of instruction during the unit on quadratic equations, calculated as the mean of SQA18A to SQA18D using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often does your mathematics teacher do the following things?***  
+  - Our mathematics teacher presents a summary of recently learned content.  
+  - Our mathematics teacher sets goals at the beginning of instruction.  
+  - Our mathematics teacher explains what he/she expects us to learn.  
+  - Our mathematics teacher explains how new and old topics are related.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_OTL"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_CLARITY"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+
+```
+
+### Post-questionnaire
+
+* **SB_OTL**	Scale measuring student perception of overall opportunity to learn during the unit on quadratic equations, calculated as the mean of SQB07EA to SQB07EK. Question: ***For each task please indicate (yes or no) whether you encountered these types of mathematical tasks.***
+  - Plotting the graph of y = x².  
+  - Solving a problem like x²−4=0 by inspection.  
+  - Finding all values of x for which(x−4)(x+5)=0.  
+  - Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like x²+6x+9=0.  
+  - Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+  - Using different ways when solving a quadratic equation.  
+  - Explaining when a quadratic equation has one, two or no solutions.  
+  - Checking if an equation like 2x²+3x+1 has any real solution.  
+  - Calculating the highest point of a ball that is thrown diagonally into the air.  
+  - Calculating the distance a car has travelled after a certain time of acceleration.  
+  - Finding the roots of a quadratic function.  
+* **SB_CLARITY**:	Scale measuring student perception of clarity of instruction during the unit on quadratic equations, calculated as the mean of SQB08A to SQB08D using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often did your mathematics teacher do the following things?***  
+  - Our mathematics teacher presented a summary of recently learned content.  
+  - Our mathematics teacher sets goals at the beginning of instruction.  
+  - Our mathematics teacher explained what he/she expects us to learn.  
+  - Our mathematics teacher explained how new and old topics are related.  
+* **SB_MEANING**: Scale measuring student perception of teacher’s focus on meaning during the unit on quadratic equations, calculated as the mean of SQB09A to SQB09D using a 1 (never or almost never) - 4 (always) scale. Question: ***How frequently did your mathematics teacher engage in the following activities during the lessons on quadratic equations?***  
+  - Explained why a mathematical procedure works.  
+  - Illustrated why a mathematical procedure works by using concrete examples or graphics.  
+  - Asked questions that helped us understand why a procedure works.  
+  - Compared different ways of solving problems.  
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SB_OTL"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_CLARITY"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_MEANING"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+
+```
+
+### Correlation between pre- and post-questionnaire
+
+##### Opportunities to learn
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_OTL"
+y_var <- "SB_OTL"
+x_lab <- "OTL Pre"
+y_lab <- "OTL Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Clarity
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_CLARITY"
+y_var <- "SB_CLARITY"
+x_lab <- "Clarity Pre"
+y_lab <- "Clarity Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+# Student cognitive engagement {#ce}
+
+* **SA_COGACT**:	Scale measuring student perception of the teacher’s ability to elicit cognitive activation during the unit on quadratic equations, calculated as the mean of SQA18E to SQA18H using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often does your mathematics teacher do the following things?***  
+  - Our mathematics teacher presents tasks for which there is no obvious solution.  
+  - Our mathematics teacher presents tasks that require us to apply what we have learned to new contexts.  
+  - Our mathematics teacher gives tasks that require us to think critically.  
+  - Our mathematics teacher asks us to decide on our own procedures for solving complex tasks.  
+* **SB_COGACT**:	Scale measuring student perception of teacher’s ability to elicit cognitive activation during the unit on quadratic equations, calculated as the mean of SQB08E to SQB08H using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often did your mathematics teacher do the following things?***  
+  - Our mathematics teacher presented tasks for which there is no obvious solution.  
+  - Our mathematics teacher presented tasks that require us to apply what we have learned to new contexts.  
+  - Our mathematics teacher gave tasks that require us to think critically.  
+  - Our mathematics teacher asled us to decide on our own procedures for solving complex tasks.  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_COGACT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_COGACT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_COGACT"
+y_var <- "SB_COGACT"
+x_lab <- "Cognitive Activation Pre"
+y_lab <- "Cognitive Activation Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+# Assessment of and response to student understanding {#ar}
+
+* **SA_ADAPT**:	Scale measuring student perception of the teacher’s adaptation of instruction to student needs in mathematics in general, calculated as the mean of SQA19A to SQA19E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***  
+  - Our mathematics teacher adapts the lessons to my class’s needs and knowledge.  
+  - Our mathematics teacher changes the way of explanation (e.g. using different representations) when a student has difficulties understanding a topic or task.  
+  - Our mathematics teacher changes the structure of the lesson on a topic that most students find difficult to understand.  
+  - Our mathematics teacher gives different work to students of different ability levels.  
+  - Our mathematics teacher asks questions to check if we have understood what he/she has taught.  
+* **SB_ADAPT**:	Scale measuring student perception of teacher’s adaptation of instruction to student needs during the unit on quadratic equations, calculated as the mean of SQB10A to SQB10E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Please think about your mathematics instruction during the unit on quadratic equations once more. To what extent do you disagree or agree with the following statements?***  
+  - Our mathematics teacher adapted the lessons to my class’s needs and knowledge.  
+  - Our mathematics teacher changed the way of explanation (e.g. using different representations) when a student has difficulties understanding a topic or task.  
+  - Our mathematics teacher changed the structure of the lesson on a topic that most students find difficult to understand.  
+  - Our mathematics teacher gave different work to students of different ability levels.  
+  - Our mathematics teacher asked questions to check if we have understood what he/she has taught.  
+* **SB_ASSESS_CHECK**:	Single item scale (yes/no) measuring whether the teacher assessed student learning by having individual students answer questions in front of the class during the unit on quadratic equations, based on SQB15A. Question: Question: ***Did your teacher use the following methods of assessing student learning during the unit on quadratic equations?***  
+  - Our mathematics teacher had individual students answer questions in front of the class.  
+* **SB_ASSESS_SELFEV**:	Single item scale (yes/no) measuring whether the teacher assessed student learning by student self-evaluation during the unit on quadratic equations, based on SQB15B. Question: Question: ***Did your teacher use the following methods of assessing student learning during the unit on quadratic equations?***  
+  - Our mathematics teacher let students evaluate their own progress.  
+* **SB_ASSESS_OBS**:	Single item scale (yes/no) measuring whether the teacher assessed student learning by teacher observation during the unit on quadratic equations, based on SQB15C. Question: Question: ***Did your teacher use the following methods of assessing student learning during the unit on quadratic equations?***  
+  - Our mathematics teacher observed students when working on particular tasks and provided immediate feedback.  
+* **SB_FEEDBACK**: Scale measuring student perception of level of feedback received from teacher. Calculated as the mean of SQB16A to SQB16D using a 1 (Never or hardly ever) - 4 (Every lesson) scale. Question: ***How often did your mathematics teacher do the following things during the unit on quadratic equations?***  
+  - Tell you what was expected of you when you got a test, quiz or assignment.  
+  - Tell you about how well you were doing in your mathematics class.  
+  - Give you feedback on your strengths and weaknesses.  
+  - Tell you what you needed to do to become better.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_ADAPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_ADAPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_ASSESS_CHECK"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_ASSESS_SELFEV"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+dv <- "SB_ASSESS_OBS"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_FEEDBACK"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_ADAPT"
+y_var <- "SB_ADAPT"
+x_lab <- "Adaptation of instruction Pre"
+y_lab <- "Adaptation of instruction Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+# Additional Factors {#af}
+
+* **SB_EXPECT**:	Scale measuring student perception of high expectations for students, calculated as the mean of SQB14A to SQB14D using a 1 (never or almost never) - 4 (always) scale. Question: ***How often did these things happen in your mathematics lessons on quadratic equations?***  
+  - Our mathematics teacher wanted us to work hard.  
+  - Our mathematics teacher told us that we can do better.  
+  - Our mathematics teacher did not like it when we delivered <careless> work.  
+  - We had to learn a lot.  
+* **SB_TEACHENTHUS**:	Scale measuring student perception of teacher enthusiasm, calculated as the mean of SQB17A to SQB17H using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***How would you describe your teacher during the unit on quadratic equations?***  
+  - I had the feeling that our mathematics teacher was interested in the topic of quadratic equations.  
+  - Our mathematics teacher was totally involved in the topic of quadratic equations.  
+  - It was clear to me that our mathematics teacher liked teaching us the topic of quadratic equations.  
+  - I could see that our mathematics teacher enjoyed giving us lessons on the topic of quadratic equations.  
+  - The enthusiasm of our mathematics teacher inspired me.  
+  - Our mathematics teacher expressed that the topic of quadratic equations is important to him/her.  
+  - It was clear that our mathematics teacher likes to deal with the topic of quadratic equations.  
+  - Our mathematics teacher showed enjoyment in teaching the topic of quadratic equations.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SB_EXPECT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_TEACHENTHUS"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+
+# Use of mathematics instruction by individual students {#ui}  
+
+### Pre-questionnaire
+
+* **SA_USECONT**: Scale measuring the student’s use of content-related structure during mathematics instruction, calculated as the mean of SQA17A to SQA17C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you feel and behave during mathematics instruction: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I try to work out what the most important parts to learn are.  
+  - I start by working out exactly what I need to do.  
+  - I try to understand new concepts by relating them to things I already know.  
+* **SA_USECOGACT**: Scale measuring the student’s actual cognitive engagement in mathematics class, calculated as the mean of SQA17D to SQA17F using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you feel and behave during mathematics instruction: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I keep thinking about tasks until I really understand them.  
+  - I think intensively about the mathematical content.  
+  - I develop my own ideas regarding the topic taught.  
+* **SA_USESELFDET**: Scale measuring the student’s experience of autonomy, competence, and social relatedness during mathematics instruction, calculated as the mean of SQA17G to SQA17I using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you feel and behave during mathematics instruction: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I feel that I can decide on things on my own.  
+  - I feel understood by my mathematics teacher.  
+  - I feel confident in my ability to learn this material.  
+* **SA_USETOT**: Scale measuring the student’s use of time on task, calculated as the mean of SQA17J to SQA17L using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you feel and behave during mathematics instruction: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I pay attention in mathematics class.  
+  - I listen to the instruction given in class.  
+  - I let my mind wander during the lessons.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SA_USECONT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_USECOGACT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_USESELFDET"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SA_USETOT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+
+### Post-questionnaire
+
+* **SB_USECONT**: Scale measuring the student’s use of content-related structure during mathematics instruction during the unit on quadratic equations, calculated as the mean of SQB06A to SQB06C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you felt and behaved during mathematics instruction during the unit on quadratic equations: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I tried to work out what the most important parts to learn were.  
+  - I started by working out exactly what I needed to do.  
+  - I tried to understand new concepts by relating them to things I already knew.  
+* **SB_USECOGACT**: Scale measuring the student’s actual cognitive engagement in mathematics class during the unit on quadratic equations, calculated as the mean of SQB06D to SQB06F using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you felt and behaved during mathematics instruction during the unit on quadratic equations: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I kept thinking about tasks until I really understood them.  
+  - I was thinking intensively about the mathematical content.  
+  - I developed my own ideas.  
+* **SB_USESELFDET**: Scale measuring the student’s experience of autonomy, competence, and social relatedness during mathematics instruction during the unit on quadratic equations, calculated as the mean of SQB06G to SQB06I using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you felt and behaved during mathematics instruction during the unit on quadratic equations: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I felt that I could decide on things on my own.  
+  - I felt understood by my mathematics teacher.  
+  - I felt confident in my ability to learn this material.  
+* **SB_USETOT**: Scale measuring the student’s use of time on task during the unit on quadratic equations, calculated as the mean of SQB06J to SQB06L using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Thinking about how you felt and behaved during mathematics instruction during the unit on quadratic equations: to what extent do you disagree or agree with the following statements about yourself?***  
+  - I paid attention in my mathematics class.  
+  - I listened to the instruction given in class.  
+  - I let my mind wander during the lessons.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "SB_USECONT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_USECOGACT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_USESELFDET"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "SB_USETOT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = stud,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+### Correlation between pre- and post-questionnaire
+
+##### Use of content-related structure 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_USECONT"
+y_var <- "SB_USECONT"
+x_lab <- "Use of content-related structure Pre"
+y_lab <- "Use of content-related structure Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Student’s actual cognitive engagement 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_USECOGACT"
+y_var <- "SB_USECOGACT"
+x_lab <- "Student’s actual cognitive engagement Pre"
+y_lab <- "Student’s actual cognitive engagement Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Student’s experience of autonomy, competence, and social relatedness 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_USESELFDET"
+y_var <- "SB_USESELFDET"
+x_lab <- "Student’s experience Pre"
+y_lab <- "Student’s experience Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Student’s use of time on task 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "SA_USETOT"
+y_var <- "SB_USETOT"
+x_lab <- "Student’s use of time on task Pre"
+y_lab <- "Student’s use of time on task Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = stud,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+# Intercorrelation {#cor}
+
+> Given the sample size, all correlation coefficients are significant.  
+  
+Please note that some variables were renamed to reduce the width of the table.  
+  
+* ST[A/B]_PROPCORRECTSCORE = ST[A/B]_ACC  
+* [PRE/SA/POST]_GENSELFEFF[_CURRENT] = [PRE/SA/POST]_GENEFF[_CURRENT]  
+* ST[A/B]_EFFICACY = ST[A/B]_EFF  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, fig.width=20, fig.height=20}
+vars <- c("S_ID", "COUNTRY",
+         "STA_IRTSCORE", "STA_PROPCORRECTSCORE",
+         "STB_IRTSCORE", "STB_PROPCORRECTSCORE",
+         "SA_SELFCON", "SB_SELFCON",
+         "PRE_PINT", "SA_PINT_CURR", "POST_PINT",
+         "PRE_GENSELFEFF", "SA_GENSELFEFF_CURR", "POST_GENSELFEFF",
+         "SA_EFFICACY", "SB_EFFICACY")
+
+desc <- stud[, vars[c(-1, -2)]]
+
+names(desc) <- gsub("SCORE", "", names(desc))
+names(desc) <- gsub("PROPCORRECT", "ACC", names(desc))
+names(desc) <- gsub("SELF", "", names(desc))
+names(desc) <- gsub("ICACY", "", names(desc))
+
+
+out <- round(psych::corr.test(desc)$r, 2)
+
+# print table
+kbl(out, caption = "Intercorrelations between student-level variables of interest") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  add_header_above(c(" " = 1, "Test" = 4, "Self-concept" = 2, "Personal interest" = 3, "Self-efficacy" = 5)) %>%
+  column_spec(1, border_right=T) %>%
+  column_spec(5, border_right=T) %>%
+  column_spec(7, border_right=T) %>%
+  column_spec(10, border_right=T) %>%
+  pack_rows("Test", 1, 4) %>%
+  pack_rows("Self-concept", 5, 6) %>%
+  pack_rows("Personal interest", 7, 9) %>%
+  pack_rows("Self-efficacy", 10, 14) 
+
+cat("\n\n")
+cat("### Correlation matrix")
+cat("\n")
+corrplot::corrplot(out, method = 'shade', addCoef.col = 'black', number.font = 2, type = 'lower', diag = T,
+                   tl.col = "black", col.lim = c(0,1), col = corrplot::COL1('YlOrRd', 200), number.cex = 1.5, tl.cex = 1.5, cl.cex = 1.5) 
+```
+
