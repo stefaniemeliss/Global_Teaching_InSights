@@ -1,0 +1,881 @@
+---
+title: "GTI Data Exploration: Teacher Ratings of Teaching"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+
+# load libraries
+library(kableExtra)
+library(ggplot2)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+```
+
+```{r, include=F}
+teach <- read.csv("data_raw/GTI-Teacher-Data.csv")
+group <- "COUNTRY"
+```
+
+
+Contents  
+
+[Classroom management](#cm)  
+[Socio-emotional support](#se)  
+[Discourse](#dc)  
+[Quality of subject matter](#qs)  
+[Student cognitive engagement](#ce)  
+[Assessment of and response to student understanding](#ar)  
+[Additional factors](#af)  
+[Use of mathematics instruction by individual students](#ui)  
+[Intercorrelation](#cor)  
+
+
+# Classroom management {#cm}
+
+### Pre-questionnaire
+  
+* **TA_CM_DISRUPT**:	Scale measuring the teacher’s perception of classroom disruptions in the target class in mathematics, calculated as the mean of TQA07A to TQA07C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - When the lesson begins, I have to wait quite a long time for these students to quieten down.  
+  - I lose quite a lot of time because of students interrupting the lesson.  
+  - There is much disruptive noise in this classroom.  
+* **TA_CM_TEACHMAN**:	Scale measuring the teacher’s perception of the teacher’s management of classroom disruptions, calculated as the mean of TQA07F, TQA07G, TQA07I, and TQA07J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I manage to stop disruptions quickly.  
+  - I react to disruptions in such a way that the students stop disturbing learning.  
+  - I am immediately aware of students doing something else.  
+  - I am aware of what is happening in the classroom, even if he or she is busy with an individual student.  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TA_CM_DISRUPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TA_CM_TEACHMAN"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+### Post-questionnaire
+  
+* **TB_CM_DISRUPT**:	Scale measuring the teacher’s perception of classroom disruptions, calculated as the mean of TQB11A to TQB11C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - When the lessons began, I had to wait quite a long time for us to quieten down.  
+  - I lost quite a lot of time because of students interrupting the lessons.  
+  - There was much disruptive noise in this classroom.  
+* **TB_CM_TEACHMAN**:	Scale measuring the teacher’s perception of the teacher’s management of classroom disruptions, calculated as the mean of TQB11F, TQB11G, TQB11I, and TQB11J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I managed to stop disruptions quickly.  
+  - I reacted to disruptions in such a way that the students stopped disturbing learning.  
+  - I was immediately aware of students doing something else.  
+  - I was aware of what was happening in the classroom, even if I was busy with an individual student.  
+  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TB_CM_DISRUPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_CM_TEACHMAN"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+
+### Correlation between pre- and post-questionnaire
+
+##### Disruptions
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_CM_DISRUPT"
+y_var <- "TB_CM_DISRUPT"
+x_lab <- "Disruptions Pre"
+y_lab <- "Disruptions Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Teacher’s classroom management 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_CM_TEACHMAN"
+y_var <- "TB_CM_TEACHMAN"
+x_lab <- "Teacher’s classroom management Pre"
+y_lab <- "Teacher’s classroom management Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+# Socio-emotional support {#se}
+
+### Pre-questionnaire
+  
+* **TA_TESUP**:	Scale measuring the teacher’s perception of teacher support in the target class in mathematics, calculated as the mean of TQA08A to TQ08C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I give extra help when these students need it.  
+  - I continue teaching until these students understand.  
+  - I help these students with their learning.  
+* **TA_SUPCOM**:	Scale measuring the teacher’s perception of support for competence in the target class in mathematics, calculated as the mean of TQA08D to TQ08G using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I aim to make these students feel confident in their ability to do well in the course.  
+  - I listen to these students' views on how to do things.  
+  - I aim to show these students that I understand them..  
+  - aim to make these students feel confident in their ability to learn the material.   
+* **TA_SUPAUT**:	Scale measuring the teacher’s perception of support for autonomy in the target class in mathematics, calculated as the mean of TQA08H to TQ08K using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I provide these students with different alternatives (e.g. learning materials or tasks).  
+  - I encourage these students to find the best way to proceed by themselves.  
+  - I let the students work on their own  
+  - I appreciate it when different solutions come up for discussion.  
+* **TA_REL_STUDTEACH**:	Scale measuring the teacher’s perception of student-teacher relationships in the target class in mathematics, calculated as the mean of TQA09A to TQ09E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I get along well with these students.  
+  - I show interest in these students’ wellbeing.  
+  - I really listen to what these students have to say.  
+  - I treat these students fairly.  
+  - I make students feel I really care about them.  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TA_TESUP"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TA_SUPCOM"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TA_SUPAUT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TA_REL_STUDTEACH"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+### Post-questionnaire
+  
+* **TB_TESUP**:	Scale measuring the teacher’s perception of teacher support in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB12A to TQB12C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I gave extra help when these students needed it.  
+  - I continued teaching until these students understood.  
+  - I helped these students with their learning.  
+* **TB_SUPCOM**:	Scale measuring the teacher’s perception of support for competence in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB12D to TQB12G using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I aimed to make these students feel confident in their ability to do well in the course.  
+  - I listened to these students’ views on how to do things.  
+  - I aimed to show these students that I understood them.  
+  - I aimed to make these students confident in their ability to learn the material.  
+* **TB_SUPAUT**:	Scale measuring the teacher’s perception of support for autonomy in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB12H to TQB12K using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I provided these students with different alternatives (e.  g.   learning materials or tasks).  
+  - I encouraged these students to find the best way to proceed by themselves.  
+  - I let these students work on their own.  
+  - I appreciated it when different solutions came up for discussion.  
+* **TB_REL_STUDTEACH**:	Scale measuring the teacher’s perception of student-teacher relationships in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB13A to TQB13E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - I got along well with these students.  
+  - I showed interest in these students’ well-being.  
+  - I really listened to what these students had to say.  
+  - I treated these students fairly.  
+  - I made students feel I really cared about them.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TB_TESUP"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_SUPCOM"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_SUPAUT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_REL_STUDTEACH"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+
+### Correlation between pre- and post-questionnaire
+
+##### Teacher's support
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_TESUP"
+y_var <- "TB_TESUP"
+x_lab <- "Teacher Support Pre"
+y_lab <- "Teacher Support Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Teacher’s support for competence 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_SUPCOM"
+y_var <- "TB_SUPCOM"
+x_lab <- "Teacher’s support for competence Pre"
+y_lab <- "Teacher’s support for competence Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+##### Teacher’s support for autonomy 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_SUPAUT"
+y_var <- "TB_SUPAUT"
+x_lab <- "Teacher’s support for autonomy Pre"
+y_lab <- "Teacher’s support for autonomy Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+##### Student teacher relationship 
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_REL_STUDTEACH"
+y_var <- "TB_REL_STUDTEACH"
+x_lab <- "Student teacher relationship Pre"
+y_lab <- "Student teacher relationship Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+
+# Discourse {#dc}
+
+* **TA_DISCOURSE**:	Scale measuring the teacher’s perception of discourse in the target class in mathematics, calculated as the mean of TQA04I to TQA04K using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often do you do the following things?***  
+  - I give these students opportunities to explain their ideas.  
+  - I encourage these students to question and critique arguments made by other students.  
+  - I require these students to engage in discussions among themselves.  
+* **TB_DISCOURSE**:	Scale measuring the teacher’s perception of discourse in the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB08I to TQB08K using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often did you do the following things?***  
+  - I gave these students opportunities to explain their ideas.  
+  - I encouraged these students to question and critique arguments made by other students.  
+  - I required these students to engage in discussions among themselves.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TA_DISCOURSE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_DISCOURSE"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_DISCOURSE"
+y_var <- "TB_DISCOURSE"
+x_lab <- "Discourse Pre"
+y_lab <- "Discourse Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+# Quality of subject matter {#qs}  
+
+### Pre-questionnaire
+
+* **TA_OTL**:	Scale (yes/no) measuring opportunity-to-learn for mathematical tasks, focusing on prerequisites necessary for the understanding of quadratic equations, calculated as the total of TQA03A to TQA03E. Question: ***For each task please indicate (yes or no) whether you encountered these types of mathematical tasks.***
+  - Plotting the graph of y = x².  
+  - Solving a problem like 𝑥2 − 4 = 0 by inspection.  
+  - Finding all values of x for which (x − 4)(x + 5) = 0.  
+  - Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like 𝑥2 + 6𝑥 + 9 = 0.  
+  - Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+* **TA_CLARITY**:	Scale measuring the teacher’s perception of clarity instruction when teaching the target class in mathematics, calculated as the mean of TQA04A to TQA04D using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often do you do the following things?***  
+  - I present a summary of recently learned content.  
+  - I set goals at the beginning of instruction.  
+  - I explain what I expect these students to learn.  
+  - I explain how new and old topics are related.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TA_OTL"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TA_CLARITY"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+
+```
+
+### Post-questionnaire
+
+* **TL_SUM**:	Sum score computed based on derived variables for subtopic coverage from the teacher log (TA23). Derived variables for subtopic coverage from the teacher log were calculated by taking the weighted sum of subtopic coverage ratings, where a lesson was counted with weight 1 if the subtopic was covered fully, weight 0.5 if the subtopic was covered to a minor extent, and weight 0 if the subtopic was not covered at all. ***INSTRUCTION: Please enter date and duration for each lesson on quadratic equations. In each column corresponding to a subtopic write 0, 1 or 2. 0 = not taught; 1 = minor focus; 2 = major focus***  
+  - TL03_SUM: Subtopic coverage rating for handling expressions.  
+  - TL04_SUM: Subtopic coverage rating for binomial formulas.  
+  - TL05_SUM: Subtopic coverage rating for introducing some type of quadratic equations.  
+  - TL06A_SUM: Subtopic coverage rating for solving quadratic equations by completing the square. 
+  - TL06B_SUM: Subtopic coverage rating for solving quadratic equations by factorizing.  
+  - TL06C_SUM: Subtopic coverage rating for solving quadratic equations using the quadratic formula.  
+  - TL06D_SUM: Subtopic coverage rating for solving quadratic equations by graphical representation.  
+  - TL07_SUM: Subtopic coverage rating for discussing different cases of quadratic equations.  
+  - TL08_SUM: Subtopic coverage rating for quadratic functions.  
+  - TL09_SUM: Subtopic coverage rating for applications.  
+* **TB_CLARITY**:	Scale measuring the teacher’s perception of clarity instruction when teaching the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB08A to TQB08D using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often did you do the following things?***  
+  - I presented a summary of recently learned content.  
+  - I set goals at the beginning of instruction.  
+  - I explained what I expected these students to learn.  
+  - I explained how new and old topics are related.  
+* **TB_MEANING**: Scale measuring the teacher’s perception of focus on meaning in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB09A to TQB09D using a 1 (never or almost never) - 4 (always) scale. Question: ***How frequently did you engage in the following activities during the lessons on quadratic equations?***  
+  - Explained why a mathematical procedure works.  
+  - Illustrated why a mathematical procedure works by using concrete examples or graphics.  
+  - Asked questions that helped us understand why a procedure works.  
+  - Compared different ways of solving problems.  
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# select relevant variables and save in a df
+tmp <- teach[, grep("T_ID|COUNTRY|TL", names(teach))]
+tmp <- tmp[, grep("T_ID|COUNTRY|_SUM", names(tmp))]
+
+# define dv
+dv = "TL_SUM"
+
+# compute sum and add to teach df
+teach[, dv] <- rowSums(tmp[, c(-1, -2)])
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_CLARITY"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_MEANING"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+
+```
+
+### Correlation between pre- and post-questionnaire
+
+##### Opportunities to learn
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_OTL"
+y_var <- "TL_SUM"
+x_lab <- "OTL Pre"
+y_lab <- "OTL Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+##### Clarity
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_CLARITY"
+y_var <- "TB_CLARITY"
+x_lab <- "Clarity Pre"
+y_lab <- "Clarity Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+# Student cognitive engagement {#ce}
+
+* **TA_COGACT**:		Scale measuring the teacher’s perception of cognitive activation of the target class in mathematics, calculated as the mean of TQA04E to TQA04H using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often do you do the following things?***  
+  - I present tasks for which there is no obvious solution.  
+  - I present tasks that require these students to apply what they have learned to new contexts.  
+  - I give tasks that require these students to think critically.  
+  - I ask these students to decide on their own procedures for solving complex tasks.  
+* **TB_COGACT**:	Scale measuring the teacher’s perception of cognitive activation of the target class in mathematics during the unit on quadratic equations, calculated as the mean of TQB08E to TQB08H using a 1 (never or almost never) - 4 (always) scale. Question: ***And how often did you do the following things?***  
+  - I presented tasks for which there is no obvious solution.  
+  - I presented tasks that required these students to apply what they have learned to new contexts.  
+  - I gave tasks that require these students to think critically.  
+  - I asked these students to decide on their own procedures for solving complex tasks.  
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TA_COGACT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_COGACT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_COGACT"
+y_var <- "TB_COGACT"
+x_lab <- "Cognitive Activation Pre"
+y_lab <- "Cognitive Activation Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+# Assessment of and response to student understanding {#ar}
+
+* **TA_ADAPT**:		Scale measuring the teacher’s perception of adaption of instruction to student understanding in the target class in mathematics, calculated as the mean of TQA06A to TQA06E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Please think about your mathematics teaching in the target class once more. To what extent do you disagree or agree with the following statements?***  
+  - I adapt the lessons to this class’s needs and knowledge.  
+  - I change my way of explanation (e.g. using different representations) when a student has difficulties understanding a topic or task.  
+  - I change the structure of the lessons on a topic that most of these students find difficult to understand.  
+  - I give different work to students of different ability levels.  
+  - I ask questions to check if these students have understood what I taught.  
+* **TB_ADAPT**:		Scale measuring the teacher’s perception of adaption of instruction to student understanding in the target class in mathematics during the lessons on quadratic equations, calculated as the mean of TQB10A to TQB10E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***  
+  - I adapted the lessons to this class’s needs and knowledge.  
+  - I changed my way of explanation (e.g. using different representations) when a student had difficulties understanding a topic or task.  
+  - I changed the structure of the lessons on a topic that most of these students found difficult to understand.  
+  - I give different work to students of different ability levels.  
+  - I asked questions to check if these students understood what I taught.  
+* **TB_ASSESS_OWN**: Single item scale (yes/no) measuring whether the teacher administered their own assessment of student learning during the unit on quadratic equations, based on TQB14A.  
+  - I administered my own assessment.  
+* **TB_ASSESS_CHECK**: Single item scale (yes/no) measuring whether the teacher assessed student learning by having individual students answer questions in front of the class during the unit on quadratic equations, based on TQB14B. Question: ***Did you use the following methods of assessing student learning during the unit on quadratic equations?***    
+  - I had individual students answer questions in front of the class.  
+* **TB_ASSESS_SELFEV**: Single item scale (yes/no) measuring whether the teacher assessed student learning by student self-evaluation during the unit on quadratic equations, based on TQB14C. Question: ***Did you use the following methods of assessing student learning during the unit on quadratic equations?***    
+  - I let students evaluate their own progress.  
+* **TB_ASSESS_OBS**: Single item scale (yes/no) measuring whether the teacher assessed student learning by teacher observation during the unit on quadratic equations, based on TQB14D. Question: ***Did you use the following methods of assessing student learning during the unit on quadratic equations?***    
+  - I observed students when working on particular tasks and provided immediate feedback.  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TA_ADAPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_ADAPT"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_ASSESS_OWN"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_ASSESS_CHECK"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_ASSESS_SELFEV"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+dv <- "TB_ASSESS_OBS"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# input vars
+x_var <- "TA_ADAPT"
+y_var <- "TB_ADAPT"
+x_lab <- "Adaptation of instruction Pre"
+y_lab <- "Adaptation of instruction Post"
+
+# scatterplot all countries #
+main <- "Scatterplot (jittered) showing data for all countries"
+# create basic plot
+plt_all <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# print plot
+plt_all
+
+# scatterplot for each country #
+main <- "Scatterplot (jittered) showing data for each country"
+# create basic plot
+plt_grp <- plot_scatter_jitter(data = teach,
+                        xvar = x_var,
+                        yvar = y_var,
+                        xlab = x_lab,
+                        ylab = y_lab,
+                        title = main)
+# make nicer
+plt_grp <- plt_grp + 
+  facet_wrap(. ~ get(group), ncol = 2)
+# print plot
+plt_grp
+
+```
+
+
+# Additional Factors {#af}
+
+* **TB_HOMEWORK**:		Single item scale measuring the frequency of homework assignments, based on TQB15 using a 1 (never or almost never) - 4 (always) scale. Question: ***Thinking about your teaching in the target class during the unit on quadratic equations: how often did you assign homework for completion outside of the classroom to these students?***  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+dv <- "TB_HOMEWORK"
+
+# generate and print descriptive tables to markdown
+table_desc(data = teach,
+           group_var = group,
+           dep_var = dv)
+
+
+```
+
