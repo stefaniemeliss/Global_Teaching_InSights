@@ -14,6 +14,7 @@ rm(list = ls())
 
 # define directory
 dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
 
 # load libraries
 library(kableExtra)
@@ -36,8 +37,8 @@ img {
 
 
 ```{r, include=F}
-teach <- read.csv("data_raw/GTI-Teacher-Data.csv")
-stud <- read.csv("data_raw/GTI-Student-Data.csv")
+teach <- read.csv(file.path(dir, "data_raw", "GTI-Teacher-Data.csv"))
+stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 group <- "COUNTRY"
 ```
 
@@ -564,7 +565,7 @@ Derived variables at classroom-level for video component scores take the form **
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/teacher_file_variables_vcomp_explanation.txt", header = T)
+tmp <- read.delim(file.path(dir, "misc","teacher_file_variables_vcomp_explanation.txt"), header = T)
 
 # create key
 key <- tmp[, c("Variable", "Altname")]
@@ -903,7 +904,7 @@ Derived variables for video indicator scores take the form **VIND[_indicator]**,
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
 # read in data dict
-tmp <- read.delim("misc/teacher_file_variables_vind_explanation.txt", header = T)
+tmp <- read.delim(file.path(dir, "misc","teacher_file_variables_vind_explanation.txt"), header = T)
 
 # create key
 key <- tmp[, c("Variable", "Altname", "Max.rating")]
@@ -1030,7 +1031,7 @@ Derived variables for artefact component scores take the form **ACOMP_[component
   
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
 # read in data dict
-tmp <- read.delim("misc/teacher_file_variables_acomp_explanation.txt", header = T)
+tmp <- read.delim(file.path(dir, "misc","teacher_file_variables_acomp_explanation.txt"), header = T)
 
 # create key
 key <- tmp[, c("Variable", "Altname", "Max.Rating")]
