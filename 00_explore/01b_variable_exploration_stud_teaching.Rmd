@@ -702,7 +702,7 @@ plt_grp
   - Our mathematics teacher presented tasks for which there is no obvious solution.  
   - Our mathematics teacher presented tasks that require us to apply what we have learned to new contexts.  
   - Our mathematics teacher gave tasks that require us to think critically.  
-  - Our mathematics teacher asled us to decide on our own procedures for solving complex tasks.  
+  - Our mathematics teacher asked us to decide on our own procedures for solving complex tasks.  
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
 dv <- "SA_COGACT"
 
