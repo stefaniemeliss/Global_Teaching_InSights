@@ -13,6 +13,7 @@ rm(list = ls())
 
 # define directory
 dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
 
 # load libraries
 library(kableExtra)
@@ -25,7 +26,7 @@ devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights
 ```
 
 ```{r, include=F}
-stud <- read.csv("data_raw/GTI-Student-Data.csv")
+stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 group <- "COUNTRY"
 ```
 
@@ -53,8 +54,8 @@ new_var <- paste0("LOO_", dv)
 tmp <- tmp %>% 
   group_by(T_ID) %>%
   # compute leave one out mean
-  mutate(new_var = (sum(get(dv), na.rm = T) - get(dv))/(n()-1),
-         n = n())
+  mutate(new_var = (sum(get(dv), na.rm = T) - get(dv))/(n() - sum(is.na(get(dv))) - 1),
+         n = (n() - sum(is.na(get(dv))) - 1))
 
 names(tmp)[names(tmp) == "new_var"] <- new_var
 
