@@ -111,13 +111,13 @@ for (c in 1:length(loo_cols)) {
              # compute sum of all values without the current row value
              # and divide that by the number of observations for this variable after excl NAs and subtracting 1 for current row value
              (sum(get(dv), na.rm = T) - get(dv))/(n() - sum(is.na(get(dv))) - 1),
-           gm = # class-level mean
+           clm = # class-level mean
              # compute group mean across all relevant observations
              mean(get(dv), na.rm = T)
     )
 
   names(tmpp)[names(tmpp) == "loo"] <- paste0("LOO_", dv)
-  names(tmpp)[names(tmpp) == "cvm"] <- paste0("CLM_", dv)
+  names(tmpp)[names(tmpp) == "clm"] <- paste0("CLM_", dv)
   
   # make df (currently tbl)
   tmpp <- as.data.frame(tmpp)
@@ -142,3 +142,7 @@ for (c in 1:length(loo_cols)) {
 
 df <- merge(tmp, dat, by = "S_ID")
 df <- merge(df, teach, by = "T_ID")
+
+write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v1.csv"), row.names = F)
+
+          
