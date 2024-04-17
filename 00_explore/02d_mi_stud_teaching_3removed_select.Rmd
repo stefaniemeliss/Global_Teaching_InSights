@@ -14,6 +14,7 @@ rm(list = ls())
 
 # define directory
 dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
 
 # load libraries
 library(kableExtra)
@@ -35,7 +36,7 @@ library(semTools)
 source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
 
 # read in data
-all_data <- read.csv("data_raw/GTI-Student-Data.csv")
+all_data <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 all_data <- all_data %>%
