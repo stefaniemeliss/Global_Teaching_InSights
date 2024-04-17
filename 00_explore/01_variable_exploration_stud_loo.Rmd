@@ -1,5 +1,5 @@
 ---
-title: "Leave one out (LOO) means of student data"
+title: "Leave one out (LOO) means of student outcome measures"
 author: "Stef Meliss"
 date: "`r Sys.Date()`"
 output: html_document
@@ -51,13 +51,16 @@ tmp <- stud[, c("S_ID", "T_ID", "COUNTRY", dv)]
 new_var <- paste0("LOO_", dv)
 
 # add LOO mean
-tmp <- tmp %>% 
-  group_by(T_ID) %>%
-  # compute leave one out mean
-  mutate(new_var = (sum(get(dv), na.rm = T) - get(dv))/(n() - sum(is.na(get(dv))) - 1),
-         n = (n() - sum(is.na(get(dv))) - 1))
+tmp <- tmp %>%
+      group_by(T_ID) %>%
+      # compute leave one out mean
+      mutate(loo = # LEAVE ONE OUT
+               # compute sum of all values without the current row value
+               # and divide that by the number of observations for this variable after excl NAs and subtracting 1 for current row value
+               (sum(get(dv), na.rm = T) - get(dv))/(n() - sum(is.na(get(dv))) - 1)
+      )
 
-names(tmp)[names(tmp) == "new_var"] <- new_var
+names(tmp)[names(tmp) == "loo"] <- new_var
 
 # make df (currently tbl)
 tmp <- as.data.frame(tmp)
