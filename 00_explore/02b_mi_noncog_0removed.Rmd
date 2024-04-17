@@ -14,6 +14,7 @@ rm(list = ls())
 
 # define directory
 dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
 
 # load libraries
 library(kableExtra)
@@ -31,11 +32,11 @@ library(semptools)
 library(semTools)
 
 # load in functions
-#devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
-source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+#source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
 
 # read in data
-stud <- read.csv("data_raw/GTI-Student-Data.csv")
+stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 stud <- stud %>%
