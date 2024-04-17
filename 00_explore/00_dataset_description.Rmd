@@ -8,6 +8,11 @@ date: "`r Sys.Date()`"
 knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
 rm(list=ls())
+
+# define directory
+dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
+
 ```
 
 https://dbdiagram.io/d/GTI-65b2719bac844320aeb89c6b
@@ -27,7 +32,7 @@ Throughout our data files, we use a consistent identification (ID) assignment sc
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/idvars.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "idvars.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
@@ -42,7 +47,7 @@ Observations in the dataset contain some administrative variables where applicab
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/adminvars.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "adminvars.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
@@ -66,7 +71,7 @@ Derived variables for the student-level file are included below, with variables 
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/student_file_variables.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "student_file_variables.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
@@ -87,7 +92,7 @@ Derived variables from the teacher questionnaires in the teacher-level file incl
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/teacher_file_variables_quest.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "teacher_file_variables_quest.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
@@ -99,7 +104,8 @@ Derived variables for subtopic coverage from the **teacher log** were calculated
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/teacher_file_variables_tl.txt", sep = ";", header = F)
+#tmp <- read.delim("misc/teacher_file_variables_tl.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "teacher_file_variables_tl.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
@@ -112,7 +118,7 @@ Derived variables also include indices for **opportunity to learn (OTL)**. There
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/teacher_file_variables_otl.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "teacher_file_variables_otl.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
@@ -126,7 +132,7 @@ Derived variables for video component scores take the form **VCOMP_[component]**
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.table("misc/teacher_file_variables_vcomp.txt", header = T, sep = "\t")
+tmp <- read.delim(file.path(dir, "misc", "teacher_file_variables_vcomp.txt"), header = T)
 
 # print table
 kbl(tmp) %>%
@@ -138,7 +144,7 @@ Derived variables for video indicator scores take the form **VIND_[indicator]** 
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.table("misc/teacher_file_variables_vind.txt", header = T)
+tmp <- read.delim(file.path(dir, "misc", "teacher_file_variables_vind.txt"), header = T, sep = " ")
 
 # print table
 kbl(tmp) %>%
@@ -149,7 +155,7 @@ Derived variables for artefact component scores take the form **ACOMP_[component
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.table("misc/teacher_file_variables_acomp.txt", header = T)
+tmp <- read.delim(file.path(dir, "misc", "teacher_file_variables_acomp.txt"))
 
 # print table
 kbl(tmp) %>%
@@ -160,7 +166,7 @@ Derived variables for video domain scores take the form **VDOMAIN_[domain]** whe
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.table("misc/teacher_file_variables_vdomain3.txt", header = T)
+tmp <- read.table(file.path(dir, "misc", "teacher_file_variables_vdomain3.txt"), header = T)
 
 # print table
 kbl(tmp) %>%
@@ -181,7 +187,7 @@ The variables for the **six domain structure** are described below:
 
 
 # read in data dict
-tmp <- read.table("misc/teacher_file_variables_vdomain6.txt", header = T)
+tmp <- read.table(file.path(dir, "misc", "teacher_file_variables_vdomain6.txt"), header = T)
 
 # print table
 kbl(tmp) %>%
@@ -197,7 +203,7 @@ The school-level file contains data collected from Statistics Canada, the school
 
 ```{r, echo = F, results='asis'}
 # read in data dict
-tmp <- read.delim("misc/school_file_variables.txt", sep = ";", header = F)
+tmp <- read.delim(file.path(dir, "misc", "school_file_variables.txt"), sep = ";", header = F)
 names(tmp) <- c("Variable", "Notes")
 
 # print table
