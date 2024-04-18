@@ -28,6 +28,13 @@ devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights
 ```{r, include=F}
 stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 group <- "COUNTRY"
+
+# replace all 9999 with NA
+stud <- stud %>%
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
+
 ```
 
 

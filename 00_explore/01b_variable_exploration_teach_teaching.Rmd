@@ -19,6 +19,7 @@ dir <- gsub("/00_explore", "", dir)
 # load libraries
 library(kableExtra)
 library(ggplot2)
+library(dplyr)
 
 # load in functions
 devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
@@ -28,6 +29,13 @@ devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights
 ```{r, include=F}
 teach <- read.csv(file.path(dir, "data_raw", "GTI-Teacher-Data.csv"))
 group <- "COUNTRY"
+
+# replace all 9999 with NA
+teach <- teach %>%
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
+
 ```
 
 
