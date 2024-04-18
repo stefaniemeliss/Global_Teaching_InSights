@@ -89,7 +89,7 @@ table_desc(data = stud,
   - When the lessons began, our mathematics teacher had to wait quite a long time for us to quieten down.  
   - We lost quite a lot of time because of students interrupting the lessons.  
   - There was much disruptive noise in this classroom.  
-* **SA_CM_TEACHMAN**:	Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQB11F, SQB11G, SQB11I, and SQB11J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+* **SB_CM_TEACHMAN**:	Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQB11F, SQB11G, SQB11I, and SQB11J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
   - Our teacher managed to stop disruptions quickly.  
   - Our teacher reacted to disruptions in such a way that the students stopped disturbing learning.  
   - Our teacher was immediately aware of students doing something else.  
