@@ -39,7 +39,9 @@ all_data <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 all_data <- all_data %>%
-  mutate(across(where(is.integer), ~na_if(., 9999)))
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
 # define list of countries
 countries <- unique(all_data$COUNTRY)
