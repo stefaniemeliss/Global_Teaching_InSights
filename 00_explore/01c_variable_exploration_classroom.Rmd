@@ -25,7 +25,7 @@ library(corrplot)
 
 # load in functions
 devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
-
+#source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
 ```
 
 ```{css, echo=FALSE}
