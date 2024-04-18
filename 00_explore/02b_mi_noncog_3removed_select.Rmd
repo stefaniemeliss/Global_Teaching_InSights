@@ -40,7 +40,9 @@ all_data <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 all_data <- all_data %>%
-  mutate(across(where(is.integer), ~na_if(., 9999)))
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
 ```
 
@@ -230,7 +232,7 @@ for (v in 1:length(vars)) {
   
   # add to summary
   summary$country_model[v] <- ifelse(sum(is.na(df_conf$p.Value)) > 0, "not defined", 
-                                     ifelse(sum(df_conf$CFI < .95) > 0 & sum(df_conf$TLI < .95) > 0 &  sum(df_conf$RMSEA > .1) > 0, "not OK", "OK"))
+                                     ifelse(sum(df_conf$CFI < .95) > 0 | sum(df_conf$TLI < .95) > 0 | sum(df_conf$RMSEA > .1) > 0, "not OK", "OK"))
   
   # define thresholds for highlighting
   col.cfi <- which(df_conf$CFI < .95)

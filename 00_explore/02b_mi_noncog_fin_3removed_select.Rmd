@@ -40,7 +40,9 @@ all_data <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 all_data <- all_data %>%
-  mutate(across(where(is.integer), ~na_if(., 9999)))
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
 ```
 
@@ -345,7 +347,7 @@ for (v in 1:length(vars)) {
   
   # add to summary
   summary$diff_config_metric[v] <- ifelse(is.na(tmp5$test$standard$pvalue), "not defined", 
-                                    ifelse(tmp5$fit["cfi"] >= .95 & tmp5$fit["tli"] >= .95 &  tmp5$fit["rmsea"] <= .1, "**OK", "(*)not OK"))
+                                    ifelse(tmp5$fit["cfi"] >= .95 | tmp5$fit["tli"] >= .95 | tmp5$fit["rmsea"] <= .1, "**OK", "(*)not OK"))
   }
   
   
