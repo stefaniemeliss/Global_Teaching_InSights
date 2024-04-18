@@ -77,10 +77,15 @@ vars <- c(
   "DISCOURSE_posttest",
   # clarity
   "CLARITY_posttest",
+  # meaning
+  "MEANING_posttest",
   # cognitive activation
   "COCACT_posttest",
   # adaptation of instruction
-  "ADAPT_posttest")
+  "ADAPT_posttest",
+  # feedback
+  "FEEDBACK_posttest"
+)
 
 # determine items that are summed up to factor
 scales <- c(
@@ -100,10 +105,14 @@ scales <- c(
   paste0("SQB08", LETTERS[9:11],collapse = " + "),
   # clarity
   paste0("SQB08", LETTERS[1:4],collapse = " + "),
+  # meaning
+  paste0("SQB09", LETTERS[1:4],collapse = " + "),
   # cognitive activation
   paste0("SQB08", LETTERS[5:8],collapse = " + "),
   # adaptation of instruction
-  paste0("SQB10", LETTERS[1:5],collapse = " + ")
+  paste0("SQB10", LETTERS[1:5],collapse = " + "),
+  # feedback
+  paste0("SQB16", LETTERS[1:4],collapse = " + ")
 )
 
 # combine to df for checking
