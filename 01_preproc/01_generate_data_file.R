@@ -313,7 +313,7 @@ for (c in 1:length(loo_cols)) {
 df <- merge(tmp, dat, by = "S_ID")
 df <- merge(df, teach, by = "T_ID")
 
-write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v2.csv"), row.names = F)
+write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v1.csv"), row.names = F)
 
 
 # code to create variable dict
