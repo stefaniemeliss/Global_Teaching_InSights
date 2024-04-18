@@ -1,5 +1,5 @@
 ---
-title: "Measurement invariance (MI): Pupil perspective on teaching-related constructs (selected 5 countries)"
+title: "Measurement invariance (MI): Pupil perspective on selected teaching-related constructs (selected 5 countries)"
 author: "Stef Meliss"
 date: "`r Sys.Date()`"
 output: html_document
@@ -40,7 +40,9 @@ all_data <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 all_data <- all_data %>%
-  mutate(across(where(is.integer), ~na_if(., 9999)))
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
 ```
 
@@ -60,113 +62,49 @@ Previous results showed that when three countries are removed systematically, me
 # determine unique variable names
 vars <- c(
   # CM disruption
-  "DISRUPR_baseline",
   "DISRUPR_posttest",
   # CM teacher management
-  "TEACHMAN_baseline",
   "TEACHMAN_posttest",
   # SE teacher support
-  "TESUP_baseline",
   "TESUP_posttest",
   # SE support for competence
-  "SUPCOM_baseline",
   "SUPCOM_posttest",
   # SE support for autonomy
-  "SUPAUT_baseline",
   "SUPAUT_posttest",
   # student teacher relationship 
-  "REL_STUD_TEACH_baseline",
   "REL_STUD_TEACH_posttest",
   # discourse
-  "DISCOURSE_baseline",
   "DISCOURSE_posttest",
-  # OTL
-  "OTL_baseline",
-  "OTL_posttest",
   # clarity
-  "CLARITY_baseline",
   "CLARITY_posttest",
   # cognitive activation
-  "COCACT_baseline",
   "COCACT_posttest",
   # adaptation of instruction
-  "ADAPT_baseline",
-  "ADAPT_posttest",
-  # feedback
-  "FEEDBACK_posttest",
-  # high expectations
-  "EXPECT_posttest",
-  # teacher enthusiasm
-  "TEACHENTHUS_posttest",
-  # Content-related activities
-  "USECONT_baseline",
-  "USECONT_posttest",
-  # Self-reported cognitive engagement
-  "USECOGACT_baseline",
-  "USECOGACT_posttest",
-  # Experience of autonomy, competence, social relatedness
-  "USESELFDET_baseline",
-  "USESELFDET_posttest",
-  # Time on task
-  "USETOT_baseline",
-  "USETOT_posttest"
-)
+  "ADAPT_posttest")
 
 # determine items that are summed up to factor
 scales <- c(
   # CM disruption
-  paste0("SQA20", LETTERS[1:3],collapse = " + "),
   paste0("SQB11", LETTERS[1:3],collapse = " + "),
   # CM teacher management
-  paste0("SQA20", LETTERS[c(6, 7, 9, 10)],collapse = " + "),
   paste0("SQB11", LETTERS[c(6, 7, 9, 10)],collapse = " + "),
   # SE teacher support
-  paste0("SQA21", LETTERS[1:3],collapse = " + "),
   paste0("SQB12", LETTERS[1:3],collapse = " + "),
   # SE support competence
-  paste0("SQA21", LETTERS[4:7],collapse = " + "),
   paste0("SQB12", LETTERS[4:7],collapse = " + "),
   # SE support autonomy
-  paste0("SQA21", LETTERS[8:11],collapse = " + "),
   paste0("SQB12", LETTERS[8:11],collapse = " + "),
   # student teacher relationship 
-  paste0("SQA22", LETTERS[1:5],collapse = " + "),
   paste0("SQB13", LETTERS[1:5],collapse = " + "),
   # discourse
-  paste0("SQA18", LETTERS[9:11],collapse = " + "),
   paste0("SQB08", LETTERS[9:11],collapse = " + "),
-  # OTL
-  paste0("SQA16", LETTERS[1:10],"1", collapse = " + "),
-  paste0("SQB07E", LETTERS[1:11], collapse = " + "),
   # clarity
-  paste0("SQA18", LETTERS[1:4],collapse = " + "),
   paste0("SQB08", LETTERS[1:4],collapse = " + "),
   # cognitive activation
-  paste0("SQA18", LETTERS[5:8],collapse = " + "),
   paste0("SQB08", LETTERS[5:8],collapse = " + "),
   # adaptation of instruction
-  paste0("SQA19", LETTERS[1:5],collapse = " + "),
-  paste0("SQB10", LETTERS[1:5],collapse = " + "),
-  # feedback
-  paste0("SQB16", LETTERS[1:4],collapse = " + "),
-  # high expectations
-  paste0("SQB14", LETTERS[1:4],collapse = " + "),
-  # teacher enthusiasm
-  paste0("SQB17", LETTERS[1:8],collapse = " + "),
-  # Content-related activities
-  paste0("SQA17", LETTERS[1:3],collapse = " + "),
-  paste0("SQB06", LETTERS[1:3],collapse = " + "),
-  # Self-reported cognitive engagement
-  paste0("SQA17", LETTERS[4:6],collapse = " + "),
-  paste0("SQB06", LETTERS[4:6],collapse = " + "),
-  # Experience of autonomy, competence, social relatedness
-  paste0("SQA17", LETTERS[7:9],collapse = " + "),
-  paste0("SQB06", LETTERS[7:9],collapse = " + "),
-  # Time on task
-  paste0("SQA17", LETTERS[10:12],collapse = " + "),
-  paste0("SQB06", LETTERS[10:12],collapse = " + ")
+  paste0("SQB10", LETTERS[1:5],collapse = " + ")
 )
-
 
 # combine to df for checking
 df <- data.frame(vars, scales)
@@ -214,7 +152,7 @@ for (v in 1:length(vars)) {
   
   # lavaan model formulation
   model <- paste(vars[v], "=~", scales[v])
-  
+
   # fit CFA
   fit <-lavaan::cfa(model, ordered = T, data = stud) 
   
@@ -291,7 +229,7 @@ for (v in 1:length(vars)) {
   
   # add to summary
   summary$country_model[v] <- ifelse(sum(is.na(df_conf$p.Value)) > 0, "not defined", 
-                                     ifelse(sum(df_conf$CFI < .95) > 0 & sum(df_conf$TLI < .95) > 0 &  sum(df_conf$RMSEA > .1) > 0, "not OK", "OK"))
+                                     ifelse(sum(df_conf$CFI < .95) > 0 | sum(df_conf$TLI < .95) > 0 | sum(df_conf$RMSEA > .1) > 0, "not OK", "OK"))
   
   # define thresholds for highlighting
   col.cfi <- which(df_conf$CFI < .95)
@@ -414,7 +352,7 @@ for (v in 1:length(vars)) {
   row.names(tmp4) <- NULL
   
   # add to summary
-  if (!grepl("PINT_", vars[v])) {
+  if (!grepl("DISRUPR_|TESUP_|DISCOURSE_", vars[v])) {
       summary$diff_config_metric[v] <- ifelse(tmp4$cfi[tmp4$model == "Δ_conf_metr"] < -.02 | tmp$rmsea[tmp4$model == "Δ_conf_metr"] > .03, "not OK", "OK")
 
   } else {
