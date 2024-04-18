@@ -82,6 +82,8 @@ vars <- c(
   # clarity
   "CLARITY_baseline",
   "CLARITY_posttest",
+  # meaning
+  "MEANING_posttest",
   # cognitive activation
   "COCACT_baseline",
   "COCACT_posttest",
@@ -137,6 +139,8 @@ scales <- c(
   # clarity
   paste0("SQA18", LETTERS[1:4],collapse = " + "),
   paste0("SQB08", LETTERS[1:4],collapse = " + "),
+  # meaning
+  paste0("SQB09", LETTERS[1:4],collapse = " + "),
   # cognitive activation
   paste0("SQA18", LETTERS[5:8],collapse = " + "),
   paste0("SQB08", LETTERS[5:8],collapse = " + "),
@@ -167,6 +171,7 @@ scales <- c(
 # combine to df for checking
 df <- data.frame(vars, scales)
 df$models <- paste(vars, "=~", scales)
+
 ```
 
 To determine measurement invariance (MI) for the questionnaire responses given by students, CFA was applied. More specifically, for each questionnaire scale, we first defined a CFA model where all items in the scale are loading on a single factor. All items were defined as being ordered categorical. 
