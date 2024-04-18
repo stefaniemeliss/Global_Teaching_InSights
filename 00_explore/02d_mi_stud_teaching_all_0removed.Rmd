@@ -40,7 +40,14 @@ stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
 
 # replace all 9999 with NA
 stud <- stud %>%
-  mutate(across(where(is.integer), ~na_if(., 9999)))
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
+
+# recode variables as necessary
+stud$SQB06L_orig <- stud$SQB06L # copy
+stud$SQB06L <- 5 - stud$SQB06L # overwrite
+
 
 ```
 
