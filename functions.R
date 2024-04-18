@@ -13,8 +13,9 @@ orange = "#EC642D"
 red = "#BF1C1D"
 
 # combine to palette
-ambition_palette <- c(cyan, coral, teal, purple, orange) # bright palette
-ambition_palette <- c(cyan, teal, purple, orange, green, red, yellow, blue) # 8 colours without coral
+ambition_palette_bright <- c(cyan, coral, teal, purple, orange) # bright palette
+ambition_palette_accent <- c(yellow, blue, red)
+ambition_palette <- c(ambition_palette_bright, ambition_palette_accent) # 8 colours without ITT green
 
 # source: https://rdrr.io/cran/MESS/src/R/colorfunctions.R
 col.tint <- function(col, tint=.5) {
@@ -29,13 +30,18 @@ col.tint <- function(col, tint=.5) {
   rgb(mat, alpha=mat[,4], maxColorValue=255)
 }
 
+# load libraries
+library(ggplot2)
+library(extrafont)
+
 # define theme for plot
-theme <- theme(
-  plot.title = element_text(size=14, face="bold", hjust = 0.5),
-  axis.title.y = element_text(size=10, face="bold"),
+theme <- theme_bw() + theme(
+  text=element_text(family="Segoe UI"),
+  plot.title = element_text(size=14, face="bold"),
+  axis.title = element_text(size=10, face="bold"),
   legend.title = element_blank(),
   legend.position = "bottom"
-) + theme_bw()
+)
 
 
 dominant_col <- coral
