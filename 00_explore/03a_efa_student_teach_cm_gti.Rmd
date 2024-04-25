@@ -1,0 +1,692 @@
+---
+title: "Exploratory Factor Analysis for student-reported measures of teaching-related constructs [SUBSET OF ITEMS for CM]"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#### setups ####
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
+
+# load libraries
+library(dplyr)
+library(kableExtra)
+
+
+#### process student-level data ####
+
+# load in data #
+stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
+
+# replace all 9999 with NA
+stud <- stud %>%
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
+
+# filter by country
+countries <- c("Shanghai", "Japan", "Madrid")
+
+# remove data from country
+stud <- stud %>% 
+  filter(!COUNTRY %in% countries)
+
+
+```
+
+Contents  
+
+[Item-level exploratory factor analysis (EFA)](#efa)  
+[Overall conclusion](#con)  
+
+
+## Item-level exploratory factor analysis (EFA) {#efa}
+
+We are interested in the following student-reported questionnaire measures as predictors:  
+
+- Disruptions  
+- Teacher's classroom management  
+- Teacher support for learning  
+- Support for competence  
+- Support for autonomy  
+- Student-teacher relationship  
+- Discourse  
+- Clarity of instruction  
+- Focus on meaning  
+- Cognitive activation  
+- Adaptation of instruction  
+- Feedback  
+
+All items that were used to measure these 12 constructs were included for into an EFA. Please note that classroom management was measured with in total 10 items (SQB11a-j) but the authors only used a subset of these items to derive the subscales disruption and teacher classroom management. **Here, only the subset of items in the classroom management scale were included.** Where appropriate, items were recoded so that a higher item score represent more quality of teaching.   
+  
+Data is used from all countries, excluding Shanghai, Japan and Madrid.  
+
+```{r, include=FALSE}
+df_efa <- stud[, grepl("S_ID|T_ID|COUNTRY|SQB11|SQB12|SQB13|SQB08|SQB09|SQB10|SQB16", names(stud))]
+
+# note: SQB13a-e only!
+df_efa$SQB13F <- NULL
+df_efa$SQB13G <- NULL
+df_efa$SQB13H <- NULL
+df_efa$SQB13I <- NULL
+
+# remove CM items
+df_efa$SQB11D <- NULL
+df_efa$SQB11E <- NULL
+df_efa$SQB11H <- NULL
+
+# recode items
+df_efa[,paste0("SQB11", LETTERS[c(1, 2, 3)])] <- 5 - df_efa[,paste0("SQB11", LETTERS[c(1, 2, 3)])]
+
+
+# import original item-construct mapping
+tmp <- read.csv(file = file.path(dir, "misc", "GTI_SQB_12F.csv"))
+
+```
+
+Following recoding, a scree plot was generated based on polychoric correlations given the ordinal nature of the data. Applying a cut-off value of 1 to the eigenvalues would result in the recommendation to extract 4-5 factors.
+
+```{r, echo=FALSE, fig.align='center'}
+# compute polychoric correlation matrix
+cor_mat <- psych::polychoric(df_efa[c(-1:-3)])$rho
+# generate scree plot
+psych::scree(cor_mat, pc = F)
+```
+
+Additionally, parallel analysis was run to evaluate the scree plot.
+
+>"A better method for evaluating the scree plot is within a parallel analysis. In addition to plotting the eigenvalues from our factor analysis (whether it’s based on principal axis or principal components extraction), a parallel analysis involves generating random correlation matrices and after factor analyzing them, comparing the resulting eigenvalues to the eigenvalues of the observed data. The idea behind this method is that observed eigenvalues that are higher than their corresponding random eigenvalues are more likely to be from 'meaningful factors' than observed eigenvalues that are below their corresponding random eigenvalue." [(Smyth & Johnson, n.d.)](https://www.uwo.ca/fhs/tc/labs/10.FactorAnalysis.pdf)
+
+In parallel analysis, minimum residual was specified as factoring method. Missing data is deleted pairwise, not listwise. Interestingly, parallel analysis suggested a 12-factor solution. The blue line in the figure below shows the observed eigenvalues and should be identical to the plot above. The red line shows eigenvalues computed based on resampled or simulated data. If a point on the blue line lies above the corresponding red line, this is a factor to extract. Hence, the parallel analysis suggests to extract 12 factors. However, some of the factors are very close to the line, suggesting that multiple solutions should be compared for interpretability.
+
+```{r, echo=F, fig.align='center'}
+# input for FA: df_efa without ID cols
+# specify polychoric correlation to account for ordinal data structure
+psych::fa.parallel(df_efa[c(-1:-3)], fm = 'minres', fa = 'fa', cor = "poly") 
+
+```
+
+#### 12-factor solution
+
+Based on the parallel analysis, the first attempt at EFA will aim to extract N = 12 factors.
+
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 12
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+
+
+
+#### 11-factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 11
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+
+
+#### 10-factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 10
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+
+
+
+#### 9-factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 9
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+
+#### 8-factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 8
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+
+#### 7-factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 7
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+
+
+
+
+#### 6-factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 6
+
+
+psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_efa[c(-1:-3)], nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+```
+
+```{r, fig.height=15, fig.align='center', echo=F}
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+```{r, echo=F}
+# extract factor loadings 
+loadings <- factors$loadings
+loadings <- round(loadings, digits = 3) # round
+loadings <- apply(loadings, MARGIN = 2, FUN = function(x){ifelse(x > .3, x, NA)}) # threshold at .3
+
+# write file and re-import
+write.csv(loadings, "loadings.csv")
+loadings <- read.csv(file = "loadings.csv")
+names(loadings)[1] <- "item" # column for merging
+
+# combine mapping between items and GTI constructs with loadings
+out <- merge(tmp, loadings, by = "item")
+
+# print output
+options(knitr.kable.NA = '') # do not print NA (NA were induced during thresholding)
+kbl(out, caption = paste0("Loadings of ",n_factors, "-factor solution [thresholded at .3]")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) 
+```
+
+## Overall conclusion {#con}  
+
+> The structure proposed by the GTI study authors fits the data reasonably well. The larger the number of factors extracted, the larger the mapping to the constructs proposed by the authors. However, some adjustments could be considered. These are outlined below.  
+  
+#### Adaptation of instruction  
+  
+The first four item measure whether the teacher actively modified their teaching based on student needs. The last item captures whether check for understanding questions were used.  
+  
+* **SB_ADAPT**:	Scale measuring student perception of teacher’s adaptation of instruction to student needs during the unit on quadratic equations, calculated as the mean of SQB10A to SQB10E using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***Please think about your mathematics instruction during the unit on quadratic equations once more. To what extent do you disagree or agree with the following statements?***  
+  - Our mathematics teacher adapted the lessons to my class’s needs and knowledge.  
+  - Our mathematics teacher changed the way of explanation (e.g. using different representations) when a student has difficulties understanding a topic or task.  
+  - Our mathematics teacher changed the structure of the lesson on a topic that most students find difficult to understand.  
+  - Our mathematics teacher gave different work to students of different ability levels.  
+  - Our mathematics teacher asked questions to check if we have understood what he/she has taught.  
+  
+
+The last item in the scale did not load on the same factor as the other 4 items for the 9-, 10-, 11-, and 12-Factor solution. In the 8-Factor solution (and less), some of the items in the adaptation scale started to load on the same factor as the items measuring teacher support.  
+  
+#### Teacher support  
+  
+Irrespective of the number of factors specified, the EFA did not support the proposed 3-factor structure of the SQB12. Instead, all 11 items were always loading on the same factor. The questionnaire measures student perception of teacher support.  
+  
+* **SB_TESUP**:	Scale measuring student perception of teacher support during the unit on quadratic equations, calculated as the mean of SQB12A to SQB12C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher gave extra help when we needed it.  
+  - Our mathematics teacher continued teaching until we understood.  
+  - Our mathematics teacher helped us with our learning.  
+* **SB_SUPCOM**:	Scale measuring student perception of teacher support for competence during the unit on quadratic equations, calculated as the mean of SQB12D to SQB12G using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher made me feel confident in my ability to do well in the course.  
+  - Our mathematics teacher listened to my view on how to do things.  
+  - I felt that our mathematics teacher understood me.  
+  - Our mathematics teacher made me feel confident in my ability to learn the material.  
+* **SB_SUPAUT**:	Scale measuring student perception of the teacher’s support for autonomy during the unit on quadratic equations, calculated as the mean of SQB12H to SQB12K using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  - Our mathematics teacher provided me with different alternatives (e.g. learning materials or tasks).  
+  - Our mathematics teacher encouraged me to find the best way to proceed by myself.  
+  - Our mathematics teacher let me work on my own.  
+  - Our mathematics teacher appreciated it when different solutions came up for discussion.  
+  
+When further reducing the number of factors below 9, items measuring the student perception of the teacher's adaptation of instruction to student needs were also loading on the same factor. In the 6-factor solution, items measuring the student perception of student-teacher relationship were also loading on the same factor.  
+  
+<details>
+<summary> <b> Supplementary analysis: EFA for SQB12 </b> </summary>
+
+To further understand the structure of this questionnaire, an EFA will be run with specifying up to four factors to extract.  
+  
+```{r, echo=F}
+# select relevant columns
+df_ts <- df_efa[, grepl("SQB12", names(df_efa))]
+
+# run parallel analysis
+psych::fa.parallel(df_ts, fm = 'minres', fa = 'fa', cor = "poly") 
+```
+
+###### 4-Factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 4
+
+
+psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+
+###### 3-Factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 3
+
+
+psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+###### 2-Factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 2
+
+
+psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+###### 1-Factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 1
+
+
+psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_ts, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+</details>
+
+  
+#### Classroom management  
+  
+According to the authors of the GTI study, questionnaire SQB11 has two subscales.  
+  
+* **SB_CM_DISRUPT**:	Scale measuring student perception of classroom disruptions and teacher’s reaction to them. Calculated as the mean of SQB11A to SQB11C using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  A) When the lessons began, our mathematics teacher had to wait quite a long time for us to quieten down.  
+  B) We lost quite a lot of time because of students interrupting the lessons.  
+  C) There was much disruptive noise in this classroom.  
+* **SB_CM_TEACHMAN**:	Scale measuring student perception of teacher’s management of classroom disruptions. Calculated as the mean of SQB11F, SQB11G, SQB11I, and SQB11J using a 1 (strongly disagree) - 4 (strongly agree) scale. Question: ***To what extent do you disagree or agree with the following statements?***
+  F) Our teacher managed to stop disruptions quickly.  
+  G) Our teacher reacted to disruptions in such a way that the students stopped disturbing learning.  
+  I) Our teacher was immediately aware of students doing something else.  
+  J) Our teacher was aware of what was happening in the classroom, even if he or she was busy with an individual student.  
+  
+This excludes the following items:  
+  
+  D) In our teacher’s class, we were aware of  what was allowed and what was not allowed.  
+  E) In our teacher’s class, we knew why certain rules were important.  
+  H) In our teacher’s class, transitions from one phase of the lesson to the other (e.g., from class discussions to individual work) took a lot of time.  
+  
+In the EFA, we found that irrespective of the number of factors, the items SQB11[a, b, c and **h**] always load on the same factor. Of note, these are also the items that were recoded and all refer to the teacher failing to manage the classroom.  
+  
+Depending on the amount of factors specified, the factor solutions for the remaining items in this scale varied and ranged from:  
+  
+- 12-Factor: SQB11[F, G, I, J] and SQB11[D, E, F, G], SQB11[D, E]  
+- 11-Factor: SQB11[F, G, I, J] and SQB11[D, E]  
+- 10-Factor and below: SQB11[D, E, F, G, I, J]  
+  
+<details>
+<summary> <b> Supplementary analysis: EFA for SQB11 </b> </summary>
+
+To further understand the structure of this questionnaire, an EFA will be run with specifying up to four factors to extract.  
+  
+```{r, echo=F}
+# select relevant columns
+df_cm <- df_efa[, grepl("SQB11", names(df_efa))]
+
+# run parallel analysis
+psych::fa.parallel(df_cm, fm = 'minres', fa = 'fa', cor = "poly") 
+```
+
+###### 3-Factor solution
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 3
+
+
+psych::fa(df_cm, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_cm, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+  
+###### 2-Factor solution  
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 2
+
+
+psych::fa(df_cm, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_cm, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+  
+###### 1-Factor solution  
+
+```{r, echo = F, fig.align='center'}
+options(width = 150)
+# try efa
+# oblique rotation (rotate = “oblimin”) to allow correlation between the factors
+# Ordinary Least Squared/Minres` factoring (fm = “minres”), as it is known to provide results similar to `Maximum Likelihood` without assuming a multivariate normal distribution and derives solutions through iterative eigendecomposition like a principal axis
+
+# determine number of factors to extract
+n_factors <- 1
+
+
+psych::fa(df_cm, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly") 
+
+# save as object
+factors <- psych::fa(df_cm, nfactors = n_factors, rotate = "oblimin", fm = "minres", cor = "poly")
+
+# show loadings in diagram
+psych::fa.diagram(factors)
+```
+
+</details>
+
+```{r, include=F}
+file.remove("loadings.csv")
+```
+
