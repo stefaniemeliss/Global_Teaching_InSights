@@ -44,6 +44,9 @@ all_data <- all_data %>%
   mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
   mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
+# recode items
+all_data[,paste0("SQB11", LETTERS[c(1, 2, 3)])] <- 5 - all_data[,paste0("SQB11", LETTERS[c(1, 2, 3)])]
+
 ```
 
 Previous results showed that when three countries are removed systematically, measurement invariance (MI) in the non-cognitive outcome measures can be established. However, there were three different possible combinations that achieved this outcome. This markdown document compares re-runs the measurement invariance test for all three data subsets for the student ratings of teaching-related constructs.   
