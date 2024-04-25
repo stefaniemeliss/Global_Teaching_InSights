@@ -27,6 +27,14 @@ teach <- teach %>%
   mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
   mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
+# remove countries #
+
+# countries to exclude
+countries <- c("Shanghai", "Japan", "Madrid")
+
+# remove data from country
+teach <- teach %>% 
+  filter(!COUNTRY %in% countries)
 
 # recode predictor variables #
 
@@ -117,6 +125,11 @@ teach$VIND_QSRT_SUM <- rowSums(teach[, grepl("VIND_QS6|VIND_QS7|VIND_QS8|VIND_QS
 
 # load in data #
 stud <- read.csv("data_raw/GTI-Student-Data.csv")
+
+# remove data from country
+stud <- stud %>% 
+  filter(!COUNTRY %in% countries)
+
 
 # replace all 9999 with NA
 stud <- stud %>%
