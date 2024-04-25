@@ -65,15 +65,15 @@ table(rowMeans(teach[, paste0("TQB10", LETTERS[1:5])]) - teach$TB_ADAPT)
 teach$TB_ADAPT <- ifelse(!is.na(teach$TB_ADAPT), rowMeans(teach[, paste0("TQB10", LETTERS[1:5])], na.rm = T), NA)
 
 # get relevant variable names: teacher level
-misc <- xlsx::read.xlsx(file = "misc/features.xlsx", sheetName = "Teacher", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Teacher", header = T)
 teach_cols <- misc$Variable
 
 # get relevant variable names: video observations
-misc <- xlsx::read.xlsx(file = "misc/features.xlsx", sheetName = "Video", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Video", header = T)
 vid_cols <- misc$Variable
 
 # get relevant variable names: artefacts
-misc <- xlsx::read.xlsx(file = "misc/features.xlsx", sheetName = "Artefacts", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Artefacts", header = T)
 arte_cols <- misc$Variable
 
 # reduce teach to relevant variables only
@@ -235,11 +235,11 @@ stud$SB_USETOT <- ifelse(!is.na(stud$SB_USETOT), rowMeans(stud[, paste0("SQB06",
 
 
 # get relevant variable names: teacher level
-misc <- xlsx::read.xlsx(file = "misc/features.xlsx", sheetName = "Student", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Student", header = T)
 stud_cols <- misc$Variable
 
 # get relevant variable names: video observations
-misc <- xlsx::read.xlsx(file = "misc/features.xlsx", sheetName = "Noncog", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Noncog", header = T)
 out_cols <- misc$Variable
 
 # reduce teach to relevant variables only
