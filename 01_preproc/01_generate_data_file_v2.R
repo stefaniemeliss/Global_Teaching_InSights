@@ -113,10 +113,24 @@ tmpp <- teach[, grepl("T_ID|VIND_QS6|VIND_QS7|VIND_QS8|VIND_QS9|VIND_QS10", name
 tmpp$sum <- rowSums(teach[, grepl("VIND_QS6|VIND_QS7|VIND_QS8|VIND_QS9|VIND_QS10", names(teach))] > 0)
 teach$VIND_QSRT_SUM <- rowSums(teach[, grepl("VIND_QS6|VIND_QS7|VIND_QS8|VIND_QS9|VIND_QS10", names(teach))] > 0)
 
+
 #### process student-level data ####
 
 # load in data #
 stud <- read.csv("data_raw/GTI-Student-Data.csv")
+
+# rename some variables in the interest of consistency
+names(stud)[names(stud) == "POST_PINT"] <- "SB_PINT"
+names(stud)[names(stud) == "POST_GENSELFEFF"] <- "SB_GENSELFEFF"
+
+# remove countries #
+
+# countries to exclude
+countries <- c("Shanghai", "Japan", "Madrid")
+
+# remove data from country
+stud <- stud %>% 
+  filter(!COUNTRY %in% countries)
 
 # replace all 9999 with NA
 stud <- stud %>%
@@ -124,122 +138,89 @@ stud <- stud %>%
   mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
   mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
-# rename some variables in the interest of consistency
-names(stud)[names(stud) == "PRE_PINT"] <- "SA_PINT_PREV"
-names(stud)[names(stud) == "POST_PINT"] <- "SB_PINT"
-names(stud)[names(stud) == "PRE_GENSELFEFF"] <- "SA_GENSELFEFF_PREV"
-names(stud)[names(stud) == "POST_GENSELFEFF"] <- "SB_GENSELFEFF"
-
 # re-compute outcome and baseline measures #
 
-# there seem to be unclear rounding issues in the data
-# hence, after checking, the values are recomputed
-
-# achivement
+# achievement: there seem to be unclear rounding issues in the data
 table((stud$STA_TOTALSCORE/30) - stud$STA_PROPCORRECTSCORE)
 table((stud$STB_TOTALSCORE/24) - stud$STB_PROPCORRECTSCORE)
 
+# hence, after checking, the values are recomputed
 stud$STA_PROPCORRECTSCORE <- stud$STA_TOTALSCORE/30
 stud$STB_PROPCORRECTSCORE <- stud$STB_TOTALSCORE/24
 
-# self-concept
-table(rowMeans(stud[, paste0("SQA06", LETTERS[1:6])]) - stud$SA_SELFCON)
-table(rowMeans(stud[, paste0("SQB01", LETTERS[1:6])]) - stud$SB_SELFCON)
+# add factor scores of noncog computed in separate script #
 
-stud$SA_SELFCON <- ifelse(!is.na(stud$SA_SELFCON), rowMeans(stud[, paste0("SQA06", LETTERS[1:6])], na.rm = T), NA)
-stud$SB_SELFCON <- ifelse(!is.na(stud$SB_SELFCON), rowMeans(stud[, paste0("SQB01", LETTERS[1:6])], na.rm = T), NA)
+# read in file
+sqf_out <-  read.csv(file.path(dir, "01_preproc", "SQF_out.csv"))
+
+# select relevant cols
+sqf_out <- sqf_out[, grepl("_", names(sqf_out))]
+
+# merge with main dataset
+stud <- merge(stud, sqf_out, by = "S_ID", all = T)
+
+# self-concept
+stud$SAF_SELFCON <- ifelse(!is.na(stud$SA_SELFCON), stud$SAF_SELFCON, NA)
+stud$SBF_SELFCON <- ifelse(!is.na(stud$SB_SELFCON), stud$SBF_SELFCON, NA)
 
 # personal interest
-table(rowMeans(stud[, paste0("SQA12", LETTERS[1:3])]) - stud$SA_PINT_PREV)
-table(rowMeans(stud[, paste0("SQA14", LETTERS[1:3])]) - stud$SA_PINT_CURR)
-table(rowMeans(stud[, paste0("SQB03", LETTERS[1:3])]) - stud$SB_PINT)
-
-stud$SA_PINT_PREV <- ifelse(!is.na(stud$SA_PINT_PREV), rowMeans(stud[, paste0("SQA12", LETTERS[1:3])], na.rm = T), NA)
-stud$SA_PINT_CURR <- ifelse(!is.na(stud$SA_PINT_CURR), rowMeans(stud[, paste0("SQA14", LETTERS[1:3])], na.rm = T), NA)
-stud$SB_PINT <- ifelse(!is.na(stud$SB_PINT), rowMeans(stud[, paste0("SQB03", LETTERS[1:3])], na.rm = T), NA)
+stud$SAF_PINT <- ifelse(!is.na(stud$SA_PINT), stud$SAF_PINT, NA)
+stud$SBF_PINT <- ifelse(!is.na(stud$SB_PINT), stud$SBF_PINT, NA)
 
 # general self-efficacy
-table(rowMeans(stud[, paste0("SQA13", LETTERS[1:5])]) - stud$SA_GENSELFEFF_PREV)
-table(rowMeans(stud[, paste0("SQA15", LETTERS[1:5])]) - stud$SA_GENSELFEFF_CURR)
-table(rowMeans(stud[, paste0("SQB02", LETTERS[1:5])]) - stud$SB_GENSELFEFF)
+stud$SAF_GENSELFEFF <- ifelse(!is.na(stud$SA_GENSELFEFF), stud$SAF_GENSELFEFF, NA)
+stud$SBF_GENSELFEFF <- ifelse(!is.na(stud$SB_GENSELFEFF), stud$SBF_GENSELFEFF, NA)
 
-stud$SA_GENSELFEFF_PREV <- ifelse(!is.na(stud$SA_GENSELFEFF_PREV), rowMeans(stud[, paste0("SQA13", LETTERS[1:5])], na.rm = T), NA)
-stud$SA_GENSELFEFF_CURR <- ifelse(!is.na(stud$SA_GENSELFEFF_CURR), rowMeans(stud[, paste0("SQA15", LETTERS[1:5])], na.rm = T), NA)
-stud$SB_GENSELFEFF <- ifelse(!is.na(stud$SB_GENSELFEFF), rowMeans(stud[, paste0("SQB02", LETTERS[1:5])], na.rm = T), NA)
-
-# compute matched task-specific self-efficacy scale #
-
-# PRE: calculated as the mean of SQA16F2 to SQA16J2 - in all cases where the SA_EFFICACY is not NA
-stud$SA_EFFICACY_MATCHED <- ifelse(!is.na(stud$SA_EFFICACY), rowMeans(stud[, paste0("SQA16", LETTERS[6:10],"2")], na.rm = T), NA)
-
-# POST: calculated as the mean of SQB07CA to SQB07CE - in all cases where the SB_EFFICACY is not NA
-stud$SB_EFFICACY_MATCHED <- ifelse(!is.na(stud$SB_EFFICACY), rowMeans(stud[, paste0("SQB07C", LETTERS[1:5])], na.rm = T), NA)
+# matched task-specific self-efficacy
+stud$SAF_EFFICACY_MATCHED <- ifelse(!is.na(stud$SA_EFFICACY), stud$SAF_EFFICACY_MATCHED, NA)
+stud$SBF_EFFICACY_MATCHED <- ifelse(!is.na(stud$SB_EFFICACY), stud$SBF_EFFICACY_MATCHED, NA)
 
 
-# recode predictor variables #
+# add factor scores of teaching questionnaires computed in separate script #
+
+# read in file
+sqf_feat <-  read.csv(file.path(dir, "01_preproc", "SQF_feat.csv"))
+
+# select relevant cols
+sqf_feat <- sqf_feat[, grepl("_", names(sqf_feat))]
+
+# merge with main dataset
+stud <- merge(stud, sqf_feat, by = "S_ID", all = T)
 
 # classroom management
-table(rowMeans((5- stud[, paste0("SQB11", LETTERS[1:3])])) - stud$SB_CM_DISRUPT)
-table(rowMeans(stud[, paste0("SQB11", LETTERS[c(6, 7, 9, 10)])]) - stud$SB_CM_TEACHMAN)
-
-stud$SB_CM_DISRUPT <- ifelse(!is.na(stud$SB_CM_DISRUPT), rowMeans((5- stud[, paste0("SQB11", LETTERS[1:3])]), na.rm = T), NA)
+stud$SBF_CM_DISRUPT <- ifelse(!is.na(stud$SB_CM_DISRUPT), stud$SBF_CM_DISRUPT, NA)
+stud$SBF_CM_TEACHMAN <- ifelse(!is.na(stud$SB_CM_TEACHMAN), stud$SBF_CM_TEACHMAN, NA)
 
 # socio-emotional support
-table(rowMeans(stud[, paste0("SQB12", LETTERS[1:3])]) - stud$SB_TESUP)
-table(rowMeans(stud[, paste0("SQB12", LETTERS[4:7])]) - stud$SB_SUPCOM)
-table(rowMeans(stud[, paste0("SQB12", LETTERS[8:11])]) - stud$SB_SUPAUT)
-table(rowMeans(stud[, paste0("SQB13", LETTERS[1:5])]) - stud$SB_REL_STUDTEACH)
-
-stud$SB_TESUP <- ifelse(!is.na(stud$SB_TESUP), rowMeans(stud[, paste0("SQB12", LETTERS[1:3])], na.rm = T), NA)
-stud$SB_REL_STUDTEACH <- ifelse(!is.na(stud$SB_REL_STUDTEACH), rowMeans(stud[, paste0("SQB13", LETTERS[1:5])], na.rm = T), NA)
+stud$SBF_TESUP <- ifelse(!is.na(stud$SB_TESUP), stud$SBF_TESUP, NA)
+stud$SBF_SUPCOM <- ifelse(!is.na(stud$SB_SUPCOM), stud$SBF_SUPCOM, NA)
+stud$SBF_SUPAUT <- ifelse(!is.na(stud$SB_SUPAUT), stud$SBF_SUPAUT, NA)
 
 # discourse
-table(rowMeans(stud[, paste0("SQB08", LETTERS[9:11])]) - stud$SB_DISCOURSE)
-stud$SB_DISCOURSE <- ifelse(!is.na(stud$SB_DISCOURSE), rowMeans(stud[, paste0("SQB08", LETTERS[9:11])], na.rm = T), NA)
+stud$SBF_DISCOURSE <- ifelse(!is.na(stud$SB_DISCOURSE), stud$SBF_DISCOURSE, NA)
 
 # quality of subject matter
-table(rowMeans(stud[, paste0("SQB08", LETTERS[1:4])]) - stud$SB_CLARITY)
-table(rowMeans(stud[, paste0("SQB09", LETTERS[1:4])]) - stud$SB_MEANING)
+stud$SBF_CLARITY <- ifelse(!is.na(stud$SB_CLARITY), stud$SBF_CLARITY, NA)
+stud$SBF_MEANING <- ifelse(!is.na(stud$SB_MEANING), stud$SBF_MEANING, NA)
 
 # cognitive engagement
-table(rowMeans(stud[, paste0("SQB08", LETTERS[5:8])]) - stud$SB_COGACT) # VERY DIFFERENT RESULTS
-
-stud$SB_COGACT <- ifelse(!is.na(stud$SB_COGACT), rowMeans(stud[, paste0("SQB08", LETTERS[5:8])], na.rm = T), NA)
+stud$SBF_COGACT <- ifelse(!is.na(stud$SB_COGACT), stud$SBF_COGACT, NA)
 
 # assessment and response
-table(rowMeans(stud[, paste0("SQB10", LETTERS[1:5])]) - stud$SB_ADAPT)
-table(rowMeans(stud[, paste0("SQB16", LETTERS[1:4])]) - stud$SB_FEEDBACK)
-
-stud$SB_ADAPT <- ifelse(!is.na(stud$SB_ADAPT), rowMeans(stud[, paste0("SQB10", LETTERS[1:5])], na.rm = T), NA)
+stud$SBF_ADAPT <- ifelse(!is.na(stud$SB_ADAPT), stud$SBF_ADAPT, NA)
+stud$SBF_FEEDBACK <- ifelse(!is.na(stud$SB_FEEDBACK), stud$SBF_FEEDBACK, NA)
 
 # recode some binary measurements: change 2 (= no) to 0
 stud$SB_ASSESS_CHECK <- ifelse(stud$SB_ASSESS_CHECK == 2, 0, stud$SB_ASSESS_CHECK)
 stud$SB_ASSESS_SELFEV <- ifelse(stud$SB_ASSESS_SELFEV == 2, 0, stud$SB_ASSESS_SELFEV)
 stud$SB_ASSESS_OBS <- ifelse(stud$SB_ASSESS_OBS == 2, 0, stud$SB_ASSESS_OBS)
 
-# additional factors
-table(rowMeans(stud[, paste0("SQB14", LETTERS[1:4])]) - stud$SB_EXPECT)
-table(rowMeans(stud[, paste0("SQB17", LETTERS[1:8])]) - stud$SB_TEACHENTHUS)
-
-# use of opportunities
-table(rowMeans(stud[, paste0("SQB06", LETTERS[1:3])]) - stud$SB_USECONT)
-table(rowMeans(stud[, paste0("SQB06", LETTERS[4:6])]) - stud$SB_USECOGACT)
-table(rowMeans(stud[, paste0("SQB06", LETTERS[7:9])]) - stud$SB_USESELFDET)
-table(rowMeans(stud[, paste0("SQB06", LETTERS[10:12])]) - stud$SB_USETOT)
-
-stud$SB_USECONT <- ifelse(!is.na(stud$SB_USECONT), rowMeans(stud[, paste0("SQB06", LETTERS[1:3])], na.rm = T), NA)
-stud$SB_USECOGACT <- ifelse(!is.na(stud$SB_USECOGACT), rowMeans(stud[, paste0("SQB06", LETTERS[4:6])], na.rm = T), NA)
-stud$SB_USESELFDET <- ifelse(!is.na(stud$SB_USESELFDET), rowMeans(stud[, paste0("SQB06", LETTERS[7:9])], na.rm = T), NA)
-stud$SQB06L <- 5 - stud$SQB06L # recode item
-stud$SB_USETOT <- ifelse(!is.na(stud$SB_USETOT), rowMeans(stud[, paste0("SQB06", LETTERS[10:12])], na.rm = T), NA)
-
-
 # get relevant variable names: teacher level
-misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Student", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Student", header = T)
 stud_cols <- misc$Variable
 
 # get relevant variable names: video observations
-misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Noncog", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Noncog", header = T)
 out_cols <- misc$Variable
 
 # reduce teach to relevant variables only
@@ -247,6 +228,7 @@ rel_cols <- c("COUNTRY", "SCH_ID", "T_ID", "S_ID", out_cols, stud_cols)
 
 # stud <- stud[, rel_cols]
 tmp <- stud[, rel_cols]
+
 
 # compute Leave-One-Out mean for each student observation #
 
@@ -308,12 +290,13 @@ for (c in 1:length(loo_cols)) {
   
 }
 
+
 #### combine student and teacher data ####
 
 df <- merge(tmp, dat, by = "S_ID")
 df <- merge(df, teach, by = "T_ID")
 
-write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v1.csv"), row.names = F)
+write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v2.csv"), row.names = F)
 
 
 # code to create variable dict
