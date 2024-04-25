@@ -174,3 +174,31 @@ plot_scatter_jitter <- function(data = df, xvar = x, yvar = y,
     ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab(paste0(ylab)) 
   
 }
+
+
+extract_factorscores <- function(data_in = raw_data,
+                                 cfa_model = lavaan_model,
+                                 id_var = subject_identifier,
+                                 file_out = output_filename # file.path(dir, "01_preproc", "SQF_feat.csv")
+){
+  
+  # Fit Confirmatory Factor Analysis Model 
+  cfa_baseline <- lavaan::cfa(cfa_model, ordered = T, data = data_in)
+  
+  # Predict values of latent variables, i.e., factor scores
+  scores <- lavaan::lavPredict(cfa_baseline)
+  
+  # convert lavaan matrix to df
+  df_scores <- as.data.frame(scores)
+  
+  # add S_ID to df_scores
+  # note: lavaan handles NA by listwise deletion
+  # use case.idx stored in lavaan object to identify with rows of the original data were used to compute CFA
+  df_scores[, paste0(id_var)] <- data_in[cfa_baseline@Data@case.idx[[1]], id_var]
+  
+  # reorder columns
+  df_scores <- dplyr::relocate(df_scores, paste(id_var))
+  
+  # save file
+  write.csv(df_scores, file = file_out, row.names = F)
+}
