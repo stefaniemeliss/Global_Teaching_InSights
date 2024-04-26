@@ -143,11 +143,11 @@ for (c in 1:ncol(combis)) {
     # configural invariance #
     
     # fit CFA to test for configural invariance
-    config <- lavaan::cfa(model, ordered = T, data = stud, group = "COUNTRY")
+    config <- lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud, group = "COUNTRY")
     
     # metric invariance #
     
-    metric <-lavaan::cfa(model, ordered = T, data = stud, group = "COUNTRY", group.equal = c("loadings"))
+    metric <-lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud, group = "COUNTRY", group.equal = c("loadings"))
     
     # compare model fit
     comp <- compareFit(list(config, metric))
