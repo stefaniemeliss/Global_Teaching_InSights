@@ -205,7 +205,7 @@ for (v in 1:length(vars)) {
   model <- paste(vars[v], "=~", scales[v])
   
   # fit CFA
-  fit <-lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud) 
+  fit <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud) 
   
   # put summary in object
   tmp <- summary(fit, fit.measures = TRUE)
@@ -256,7 +256,7 @@ for (v in 1:length(vars)) {
   for (c in 1:length(countries)) {
     
     # compute CFA in each country
-    tmp_fit <-lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud[stud$COUNTRY == countries[c], ])
+    tmp_fit <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud[stud$COUNTRY == countries[c], ])
     
     # put summary in object
     tmp <- summary(tmp_fit, fit.measures = TRUE)
@@ -292,7 +292,7 @@ for (v in 1:length(vars)) {
   # configural invariance #
   
   # fit CFA to test for conigural invariance
-  config <- lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud, group = "COUNTRY")
+  config <- lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY")
   
   # put summary in object
   tmp <- summary(config, fit.measures = TRUE)
@@ -332,8 +332,8 @@ for (v in 1:length(vars)) {
   
   # metric invariance #
   
-  metric <-lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud, group = "COUNTRY", group.equal = c("loadings"))
-  scalar <-lavaan::cfa(model, ordered = T, missing = "pairwise", data = stud, group = "COUNTRY", group.equal = c("loadings", "intercepts"))
+  metric <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings"))
+  scalar <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings", "intercepts"))
   
   # compare model fit
   comp <- compareFit(list(config, metric, scalar))
