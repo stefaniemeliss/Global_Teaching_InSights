@@ -59,6 +59,7 @@ Previous results showed that when three countries are removed systematically, me
 [Shanghai, Japan & Madrid removed](#madrid)  
 [Shanghai, Japan & Chile removed](#chile)  
 [Shanghai, Japan & Mexico removed](#mexico)  
+[Japan, Madrid & Mexico removed](#japan)  
 [Summary](#summary)  
 
 
@@ -510,17 +511,17 @@ kbl(summary,
 # define data input #
 
 # countries to exclude
-countries <- c("Shanghai", "Japan", "Madrid")
+countries_excl <- c("Shanghai", "Japan", "Madrid")
 
 # remove data from country
 stud <- all_data %>% 
-  filter(!COUNTRY %in% countries)
+  filter(!COUNTRY %in% countries_excl)
 
 <<working_chunk>>
 
 # export summary
-summary$excluded <- paste0(countries, collapse = "|")
-summary$excluded <- "Madrid"
+summary$excluded <- paste0(countries_excl, collapse = "|")
+#summary$excluded <- "Madrid"
 check <- summary
 
 ```
@@ -531,17 +532,17 @@ check <- summary
 # define data input #
 
 # countries to exclude
-countries <- c("Shanghai", "Japan", "Chile")
+countries_excl <- c("Shanghai", "Japan", "Chile")
 
 # remove data from country
 stud <- all_data %>% 
-  filter(!COUNTRY %in% countries)
+  filter(!COUNTRY %in% countries_excl)
 
 <<working_chunk>>
 
 # export summary
-summary$excluded <- paste0(countries, collapse = "|")
-summary$excluded <- "Chile"
+summary$excluded <- paste0(countries_excl, collapse = "|")
+#summary$excluded <- "Chile"
 check <- rbind(check, summary)
 
 
@@ -553,17 +554,39 @@ check <- rbind(check, summary)
 # define data input #
 
 # countries to exclude
-countries <- c("Shanghai", "Japan", "Mexico")
+countries_excl <- c("Shanghai", "Japan", "Mexico")
 
 # remove data from country
 stud <- all_data %>% 
-  filter(!COUNTRY %in% countries)
+  filter(!COUNTRY %in% countries_excl)
 
 <<working_chunk>>
 
 # export summary
-summary$excluded <- paste0(countries, collapse = "|")
-summary$excluded <- "Mexico"
+summary$excluded <- paste0(countries_excl, collapse = "|")
+#summary$excluded <- "Mexico"
+check <- rbind(check, summary)
+
+
+```
+
+
+# Japan, Madrid & Mexico removed {#japan}
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define data input #
+
+# countries to exclude
+countries_excl <- c("Japan", "Madrid", "Mexico")
+
+# remove data from country
+stud <- all_data %>% 
+  filter(!COUNTRY %in% countries_excl)
+
+<<working_chunk>>
+
+# export summary
+summary$excluded <- paste0(countries_excl, collapse = "|")
 check <- rbind(check, summary)
 
 
@@ -591,7 +614,7 @@ However, this [video](https://www.youtube.com/watch?v=i3EnZ-RXpDg) suggests that
 check <- check %>%
   relocate(excluded)
 # declare factor to help with ordering
-check$excluded <- factor(check$excluded, levels = c("Madrid", "Chile", "Mexico"))
+check$excluded <- factor(check$excluded, levels = c("Shanghai|Japan|Madrid", "Shanghai|Japan|Chile", "Shanghai|Japan|Mexico", "Japan|Madrid|Mexico"))
 
 # print table
 kbl(check[, -1], 
