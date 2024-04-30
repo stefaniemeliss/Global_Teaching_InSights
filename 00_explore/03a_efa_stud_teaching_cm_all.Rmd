@@ -15,7 +15,7 @@ rm(list = ls())
 
 # define directory
 dir <- getwd()
-dir <- gsub("/01_preproc", "", dir)
+dir <- gsub("/00_explore", "", dir)
 
 # load libraries
 library(dplyr)
