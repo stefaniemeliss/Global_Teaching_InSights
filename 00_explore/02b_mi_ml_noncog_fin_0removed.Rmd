@@ -60,7 +60,7 @@ vars <- c(
   "SELFCON_baseline",
   "SELFCON_posttest",
   # personal interest
-  "PINT_current",
+  "PINT_baseline",
   "PINT_posttest",
   # general self-efficacy
   "GENSELFEFF_current",
