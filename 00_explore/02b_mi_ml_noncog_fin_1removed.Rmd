@@ -1,0 +1,345 @@
+---
+title: "Measurement invariance (MI): Non-cognitive Student Outcomes (all 7 countries)"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
+
+# load libraries
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+
+library(mirt)
+library(ggmirt)
+
+library(plotly)
+
+library(lavaan)
+library(semPlot)
+library(semptools)
+library(semTools)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+devtools::source_url("https://github.com/stefaniemeliss/MAGMOT/blob/master/functions/rbindcolumns.R?raw=TRUE")
+
+# read in data
+all_data <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
+
+# replace all 9999 with NA
+all_data <- all_data %>%
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
+
+# remove Madrid
+all_data <- subset(all_data, all_data$COUNTRY != "Madrid")
+
+# recode items
+all_data[,paste0("SQB11", LETTERS[c(1, 2, 3)])] <- 5 - all_data[,paste0("SQB11", LETTERS[c(1, 2, 3)])]
+
+# define list of countries
+countries <- unique(all_data$COUNTRY)
+combis <- combn(countries, 1)
+```
+
+
+```{r, echo = F, results='asis'}
+# determine unique variable names
+vars <- c(
+  # self-concept
+  "SELFCON_baseline",
+  "SELFCON_posttest",
+  # personal interest
+  "PINT_baseline",
+  "PINT_posttest",
+  # general self-efficacy
+  "GENSELFEFF_current",
+  "GENSELFEFF_posttest",
+  # MATCHED task-specific self- efficacy 
+  "EFFICACY_MATCHED_baseline",
+  "EFFICACY_MATCHED_posttest"
+)
+
+# determine items that are summed up to factor
+scales <- c(
+  # self-concept
+  paste0("SQA06", LETTERS[1:6],collapse = " + "),
+  paste0("SQB01", LETTERS[1:6],collapse = " + "),
+  # personal interest
+  paste0("SQA14", LETTERS[1:3],collapse = " + "),
+  paste0("SQB03", LETTERS[1:3],collapse = " + "),
+  # general self-efficacy
+  paste0("SQA15", LETTERS[1:5],collapse = " + "),
+  paste0("SQB02", LETTERS[1:5],collapse = " + "),
+  # MATCHED task-specific self- efficacy 
+  paste0("SQA16", LETTERS[6:10],"2", collapse = " + "),
+  paste0("SQB07C", LETTERS[1:5], collapse = " + ")
+)
+
+
+# combine to df for checking
+df <- data.frame(vars, scales)
+df$models <- paste(vars, "=~", scales)
+```
+
+The property of a scale to measure the underlying latent variable(s) equally across different groups (e.g., different countries) is referred to as measurement invariance (MI; Rutkowski & Svetina, 2014). MI (or equivalence) assesses and compares the psychometric properties of a scales across groups to demonstrate the construct has the same meaning across groups (Putnick & Bornstein, 2016). Different aspects of MI can be distinguished (Horn & McArdle, 1992; Putnick & Bornstein, 2016; Vandenberg & Lance, 2000). Configural (or model form) MI assumes that each specified group has the same pattern of factor loadings. Metric (or weak factorial) MI additionally requires the loadings of the items on a factor to be invariant across groups. Scalar (or strong factorial) MI additionally constraints the intercepts of the item’s loading on the factor(s) to be invariant across groups. Residual (or strict) MI further restricts the items’ residuals and unique variances to be equal across groups. To test for MI, a structural equation modelling (SEM) framework can be adopted, most frequently using multiple group confirmatory factor analysis (MG-CFA). Constraints are added to the MG-CFA model in a stepwise fashion and MI is tested by evaluating how well the specified model fits the data in comparison to the lesser constrained nested model (Hirschfeld et al., 2014; Putnick & Bornstein, 2016).  
+
+In the context of this project, it was necessary to establish metric MI to allow us to pool data collected in different countries/economies that participated in the GTI study. It was not necessary to establish scalar invariance as we are not interested in comparing means across groups. While various guidelines exist to establish measurement invariance (e.g., Hirschfeld et al., 2014; Putnick & Bornstein, 2016), they may not be applicable to international large-scale assessments (ILSAs) because ILSAs often compare relatively large numbers of groups with large sample sizes (Rutkowski & Svetina, 2014) as decision criteria were often validated for two-group investigations (Chen, 2007; Cheung & Rensvold, 2002; French & Finch, 2006). We hence here apply the evaluation steps and decision criteria that have specifically been proposed in the context of ILSAs (Rutkowski & Svetina, 2014): (1) fit configural MG-CFA model to the data of all countries/economies, (2) assess overall model fit, (3) fit metric MG-CFA model to the data of all countries/economies, (4) assess overall model fit and (5) access relative (or comparative) model fit. To access the overall model fit in steps (2) and (4), the χ2 (chi-square) test of model fit as well as alternative fit indices were used, i.e., Comparative Fit Index (CFI), Tucker–Lewis Index (TLI) and Root Mean Square Error of Approximation (RMSEA). For the overall model fit to be acceptable, CFI and TLI needed to be larger than .95 and RMSEA smaller than or equal to .10. To examine relative model fit, we used χ2 difference test, ΔCFI and ΔRMSEA were used. Here, we applied a cutoff of -.020 to the ΔCFI values and a cutoff of .030 to the ΔRMSEA values.  
+
+It is important to note that the cut-offs proposed by Rutkowski & Svetina (2014) were derived using models that treat the 4-point Likert scale items as continuous rather than ordered categorical (ordinal). As discussed by the authors, this choice is theoretically not best practice but reflects current state of practice in the context of establishing MI in ILSAs. As an additional step upon establishing metric MI, we specified a baseline CFA model pooling the data from all countries/economies and treating the items as ordinal and evaluated the overall model fit.  
+
+All MI analyses were conducted using the R package lavaan (version 0.6-17; Rosseel, 2012). Missing values were handled using pairwise deletion. To fit the CFA models, the scale specifications suggested by the GTI study authors were used for all scales other than task-specific self-efficacy in mathematics were we only included the subset of matching items used in student pre- and post-questionnaire were included (see Table S[XXX]). For each non-cognitive outcome measure of interest, we defined a model where the items load on a single factor reflecting the construct as specified in the [GTI technical report](https://web-archive.oecd.org/2020-11-15/569819-GTI-TechReport-AnnexD5.pdf).
+
+> factor =~ item_1 + item_2 + ... + item_n  
+
+The models for each construct were fitted separately for the student pre- and post-questionnaire.  The models were initially fitted on all available data and overall and relative model fit indices were extracted.    
+
+```{r working_chunk, echo=FALSE, eval=F}
+options(knitr.kable.NA = '')
+# debug
+# vars <- vars[2]
+
+# loop over all variables
+for (v in 1:length(vars)) {
+  
+  # lavaan model formulation
+  model <- paste(vars[v], "=~", scales[v])
+  
+  # configural invariance #
+  
+  # fit CFA to test for conigural invariance
+  config <- lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY")
+  
+  # put summary in object
+  tmp <- summary(config, fit.measures = TRUE)
+  
+  # safe alternative fit indices (AFI) in df
+  afi <- data.frame(config = tmp$fit)
+  afi$index <- row.names(afi)
+  row.names(afi) <- NULL
+  
+  # metric invariance #
+  
+  metric <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings"))
+  
+  # put summary in object
+  tmp <- summary(metric, fit.measures = TRUE)
+  
+  # safe alternative fit indices (AFI) in df
+  tmp_afi <- data.frame(metric = tmp$fit)
+  tmp_afi$index <- row.names(tmp_afi)
+  row.names(tmp_afi) <- NULL
+  
+  # merge baseline and config
+  afi <- merge(afi, tmp_afi, by = "index")
+  
+  # create table for reporting tests of measurement invariance #
+  
+  # transpose AFIs
+  fit <- afi[-1] %>% 
+    t() %>% as.data.frame() %>% setNames(afi[,1]) %>% round(digits = 3)
+  # add column that indicates model
+  fit$model <- row.names(fit)
+  row.names(fit) <- NULL
+  
+  # re-format values
+  fit$pval <-ifelse(fit$pvalue < .001, "***", 
+                    ifelse(fit$pvalue < .05, "*",
+                           ifelse(fit$pvalue >= .05, "n.s.", NA)))
+  fit$chisq <- paste0(fit$chisq, fit$pval, " (", fit$df, ")")
+  fit$RMSEA <- paste0(fit$rmsea, " [", fit$rmsea.ci.lower, "; ", fit$rmsea.ci.upper, "]")
+  #fit$RMSEA.scaled <- paste0(fit$rmsea.scaled, " [", fit$rmsea.ci.lower.scaled, "; ", fit$rmsea.ci.upper.scaled, "]")
+  
+  # select relevant columns
+  fit <- fit[, c("model", 
+                 "chisq", 
+                 "cfi", 
+                 "tli", 
+                 "rmsea"
+                 #"RMSEA"
+  )]
+  
+  names(fit) <- c("model", 
+                  "ChiSq", 
+                  "CFI", 
+                  "TLI", 
+                  "RMSEA")
+  
+  # compare model fit #
+  comp <- compareFit(list(config, metric))
+  
+  # get chi square model comparison etc
+  chi2 <- slot(comp, "nested")
+  # remove empty row
+  chi2 <- chi2[!is.na(chi2$`Df diff`),]
+  chi2 <- round(chi2, digits = 3)
+  chi2$model <- "metric"
+  # re-format values
+  chi2$pval <-ifelse(chi2$`Pr(>Chisq)` < .001, "***", 
+                     ifelse(chi2$`Pr(>Chisq)` < .05, "*",
+                            ifelse(chi2$`Pr(>Chisq)` >= .05, "n.s.", NA)))
+  chi2$diff.chisq <- paste0(chi2$`Chisq diff`, chi2$pval, " (", chi2$`Df diff`, ")")
+  
+  # select relevant columns
+  chi2 <- chi2[, c("model",
+                   "diff.chisq")]
+  row.names(chi2) <- NULL
+  
+  # change in model fit indices
+  tmp <- slot(comp, "fit.diff")
+  tmp <- round(tmp, digits = 3)
+  tmp$model <- "metric"
+  row.names(tmp) <- NULL
+  
+  # re-format values
+  tmp$RMSEA <- paste0(tmp$rmsea, " [", tmp$rmsea.ci.lower, "; ", tmp$rmsea.ci.upper, "]")
+  #tmp$RMSEA.scaled <- paste0(tmp$rmsea.scaled, " [", tmp$rmsea.ci.lower.scaled, "; ", tmp$rmsea.ci.upper.scaled, "]")
+  
+  
+  # select relevant columns
+  tmp <- tmp[, c("model", 
+                 "cfi", 
+                 "rmsea"
+  )]
+  
+  # change column names
+  names(tmp) <- c("model", 
+                  "Δ CFI", 
+                  "Δ RMSEA"
+  )
+  
+  # combine change in chi square and alternative fit indices
+  tmp <- merge(chi2, tmp, by = "model")
+  
+  # combine all fit info related to MI in one table
+  out <- merge(fit, tmp, by = "model", all = T)
+  
+  # fit baseline CFA model ORDINAL #
+  base <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud)
+  
+  # put summary in object
+  tmp <- summary(base, fit.measures = TRUE)
+  
+  # safe alternative fit indices (AFI) in df
+  afi <- data.frame(baseline_ord = tmp$fit)
+  afi$index <- row.names(afi)
+  row.names(afi) <- NULL
+  
+  # transpose AFIs
+  fit <- afi[-2] %>% 
+    t() %>% as.data.frame() %>% setNames(afi[,2]) %>% round(digits = 3)
+  # add column that indicates model
+  fit$model <- row.names(fit)
+  row.names(fit) <- NULL
+  
+  # re-format values
+  fit$pval <-ifelse(fit$pvalue.scaled < .001, "***", 
+                    ifelse(fit$pvalue.scaled < .05, "*",
+                           ifelse(fit$pvalue.scaled >= .05, "n.s.", NA)))
+  fit$chisq <- paste0(fit$chisq.scaled, fit$pval, " (", fit$df.scaled, ")")
+  fit$RMSEA <- paste0(fit$rmsea.scaled, " [", fit$rmsea.ci.lower.scaled, "; ", fit$rmsea.ci.upper.scaled, "]")
+  
+  # select relevant columns
+  fit <- fit[, c("model", 
+                 "chisq", # this is scaled
+                 "cfi.scaled",
+                 "tli.scaled",
+                 #"RMSEA", 
+                 "rmsea.scaled"
+  )]
+  
+  # rename columns
+  names(fit) <- c("model", 
+                  "ChiSq", 
+                  "CFI", 
+                  "TLI", 
+                  "RMSEA")
+  
+  # combine with other output
+  out <- rbind.all.columns(out, fit)
+  
+  # two outputs will be saved: one that is plotted in the markdown, hence needs variable info as column
+  # one for csv export to create apa style table, hence needs variable as row
+  
+  # APA: put row on top that contains the variable name in model column
+  tmp_apa <- rbind(NA, out)
+  tmp_apa$model[1] <- vars[v] # add var
+  
+  # markdown: add column with variable
+  tmp_md <- out
+  tmp_md$var <- vars[v] # add var
+  tmp_md <- tmp_md %>%
+    relocate(var) # move first
+  
+  # combine all data in one output for extraction
+  if (v == 1) {
+    apa <- tmp_apa
+    md <- tmp_md
+  } else {
+    apa <- rbind(tmp_apa, apa)
+    md <- rbind(tmp_md, md)
+  }
+  
+}
+
+# define thresholds for highlighting
+col.cfi <- which(md$CFI < .95)
+col.tli <- which(md$TLI < .95)
+col.rmsea <- which(md$RMSEA > .1)
+col.red <- which(md$`Δ CFI` < -.02 | md$`Δ RMSEA` > .03)
+
+# print table
+kbl(md[-1], row.names = F,
+    caption = "Report of tests of measurement invariance") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) %>%
+  row_spec(col.cfi, bold = T, color = blue) %>%
+  row_spec(col.tli, bold = T, color = blue) %>%
+  row_spec(col.rmsea, bold = T, color = blue) %>%
+  row_spec(col.red, bold = T, color = red) %>%
+  pack_rows(index = table(md$var)) %>%
+  add_footnote("Note. For the baseline model that treats the item as ordinal, scaled overall fit measures are reported.") %>%
+    print()
+  cat("\n")
+
+# save apa file
+#write.csv(apa, file = filename, row.names = F, na = "")
+
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+for (c in 1:ncol(combis)) {
+  
+  # determine which countries to remove
+  countries_excl <- combis[,c]
+  
+  # remove data from country
+  stud <- subset(all_data, all_data$COUNTRY != paste(countries_excl, collapse = "|"))
+  
+  stud <- all_data %>% 
+    filter(!COUNTRY %in% countries_excl)
+  
+  cat("\n\n")
+  cat("### Excluded countries:", paste(countries_excl, collapse = "|"))
+  cat("\n\n")
+  
+  # run chunk
+  <<working_chunk>>
+    
+    
+}
+```
+    
