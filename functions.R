@@ -17,6 +17,11 @@ ambition_palette_bright <- c(cyan, coral, teal, purple, orange) # bright palette
 ambition_palette_accent <- c(yellow, blue, red)
 ambition_palette <- c(ambition_palette_bright, ambition_palette_accent) # 8 colours without ITT green
 
+# declare dominant and non-dominant colour in plots
+dominant_col <- coral
+nondominant_col <- navy
+
+
 # source: https://rdrr.io/cran/MESS/src/R/colorfunctions.R
 col.tint <- function(col, tint=.5) {
   
@@ -44,8 +49,6 @@ theme <- theme_bw() + theme(
 )
 
 
-dominant_col <- coral
-nondominant_col <- navy
 
 plot_raincloud <- function(data = df, xvar = x, yvar = y,
                            xlower = NULL,
