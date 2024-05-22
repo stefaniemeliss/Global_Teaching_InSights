@@ -1,20 +1,10 @@
-# ambition colours 2023 #
-navy = "#474C68"
-white = "#FFFFFF"
-black = "#000000"
-cyan = "#14B4E9"
-coral = "#E94B58"
-yellow = "#FFCC00"
-green = "#C1D10F"
-teal = "#00987C"
-blue = "#006FB7"
-purple = "#6D2160"
-orange = "#EC642D"
-red = "#BF1C1D"
+# source ambition theme
+devtools::source_url("https://github.com/stefaniemeliss/ambition_theme/blob/main/ambition_theme.R?raw=TRUE")
 
 # combine to palette
 ambition_palette_bright <- c(cyan, coral, teal, purple, orange) # bright palette
 ambition_palette_accent <- c(yellow, blue, red)
+ambition_palette <- c(coral, teal, purple, orange, blue, red, cyan, yellow) # de-prioritise cyan and yellow
 ambition_palette <- c(ambition_palette_bright, ambition_palette_accent) # 8 colours without ITT green
 
 # declare dominant and non-dominant colour in plots
@@ -22,34 +12,8 @@ dominant_col <- coral
 nondominant_col <- navy
 
 
-# source: https://rdrr.io/cran/MESS/src/R/colorfunctions.R
-col.tint <- function(col, tint=.5) {
-  
-  if(missing(col))
-    stop("a vector of colours is missing")
-  
-  if (tint<0 | tint>1)
-    stop("shade must be between 0 and 1")
-  
-  mat <- t(col2rgb(col, alpha=TRUE)  +  c(rep(1-tint, 3), 0)*(255-col2rgb(col, alpha=TRUE)))
-  rgb(mat, alpha=mat[,4], maxColorValue=255)
-}
 
-# load libraries
-library(ggplot2)
-library(extrafont)
-
-# define theme for plot
-theme <- theme_bw() + theme(
-  text=element_text(family="Segoe UI"),
-  plot.title = element_text(size=14, face="bold"),
-  axis.title = element_text(size=10, face="bold"),
-  legend.title = element_blank(),
-  legend.position = "bottom"
-)
-
-
-
+# raincloud plot function
 plot_raincloud <- function(data = df, xvar = x, yvar = y,
                            xlower = NULL,
                            xupper = NULL,
