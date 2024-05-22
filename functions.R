@@ -5,7 +5,6 @@ devtools::source_url("https://github.com/stefaniemeliss/ambition_theme/blob/main
 ambition_palette_bright <- c(cyan, coral, teal, purple, orange) # bright palette
 ambition_palette_accent <- c(yellow, blue, red)
 ambition_palette <- c(coral, teal, purple, orange, blue, red, cyan, yellow) # de-prioritise cyan and yellow
-ambition_palette <- c(ambition_palette_bright, ambition_palette_accent) # 8 colours without ITT green
 
 # declare dominant and non-dominant colour in plots
 dominant_col <- coral
