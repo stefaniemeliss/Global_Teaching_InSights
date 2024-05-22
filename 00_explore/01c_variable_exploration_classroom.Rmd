@@ -45,7 +45,7 @@ group <- "COUNTRY"
 
 # Contents  
 
-[Oppurtonity to learn (OTL)](#OTL)  
+[Opportunity to learn (OTL)](#OTL)  
 [Video component scores (VCOMP)](#VCOMP)  
 [Video indicator scores (VIND)](#VIND)  
 [Artefact component scores (ACOMP)](#ACOMP)  
@@ -117,11 +117,11 @@ out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
 plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
-  theme + 
+  ambition_theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(item), ncol = 1) +
   xlab("Country") + ylab("Average OTL (based on teacher log)") +
-  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE.") + 
   ggtitle("OTL (source: teacher log) seperately for each country")
 
 plt
@@ -149,7 +149,7 @@ costum_points <- function(data,mapping){
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL as reported in the teacher log") + 
-  theme
+  ambition_theme
 ```
 
 > The scatterplot matrix generated using the teacher log data as source suggests that overall, different OTL categories are positively correlated with each other.
@@ -208,11 +208,11 @@ out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
 plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
-  theme + 
+  ambition_theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(item), ncol = 1) +
   xlab("Country") + ylab("Average subtopic coverage (based on teacher log)") +
-  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE.") + 
   ggtitle("Subtopic coverage seperately for each country")
 
 plt
@@ -238,7 +238,7 @@ To identify any patterns among the subtopic coverage, a scatter and correlation 
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of subtopic coverage") + 
-  theme
+  ambition_theme
 ```
 
 </details> 
@@ -305,11 +305,11 @@ out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
 plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
-  theme + 
+  ambition_theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(item), ncol = 1) +
   xlab("Country") + ylab("Average OTL (based on SQB)") +
-  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE.") + 
   ggtitle("OTL (source: students) seperately for each country")
 
 plt
@@ -336,7 +336,7 @@ costum_points <- function(data,mapping){
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL as reported in the student questionnaire") + 
-  theme
+  ambition_theme
 ```
 
 > The scatterplot matrix generated using the student questionnaire response data as source suggests that there is a more mixed and nuanced pattern with respect to the question whether or not different OTL categories are  correlated with each other.
@@ -398,11 +398,11 @@ out[, c(-1, -2)] <- round(out[, c(-1, -2)], 3)
 plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
-  theme + 
+  ambition_theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(item), ncol = 1) +
   xlab("Country") + ylab("Average OTL (based on AR)") +
-  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE.") + 
   ggtitle("OTL (source: artefact ratings) seperately for each country")
 
 plt
@@ -429,7 +429,7 @@ costum_points <- function(data,mapping){
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL based on the artefact ratings") + 
-  theme
+  ambition_theme
 ```
 
 > The scatterplot matrix generated using the artefact rating data as source suggests that there is a more mixed and nuanced pattern with respect to the question whether or not different OTL categories are  correlated with each other.  
@@ -449,7 +449,7 @@ tmp <- teach[, grep("T_ID|COUNTRY|_FUNCTIONS", names(teach))]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL for using quadratic functions") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -466,7 +466,7 @@ tmp <- teach[, grep("T_ID|COUNTRY|_REASON", names(teach))]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL for reasoning about different types of quadratic equations") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -481,7 +481,7 @@ tmp <- teach[, grep("T_ID|COUNTRY|_APPLIED", names(teach))]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL for applying quadratic equations to real world contexts") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -496,7 +496,7 @@ tmp <- teach[, grep("T_ID|COUNTRY|_ALGEBRA", names(teach))]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of OTL for algebraic procedures") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -513,7 +513,7 @@ tmp <- teach[, grep("T_ID|COUNTRY|_FUNCTIONS|_REASONING|_APPLIED|_ALGEBRA", name
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of all OTL") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -645,7 +645,7 @@ out$y_cord <- 5
 plt <- ggplot(data = out, aes(x = comp_no, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5, position = position_dodge(width=0.8)) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1, position = position_dodge(width=0.8)) +
-  theme + 
+  ambition_theme + 
   geom_label(
     aes(x = comp_no, y = y_cord, label = Altname, group = comp_no),
     check_overlap = T,
@@ -654,7 +654,7 @@ plt <- ggplot(data = out, aes(x = comp_no, y = mean, fill = group1)) +
   scale_fill_manual(values = ambition_palette, name = "Country") + 
   facet_wrap(vars(domain), ncol = 1) +
   xlab("Component") + ylab("Classroom-level VCOMP score") +
-  labs(caption = "Error bars represent SE.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE.") + 
   ggtitle("Video component score seperately for each country") +
   theme(axis.text.x = element_blank())
 plt
@@ -692,7 +692,7 @@ costum_points <- function(data,mapping){
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix - Domain AR") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -710,7 +710,7 @@ names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix - Domain CE") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -728,7 +728,7 @@ names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix - Domain CM") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -746,7 +746,7 @@ names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix - Domain DC") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -764,7 +764,7 @@ names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix - Domain QS") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -782,7 +782,7 @@ names(tmp)[c(-1, -2)] <- key$Altname[match(names(tmp),key$Variable)][c(-1, -2)]
 ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY), diag = list(continuous = custom_dens), lower = list(continuous = costum_points)) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix - Domain SE") + 
-  theme
+  ambition_theme
 
 
 ```
@@ -857,7 +857,7 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
         showStrips = T) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of video component scores") + 
-  theme
+  ambition_theme
 ```
 
 </details>
@@ -974,11 +974,11 @@ plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
   geom_hline(data = key, aes(yintercept = Max.value.agg), col = "grey", type = "dotted") +
-  theme + 
+  ambition_theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(Altname_f), ncol = 1, scales = "free_y") +
   xlab("Country") + ylab("Classroom-level VIND score") +
-  labs(caption = "Error bars represent SE. Horizontal line shows maximum possible value.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE. Horizontal line shows maximum possible value.") + 
   ggtitle("Video indicator score seperately for each country")
 
 plt
@@ -1087,11 +1087,11 @@ plt <- ggplot(data = out, aes(x = group1, y = mean, fill = group1)) +
   geom_bar(stat = "identity", width = 0.5) + 
   geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1) +
   geom_hline(data = key, aes(yintercept = Max.Rating), col = "grey", type = "dotted") +
-  theme + 
+  ambition_theme + 
   scale_fill_manual(values = ambition_palette) + guides(fill=FALSE) +
   facet_wrap(vars(Altname_f), ncol = 1) +
   xlab("Country") + ylab("Classroom-level VIND score") +
-  labs(caption = "Error bars represent SE. Horizontal line shows maximum possible value.") + theme(plot.caption = element_text(hjust=0)) +
+  labs(caption = "Error bars represent SE. Horizontal line shows maximum possible value.") + 
   ggtitle("Artefact component score seperately for each country")
 
 plt
@@ -1153,7 +1153,7 @@ ggpairs(tmp, columns = 3:ncol(tmp), mapping = aes(fill = COUNTRY, col = COUNTRY)
         showStrips = T) + 
   scale_color_manual(values = ambition_palette) + scale_fill_manual(values = ambition_palette) +
   ggtitle("Scatterplot and correlation matrix of artefact component scores") + 
-  theme
+  ambition_theme
 ```
 
 </details>
