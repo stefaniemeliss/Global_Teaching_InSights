@@ -111,13 +111,13 @@ plot_scatter <- function(data = df, xvar = x, yvar = y,
     theme +
     # determine titles
     ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab(paste0(ylab)) 
-
+  
 }
 
 plot_scatter_jitter <- function(data = df, xvar = x, yvar = y,
-                         title = "",
-                         ylab = "",
-                         xlab = "") {
+                                title = "",
+                                ylab = "",
+                                xlab = "") {
   
   # compute appropriate jitfer
   
@@ -212,6 +212,47 @@ create_cfa_plot_longitudinal <- function(model_baseline,
                          thresholds = F,
                          DoNotPlot = T,
                          sizeMan = 5*scaling_factor,
+                         sizeMan2 = 1.5*scaling_factor,
+                         sizeLat = 5*scaling_factor,
+                         sizeLat2 = 3*scaling_factor,
+                         nCharNodes = 0,
+                         edge.label.cex = .8* scaling_factor,
+                         rotation = 4, # exogenuous variables placed on right side 
+                         intercepts = F,
+                         residuals = F
+  ), base)
+  # print plot
+  plot(p)
+  
+  # add title
+  title(paste(construct_name), line = -2, adj = 0, outer = TRUE)
+  dev.off()
+  
+}
+
+create_cfa_plot <- function(model,
+                            construct_name,
+                            data,
+                            filename){
+  
+  # define output
+  png(filename = filename, width = 960/2, height = 300)
+  # modify plot
+  # par(cex.main = 1.8, # size of title
+  #     mfrow = c(1, 2)) # plot as grid
+  par(cex.main = 1.8) # size of title
+  
+  # fit baseline CFA model ORDINAL #
+  base <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud)
+  
+  # plot model
+  scaling_factor <- 2.5
+  
+  # generate plot
+  p <- mark_sig(semPaths(base, whatLabels="est",
+                         thresholds = F,
+                         DoNotPlot = T,
+                         sizeMan = 6*scaling_factor,
                          sizeMan2 = 1.5*scaling_factor,
                          sizeLat = 5*scaling_factor,
                          sizeLat2 = 3*scaling_factor,
