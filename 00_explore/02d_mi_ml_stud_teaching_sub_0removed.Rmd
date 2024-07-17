@@ -1,0 +1,398 @@
+---
+title: "Measurement invariance (MI): Pupil perspective on selected teaching-related constructs (all 7 countries)"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+dir <- gsub("/00_explore", "", dir)
+
+# load libraries
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+
+library(mirt)
+library(ggmirt)
+
+library(plotly)
+
+library(lavaan)
+library(semPlot)
+library(semptools)
+library(semTools)
+
+# load in functions
+#devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+#source("C:/Users/stefanie.meliss/OneDrive - Ambition Institute/code/Global_Teaching_InSights/functions.R")
+blue    = "#006FB7"
+red     = "#BF1C1D"
+
+
+# read in data
+stud <- read.csv(file.path(dir, "data_raw", "GTI-Student-Data.csv"))
+
+# replace all 9999 with NA
+stud <- stud %>%
+  mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
+  mutate(across(where(is.integer), ~na_if(., 9998))) %>% # multiple responses
+  mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
+
+# remove Madrid
+stud <- subset(stud, stud$COUNTRY != "Madrid")
+
+# recode items
+stud[,paste0("SQB11", LETTERS[c(1, 2, 3)])] <- 5 - stud[,paste0("SQB11", LETTERS[c(1, 2, 3)])]
+
+```
+
+
+```{r, echo = F, results='asis'}
+# determine unique variable names
+vars <- c(
+  # CM disruption
+  "DISRUPR_posttest",
+  # CM teacher management
+  "TEACHMAN_posttest",
+  # SE teacher support
+  "TESUP_posttest",
+  # SE support for competence
+  "SUPCOM_posttest",
+  # SE support for autonomy
+  "SUPAUT_posttest",
+  # student teacher relationship 
+  "REL_STUD_TEACH_posttest",
+  # discourse
+  "DISCOURSE_posttest",
+  # clarity
+  "CLARITY_posttest",
+  # meaning
+  "MEANING_posttest",
+  # cognitive activation
+  "COCACT_posttest",
+  # adaptation of instruction
+  "ADAPT_posttest",
+  # feedback
+  "FEEDBACK_posttest"
+)
+
+# determine items that are summed up to factor
+scales <- c(
+  # CM disruption
+  paste0("SQB11", LETTERS[1:3],collapse = " + "),
+  # CM teacher management
+  paste0("SQB11", LETTERS[c(6, 7, 9, 10)],collapse = " + "),
+  # SE teacher support
+  paste0("SQB12", LETTERS[1:3],collapse = " + "),
+  # SE support competence
+  paste0("SQB12", LETTERS[4:7],collapse = " + "),
+  # SE support autonomy
+  paste0("SQB12", LETTERS[8:11],collapse = " + "),
+  # student teacher relationship 
+  paste0("SQB13", LETTERS[1:5],collapse = " + "),
+  # discourse
+  paste0("SQB08", LETTERS[9:11],collapse = " + "),
+  # clarity
+  paste0("SQB08", LETTERS[1:4],collapse = " + "),
+  # meaning
+  paste0("SQB09", LETTERS[1:4],collapse = " + "),
+  # cognitive activation
+  paste0("SQB08", LETTERS[5:8],collapse = " + "),
+  # adaptation of instruction
+  paste0("SQB10", LETTERS[1:5],collapse = " + "),
+  # feedback
+  paste0("SQB16", LETTERS[1:4],collapse = " + ")
+)
+
+
+# combine to df for checking
+df <- data.frame(vars, scales)
+df$models <- paste(vars, "=~", scales)
+```
+
+To determine measurement invariance (MI) for the questionnaire responses given by students, CFA was applied. More specifically, for each questionnaire scale, we first defined a CFA model where all items in the scale are loading on a single factor. No items were defined as being ordered categorical. 
+
+> factor =~ item_1 + item_2 + ... + item_n  
+
+This model was first fitted on all available data across all countries, model fit indices were extracted and a path diagram was created.  
+
+Next, we fitted the model to each country separately to extract model fit indices for each country. These are summarised in a table.  
+
+For the multi-group CFA, the same model is fitted in all groups. To establish metric (or weak) MI,  the pattern of salient (non-zero) and non-salient (zero) loadings was compared across groups. This was done by extracting the p-values associated with each loading and binarising it through comparison against an alpha value of .05. In a next step, we checked whether  there is any variance in the binarised p values across countries for each item. If the variance was zero for each item, we can assume that the same pattern of salient and non-salient loadings occurs across countries.  
+
+To determine MI, a configural, a metric and a scalar model were fitted and compared. The model fit incides and changes therein were summarised in a table.  
+
+The outlined procedure was followed for each questionnaire scale of interest. The results are shown below.  
+
+
+
+
+```{r, echo = F, results='asis', fig.align='center'}
+# debug
+# vars <- vars[2]
+
+# loop over all variables
+for (v in 1:length(vars)) {
+  
+  cat("### ", vars[v])
+  cat("\n")
+  
+  # lavaan model formulation
+  model <- paste(vars[v], "=~", scales[v])
+  
+  # fit CFA
+  fit <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud) 
+  
+  # put summary in object
+  tmp <- summary(fit, fit.measures = TRUE)
+  
+  cat("##### Fitting the model to all available data \n\n")
+  
+  cat("Model Test User Model::\n\n")
+  
+  cat("\tTest Statistic:\t\t\t\t\t\t\t\t\t\t", round(tmp$test$standard$stat,3),"\n")
+  cat("\tDegrees of freedom:\t\t\t\t\t\t\t\t\t", tmp$test$standard$df,"\n")
+  cat("\tP-value (Chi-square):\t\t\t\t\t\t\t\t", round(tmp$test$standard$pvalue,3),"\n\n")
+  
+  
+  cat("User Model versus Baseline Model:\n\n")
+  
+  cat("\tComparative Fit Index (CFI):\t\t\t\t\t\t", round(tmp$fit["cfi"],3),"\n")
+  cat("\tTucker-Lewis Index (TLI):\t\t\t\t\t\t\t", round(tmp$fit["tli"],3),"\n")
+  cat("\tRoot Mean Square Error of Approximation (RMSEA):\t", round(tmp$fit["rmsea"],3),"\n\n")
+  
+  cat("The loadings of each item on the factor were plotted in a path diagram. The path diagram was computed pooling the data across all countries.")
+  
+  cat("\n\n")
+  
+  # plot path model with paramter estimates (i.e., loadings)
+  path_diag <- mark_sig(semPaths(fit, "est", curvePivot = TRUE, thresholds = FALSE,  edge.label.cex = 1, title.cex = 1, reorder = F, sizeMan = 10, sizeLat = 14, intercepts = F, layout = "circle2", DoNotPlot = T), fit)
+  plot(path_diag)
+  
+  # extract relevant information from tmp
+  tmp2 <- tmp$pe[tmp$pe$lhs == vars[v] & tmp$pe$rhs != vars[v], ]
+  tmp2$group <- "all"
+  
+  
+  cat("The model was then fitted separately for each country. Model fit indices are included in the table below. Data for a country is **highlighted in blue if CFI or TLI are below .95 or if RMSEA is above .1**.\n\n")
+  
+  # baseline model fit in each country #
+  
+  countries <- unique(stud$COUNTRY)
+  
+  df_conf <- data.frame(Country = countries,
+                        Chi.square = NA,
+                        Df = NA,
+                        p.Value = NA,
+                        CFI = NA,
+                        TLI = NA,
+                        RMSEA = NA)
+  
+  
+  for (c in 1:length(countries)) {
+    
+    # compute CFA in each country
+    tmp_fit <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud[stud$COUNTRY == countries[c], ])
+    
+    # put summary in object
+    tmp <- summary(tmp_fit, fit.measures = TRUE)
+    
+    # add to data frame
+    df_conf$Chi.square[df_conf$Country == countries[c]] <- tmp$fit["chisq"]
+    df_conf$Df[df_conf$Country == countries[c]] <- tmp$fit["df"]
+    df_conf$p.Value[df_conf$Country == countries[c]] <- tmp$fit["pvalue"]
+    df_conf$CFI[df_conf$Country == countries[c]] <- tmp$fit["cfi"]
+    df_conf$TLI[df_conf$Country == countries[c]] <- tmp$fit["tli"]
+    df_conf$RMSEA[df_conf$Country == countries[c]] <- tmp$fit["rmsea"]
+    
+  }
+  
+  # define thresholds for highlighting
+  col.cfi <- which(df_conf$CFI < .95)
+  col.tli <- which(df_conf$tli < .95)
+  col.rmsea <- which(df_conf$RMSEA > .1)
+  
+  # print table
+  kbl(df_conf, digits = 3,
+      caption = "Model fit in each country") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+    row_spec(col.cfi, bold = T, color = blue) %>%
+    row_spec(col.tli, bold = T, color = blue) %>%
+    row_spec(col.rmsea, bold = T, color = blue) %>%
+    print()
+  cat("\n")
+  
+  
+  cat("##### Fitting the model for multigroup CFA \n\n")
+  
+  # configural invariance #
+  
+  # fit CFA to test for conigural invariance
+  config <- lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY")
+  
+  # put summary in object
+  tmp <- summary(config, fit.measures = TRUE)
+  
+  # extract relevant information from tmp
+  tmp3 <- tmp$pe[tmp$pe$lhs == vars[v] & tmp$pe$rhs != vars[v], ]
+  
+  # add country information
+  tmp3$group <- tmp$data$group.label[tmp3$group]
+  tmp3$block <- NULL
+  
+  # combine data from all countries with data from each country
+  tmp2 <- rbind(tmp2, tmp3)
+  
+  # use relevant cols only
+  tmp3 <- tmp2[, c("rhs", "group", "pvalue")]
+  tmp3$pvalue <- tmp3$pvalue < 0.05 # true if item loads significantly on factor
+  
+  # reshape
+  tmp4 <- reshape(tmp3, idvar = "rhs", timevar = "group", direction = "wide")
+  
+  # create a variable that checks whether the loading is significant across all countries
+  # this is done by computing the SD of the boolean variable pvalue per country
+  tmp4$sd_loadings_sig <- apply(tmp4[, -1], MARGIN = 1, FUN = sd, na.rm = T)
+  
+  
+  
+  # check if configural invariance was achieved
+  if (sum(tmp4$sd_loadings_sig != 0, na.rm = T) == 0) {
+    cat("Comparing the salient loadings across countries showed that the same set of items were associated with the latent factor across all countries.")
+  } else {
+    cat("Comparing the salient loadings across countries showed that the same set of items were not associated with the latent factor across all countries.")
+  }
+  
+  cat("\n\n")
+  
+  
+  # metric invariance #
+  
+  metric <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings"))
+  scalar <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings", "intercepts"))
+  
+  # compare model fit
+  comp <- compareFit(list(config, metric, scalar))
+  
+  # save fit data
+  tmp <- slot(comp, "fit")
+  
+  tmp$variable <- vars[v]
+  tmp$model <- c("config", "metric", "scalar")
+  
+  tmp2 <- tmp[, c("variable", "model",
+                  "chisq", "df", "pvalue",
+                  #"chisq.scaled", "df.scaled", "pvalue.scaled",
+                  "cfi", #"cfi.scaled", "cfi.robust",
+                  "tli", #"tli.scaled", "tli.robust",
+                  "rmsea"#, "rmsea.scaled", "rmsea.robust"
+                  )]
+  
+  row.names(tmp2) <- NULL
+  
+  # define threshold
+  col.blue <- integer(0)
+  # if CFI drops by more than .02 or if RMSEA increases by more than .03
+  if (tmp2$cfi[1] < .95 | tmp2$tli[1] < .95 | tmp2$rmsea[1] > .1) {
+    # colour row red
+    col.blue <- 1
+  }
+  
+  
+  tmp <- slot(comp, "nested")
+  
+  tmp <- tmp[!is.na(tmp$`Df diff`),]
+  tmp$variable <- vars[v]
+  tmp$model <- c("Δ_conf_metr", "Δ_metr_scal")
+  
+  tmp3 <- tmp[, c("variable", "model",
+                  "Chisq diff", "Df diff", "Pr(>Chisq)")]
+  row.names(tmp3) <- NULL
+  names(tmp3) <- c("variable", "model",
+                   "chisq", "df", "pvalue")
+  
+  
+  tmp <- slot(comp, "fit.diff")
+  
+  tmp$variable <- vars[v]
+  tmp$model <- c("Δ_conf_metr", "Δ_metr_scal")
+  
+  
+  tmp4 <- tmp[, c("variable", "model",
+                  "cfi", #"cfi.scaled", "cfi.robust",
+                  "tli", #"tli.scaled", "tli.robust",
+                  "rmsea"#, "rmsea.scaled", "rmsea.robust"
+                  )]
+  row.names(tmp4) <- NULL
+  
+  # define thresholds for highlighting
+  col.red <- which(tmp4$cfi < -.02 | tmp4$rmsea > .03)
+  
+  # merge 
+  tmp3 <- merge(tmp3, tmp4, by = c("variable", "model"))
+  
+  # merge model data and model comparison data
+  tmp <- rbind(tmp2, tmp3)
+  
+  # adjust row numbers after merging
+  if(length(col.red) != 0){
+    col.red <- col.red + nrow(tmp2)
+  }
+  
+  cat("Configural, metric and scalar invariance were modeled. The respective model fit indices are shown in the first three rows in the table below. If the configural model did not have good fit indices (i.e., **CFI or TLI are below .95 or if RMSEA is above .1** ), this is nighlighted in blue. The last two rows show the model comparison statistics and change in fit indices. If the change exceeded thresholds (i.e., **decrease in CFI of more than  -.02 and increase in RMSEA of more than .03**), this was highlighted in red. \n\n")
+  
+  
+  # print table
+  kbl(tmp, digits = 3,
+      caption = "Model fit indices and changes therein using data from all countries") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+    #kableExtra::column_spec(6, bold = TRUE) %>%
+    #kableExtra::column_spec(12, bold = TRUE) %>%
+    row_spec(col.blue, color = blue) %>%
+    row_spec(col.red, color = red) %>%
+    print()
+  cat("\n")
+  
+  
+  # combine all data in one output for extraction
+  if (v == 1) {
+    out <- tmp
+  } else {
+    out <- rbind(out, tmp)
+  }
+  
+  # remove tmp objects
+  #rm(tmp, tmp2, tmp3, tmp4)
+  
+  # remove other objects
+  #rm(comp, config, fit, metric, path_diag, scalar)
+}
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# create summary
+out2 <- subset(out, model == "Δ_conf_metr")
+
+# define thresholds for highlighting
+col.red <- which(out2$cfi < -.02 | out2$rmsea > .03)
+
+# print summary
+# print table
+kbl(out2, digits = 3, row.names = F,
+    caption = "Does a metric model fit worse than a configural model?") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  #kableExtra::column_spec(6, bold = TRUE) %>%
+  #kableExtra::column_spec(12, bold = TRUE) %>%
+  row_spec(col.red, color = red) 
+
+```
