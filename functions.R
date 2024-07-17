@@ -152,7 +152,7 @@ extract_factorscores <- function(data_in = raw_data,
   cfa_baseline <- lavaan::cfa(cfa_model, ordered = T, data = data_in, missing = "pairwise")
   
   # Predict values of latent variables, i.e., factor scores
-  scores <- lavaan::lavPredict(cfa_baseline, newdata = data_in, append.data = T)
+  scores <- lavaan::lavPredict(cfa_baseline, newdata = data_in, append.data = T, method = "Bartlett")
   
   # convert lavaan matrix to df
   df_scores <- as.data.frame(scores)
