@@ -21,6 +21,13 @@ library(dplyr)
 teach <- read.csv("data_raw/GTI-Teacher-Data.csv")
 tl <- read.csv("data_raw/GTI-TeachLog-Data.csv")
 
+# countries to exclude
+countries <- c("Shanghai", "Madrid")
+
+# remove data from country
+teach <- teach %>% 
+  filter(!COUNTRY %in% countries)
+
 # replace all 9999 with NA
 teach <- teach %>%
   mutate(across(where(is.integer), ~na_if(., 9999))) %>% # missing
@@ -28,52 +35,52 @@ teach <- teach %>%
   mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
 
-# recode predictor variables #
-
-# classroom management
-table(rowMeans((5- teach[, paste0("TQB11", LETTERS[1:3])])) - teach$TB_CM_DISRUPT)
-table(rowMeans(teach[, paste0("TQB11", LETTERS[c(6, 7, 9, 10)])]) - teach$TB_CM_TEACHMAN) # very different
-
-teach$TB_CM_DISRUPT <- ifelse(!is.na(teach$TB_CM_DISRUPT), rowMeans((5- teach[, paste0("TQB11", LETTERS[1:3])]), na.rm = T), NA)
-teach$TB_CM_TEACHMAN <- ifelse(!is.na(teach$TB_CM_TEACHMAN), rowMeans(teach[, paste0("TQB11", LETTERS[c(6, 7, 9, 10)])], na.rm = T), NA)
-
-tmpp <- teach[, c("T_ID", paste0("TQB11", LETTERS[c(6, 7, 9, 10)]), "TB_CM_TEACHMAN")]
-
-# socio-emotional support
-table(rowMeans(teach[, paste0("TQB12", LETTERS[1:3])]) - teach$TB_TESUP)
-table(rowMeans(teach[, paste0("TQB12", LETTERS[4:7])]) - teach$TB_SUPCOM)
-table(rowMeans(teach[, paste0("TQB12", LETTERS[8:11])]) - teach$TB_SUPAUT)
-table(rowMeans(teach[, paste0("TQB13", LETTERS[1:5])]) - teach$TB_REL_STUDTEACH)
-
-teach$TB_TESUP <- ifelse(!is.na(teach$TB_TESUP), rowMeans(teach[, paste0("TQB12", LETTERS[1:3])], na.rm = T), NA)
-teach$TB_REL_STUDTEACH <- ifelse(!is.na(teach$TB_REL_STUDTEACH), rowMeans(teach[, paste0("TQB13", LETTERS[1:5])], na.rm = T), NA)
-
-# discourse
-table(rowMeans(teach[, paste0("TQB08", LETTERS[9:11])]) - teach$TB_DISCOURSE)
-teach$TB_DISCOURSE <- ifelse(!is.na(teach$TB_DISCOURSE), rowMeans(teach[, paste0("TQB08", LETTERS[9:11])], na.rm = T), NA)
-
-# quality of subject matter
-table(rowMeans(teach[, paste0("TQB08", LETTERS[1:4])]) - teach$TB_CLARITY)
-table(rowMeans(teach[, paste0("TQB09", LETTERS[1:4])]) - teach$TB_MEANING)
-
-# cognitive engagement
-table(rowMeans(teach[, paste0("TQB08", LETTERS[5:8])]) - teach$TB_COGACT) # VERY DIFFERENT RESULTS
-
-# assessment and response
-table(rowMeans(teach[, paste0("TQB10", LETTERS[1:5])]) - teach$TB_ADAPT)
-
-teach$TB_ADAPT <- ifelse(!is.na(teach$TB_ADAPT), rowMeans(teach[, paste0("TQB10", LETTERS[1:5])], na.rm = T), NA)
+# # recode predictor variables #
+# 
+# # classroom management
+# table(rowMeans((5- teach[, paste0("TQB11", LETTERS[1:3])])) - teach$TB_CM_DISRUPT)
+# table(rowMeans(teach[, paste0("TQB11", LETTERS[c(6, 7, 9, 10)])]) - teach$TB_CM_TEACHMAN) # very different
+# 
+# teach$TB_CM_DISRUPT <- ifelse(!is.na(teach$TB_CM_DISRUPT), rowMeans((5- teach[, paste0("TQB11", LETTERS[1:3])]), na.rm = T), NA)
+# teach$TB_CM_TEACHMAN <- ifelse(!is.na(teach$TB_CM_TEACHMAN), rowMeans(teach[, paste0("TQB11", LETTERS[c(6, 7, 9, 10)])], na.rm = T), NA)
+# 
+# tmpp <- teach[, c("T_ID", paste0("TQB11", LETTERS[c(6, 7, 9, 10)]), "TB_CM_TEACHMAN")]
+# 
+# # socio-emotional support
+# table(rowMeans(teach[, paste0("TQB12", LETTERS[1:3])]) - teach$TB_TESUP)
+# table(rowMeans(teach[, paste0("TQB12", LETTERS[4:7])]) - teach$TB_SUPCOM)
+# table(rowMeans(teach[, paste0("TQB12", LETTERS[8:11])]) - teach$TB_SUPAUT)
+# table(rowMeans(teach[, paste0("TQB13", LETTERS[1:5])]) - teach$TB_REL_STUDTEACH)
+# 
+# teach$TB_TESUP <- ifelse(!is.na(teach$TB_TESUP), rowMeans(teach[, paste0("TQB12", LETTERS[1:3])], na.rm = T), NA)
+# teach$TB_REL_STUDTEACH <- ifelse(!is.na(teach$TB_REL_STUDTEACH), rowMeans(teach[, paste0("TQB13", LETTERS[1:5])], na.rm = T), NA)
+# 
+# # discourse
+# table(rowMeans(teach[, paste0("TQB08", LETTERS[9:11])]) - teach$TB_DISCOURSE)
+# teach$TB_DISCOURSE <- ifelse(!is.na(teach$TB_DISCOURSE), rowMeans(teach[, paste0("TQB08", LETTERS[9:11])], na.rm = T), NA)
+# 
+# # quality of subject matter
+# table(rowMeans(teach[, paste0("TQB08", LETTERS[1:4])]) - teach$TB_CLARITY)
+# table(rowMeans(teach[, paste0("TQB09", LETTERS[1:4])]) - teach$TB_MEANING)
+# 
+# # cognitive engagement
+# table(rowMeans(teach[, paste0("TQB08", LETTERS[5:8])]) - teach$TB_COGACT) # VERY DIFFERENT RESULTS
+# 
+# # assessment and response
+# table(rowMeans(teach[, paste0("TQB10", LETTERS[1:5])]) - teach$TB_ADAPT)
+# 
+# teach$TB_ADAPT <- ifelse(!is.na(teach$TB_ADAPT), rowMeans(teach[, paste0("TQB10", LETTERS[1:5])], na.rm = T), NA)
 
 # get relevant variable names: teacher level
-misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Teacher", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Teacher", header = T)
 teach_cols <- misc$Variable
 
 # get relevant variable names: video observations
-misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Video", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Video", header = T)
 vid_cols <- misc$Variable
 
 # get relevant variable names: artefacts
-misc <- xlsx::read.xlsx(file = "misc/voi_v1.xlsx", sheetName = "Artefacts", header = T)
+misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Artefacts", header = T)
 arte_cols <- misc$Variable
 
 # reduce teach to relevant variables only
