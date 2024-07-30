@@ -141,6 +141,26 @@ plot_scatter_jitter <- function(data = df, xvar = x, yvar = y,
   
 }
 
+plot_histogram <- function(data = df, xvar = x,
+                           title = "",
+                           xlab = "") {
+  plot <- 
+    # define variables to plot based on input
+    ggplot(df, aes(x = get(xvar))) +
+    # basic histogram with density
+    geom_histogram(aes(y=..density..), color = nondominant_col, fill = "white") +
+    # add density plot
+    geom_density(alpha = .2, fill = dominant_col, col = dominant_col) +
+    # add mean as vertical line
+    geom_vline(aes(xintercept = mean(get(xvar), na.rm = T)),
+               color = dominant_col, linetype = "dashed", size = 1) +
+    # add theme
+    ambition_theme +
+    # determine titles
+    ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab("Density") 
+}
+
+
 
 extract_factorscores <- function(data_in = raw_data,
                                  cfa_model = lavaan_model,
