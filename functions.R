@@ -148,7 +148,7 @@ plot_histogram <- function(data = df, xvar = x,
     # define variables to plot based on input
     ggplot(df, aes(x = get(xvar))) +
     # basic histogram with density
-    geom_histogram(aes(y=..density..), color = nondominant_col, fill = "white") +
+    geom_histogram(aes(y=..density..), color = nondominant_col, fill = "nondominant_col") +
     # add density plot
     geom_density(alpha = .2, fill = dominant_col, col = dominant_col) +
     # add mean as vertical line
