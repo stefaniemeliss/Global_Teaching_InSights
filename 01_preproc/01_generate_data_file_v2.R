@@ -35,41 +35,6 @@ teach <- teach %>%
   mutate(across(where(is.integer), ~na_if(., 9997))) # Illegible response
 
 
-# # recode predictor variables #
-# 
-# # classroom management
-# table(rowMeans((5- teach[, paste0("TQB11", LETTERS[1:3])])) - teach$TB_CM_DISRUPT)
-# table(rowMeans(teach[, paste0("TQB11", LETTERS[c(6, 7, 9, 10)])]) - teach$TB_CM_TEACHMAN) # very different
-# 
-# teach$TB_CM_DISRUPT <- ifelse(!is.na(teach$TB_CM_DISRUPT), rowMeans((5- teach[, paste0("TQB11", LETTERS[1:3])]), na.rm = T), NA)
-# teach$TB_CM_TEACHMAN <- ifelse(!is.na(teach$TB_CM_TEACHMAN), rowMeans(teach[, paste0("TQB11", LETTERS[c(6, 7, 9, 10)])], na.rm = T), NA)
-# 
-# tmpp <- teach[, c("T_ID", paste0("TQB11", LETTERS[c(6, 7, 9, 10)]), "TB_CM_TEACHMAN")]
-# 
-# # socio-emotional support
-# table(rowMeans(teach[, paste0("TQB12", LETTERS[1:3])]) - teach$TB_TESUP)
-# table(rowMeans(teach[, paste0("TQB12", LETTERS[4:7])]) - teach$TB_SUPCOM)
-# table(rowMeans(teach[, paste0("TQB12", LETTERS[8:11])]) - teach$TB_SUPAUT)
-# table(rowMeans(teach[, paste0("TQB13", LETTERS[1:5])]) - teach$TB_REL_STUDTEACH)
-# 
-# teach$TB_TESUP <- ifelse(!is.na(teach$TB_TESUP), rowMeans(teach[, paste0("TQB12", LETTERS[1:3])], na.rm = T), NA)
-# teach$TB_REL_STUDTEACH <- ifelse(!is.na(teach$TB_REL_STUDTEACH), rowMeans(teach[, paste0("TQB13", LETTERS[1:5])], na.rm = T), NA)
-# 
-# # discourse
-# table(rowMeans(teach[, paste0("TQB08", LETTERS[9:11])]) - teach$TB_DISCOURSE)
-# teach$TB_DISCOURSE <- ifelse(!is.na(teach$TB_DISCOURSE), rowMeans(teach[, paste0("TQB08", LETTERS[9:11])], na.rm = T), NA)
-# 
-# # quality of subject matter
-# table(rowMeans(teach[, paste0("TQB08", LETTERS[1:4])]) - teach$TB_CLARITY)
-# table(rowMeans(teach[, paste0("TQB09", LETTERS[1:4])]) - teach$TB_MEANING)
-# 
-# # cognitive engagement
-# table(rowMeans(teach[, paste0("TQB08", LETTERS[5:8])]) - teach$TB_COGACT) # VERY DIFFERENT RESULTS
-# 
-# # assessment and response
-# table(rowMeans(teach[, paste0("TQB10", LETTERS[1:5])]) - teach$TB_ADAPT)
-# 
-# teach$TB_ADAPT <- ifelse(!is.na(teach$TB_ADAPT), rowMeans(teach[, paste0("TQB10", LETTERS[1:5])], na.rm = T), NA)
 
 # get relevant variable names: teacher level
 misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Teacher", header = T)
@@ -105,10 +70,30 @@ tmpp <- teach[, c("T_ID", paste0("VIND_CEXCT", 1:8, "PCT"))]
 tmpp$sum <- rowSums(teach[, c(paste0("VIND_CEXCT", 1:8, "PCT"))] > 0)
 teach$VIND_CEXCT_SUM <- rowSums(teach[, c(paste0("VIND_CEXCT", 1:8, "PCT"))] > 0)
 
+# aggregate GENERAL Class Tech Indicators #
+tmpp <- teach[, c("T_ID", paste0("VIND_CEXCT", c(1, 2, 5, 6, 7, 8), "PCT"))]
+tmpp$sum <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXCT", c(1, 2, 5, 6, 7, 8), "PCT"))] > 0) > 0)
+teach$VIND_CEXCT_general <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXCT", c(1, 2, 5, 6, 7, 8), "PCT"))] > 0) > 0)
+
+# aggregate MATHS Class Tech Indicators #
+tmpp <- teach[, c("T_ID", paste0("VIND_CEXCT", c(3, 4), "PCT"))]
+tmpp$sum <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXCT", c(3, 4), "PCT"))] > 0) > 0)
+teach$VIND_CEXCT_maths <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXCT", c(3, 4), "PCT"))] > 0) > 0)
+
 # aggregate all Student Tech Indicators #
 tmpp <- teach[, c("T_ID", paste0("VIND_CEXST", c(3, 4, 5, 7, 8), "PCT"))]
 tmpp$sum <- rowSums(teach[, c(paste0("VIND_CEXST",  c(3, 4, 5, 7, 8), "PCT"))] > 0)
 teach$VIND_CEXST_SUM <- rowSums(teach[, c(paste0("VIND_CEXST",  c(3, 4, 5, 7, 8), "PCT"))] > 0)
+
+# aggregate GENERAL Student Tech Indicators #
+tmpp <- teach[, c("T_ID", paste0("VIND_CEXST", c(5, 7, 8), "PCT"))]
+tmpp$sum <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXST", c(5, 7, 8), "PCT"))] > 0) > 0)
+teach$VIND_CEXST_general <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXST", c(5, 7, 8), "PCT"))] > 0) > 0)
+
+# aggregate MATHS Student Tech Indicators #
+tmpp <- teach[, c("T_ID", paste0("VIND_CEXST", c(3, 4), "PCT"))]
+tmpp$sum <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXST", c(3, 4), "PCT"))] > 0) > 0)
+teach$VIND_CEXST_maths <- as.numeric(rowSums(teach[, c(paste0("VIND_CEXST", c(3, 4), "PCT"))] > 0) > 0)
 
 # aggregate all Activity Structure Indicators #
 tmpp <- teach[, grepl("T_ID|VIND_CM2|VIND_CM3|VIND_CM4|VIND_CM5", names(teach))]
@@ -133,7 +118,7 @@ names(stud)[names(stud) == "POST_GENSELFEFF"] <- "SB_GENSELFEFF"
 # remove countries #
 
 # countries to exclude
-countries <- c("Shanghai", "Japan", "Madrid")
+countries <- c("Shanghai", "Madrid")
 
 # remove data from country
 stud <- stud %>% 
@@ -165,6 +150,8 @@ sqf_out <- sqf_out[, grepl("_", names(sqf_out))]
 
 # merge with main dataset
 stud <- merge(stud, sqf_out, by = "S_ID", all = T)
+
+# apply same exclusion as GTI authors 
 
 # self-concept
 stud$SAF_SELFCON <- ifelse(!is.na(stud$SA_SELFCON), stud$SAF_SELFCON, NA)
@@ -217,10 +204,10 @@ stud$SBF_COGACT <- ifelse(!is.na(stud$SB_COGACT), stud$SBF_COGACT, NA)
 stud$SBF_ADAPT <- ifelse(!is.na(stud$SB_ADAPT), stud$SBF_ADAPT, NA)
 stud$SBF_FEEDBACK <- ifelse(!is.na(stud$SB_FEEDBACK), stud$SBF_FEEDBACK, NA)
 
-# recode some binary measurements: change 2 (= no) to 0
-stud$SB_ASSESS_CHECK <- ifelse(stud$SB_ASSESS_CHECK == 2, 0, stud$SB_ASSESS_CHECK)
-stud$SB_ASSESS_SELFEV <- ifelse(stud$SB_ASSESS_SELFEV == 2, 0, stud$SB_ASSESS_SELFEV)
-stud$SB_ASSESS_OBS <- ifelse(stud$SB_ASSESS_OBS == 2, 0, stud$SB_ASSESS_OBS)
+# # recode some binary measurements: change 2 (= no) to 0
+# stud$SB_ASSESS_CHECK <- ifelse(stud$SB_ASSESS_CHECK == 2, 0, stud$SB_ASSESS_CHECK)
+# stud$SB_ASSESS_SELFEV <- ifelse(stud$SB_ASSESS_SELFEV == 2, 0, stud$SB_ASSESS_SELFEV)
+# stud$SB_ASSESS_OBS <- ifelse(stud$SB_ASSESS_OBS == 2, 0, stud$SB_ASSESS_OBS)
 
 # get relevant variable names: teacher level
 misc <- xlsx::read.xlsx(file = "misc/voi_v2.xlsx", sheetName = "Student", header = T)
@@ -240,7 +227,7 @@ tmp <- stud[, rel_cols]
 # compute Leave-One-Out mean for each student observation #
 
 # determine vector with column names
-loo_cols <- c(out_cols, stud_cols)
+loo_cols <- c(stud_cols)
 
 for (c in 1:length(loo_cols)) {
   
@@ -308,13 +295,13 @@ write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v2.csv"), row.nam
 
 # code to create variable dict
 # tmp <- data.frame("Variable" = names(df))
-# tmp$Source <- 
+# tmp$Source <-
 #   ifelse(startsWith(tmp$Variable, "STA_"), "Student test variable - RAW",
 #          ifelse(startsWith(tmp$Variable, "STB_"), "Student test variable - RAW",
-#                 ifelse(startsWith(tmp$Variable, "SA_"), "Student reported variable - RAW",
-#                        ifelse(startsWith(tmp$Variable, "SB_"), "Student reported variable - RAW",
+#                 ifelse(startsWith(tmp$Variable, "SAF_"), "Student reported variable - RAW",
+#                        ifelse(startsWith(tmp$Variable, "SBF_"), "Student reported variable - RAW",
 #                               ifelse(grepl("LOO_", tmp$Variable), "Student derived variable - LOO",
-#                                      ifelse(grepl("CLM_", tmp$Variable), "Student derived variable - CLM", 
+#                                      ifelse(grepl("CLM_", tmp$Variable), "Student derived variable - CLM",
 #                                             ifelse(startsWith(tmp$Variable, "TA_"), "Teacher reported variable",
 #                                                    ifelse(startsWith(tmp$Variable, "TB_"), "Teacher reported variable",
 #                                                           ifelse(grepl("_TL", tmp$Variable), "Teacher logged variable",
@@ -323,5 +310,47 @@ write.csv(df, file = file.path(dir, "01_preproc", "GTI_preproc_v2.csv"), row.nam
 #                                                                                ifelse(startsWith(tmp$Variable, "ACOMP"), "Artefact rating - Component",
 #                                                                                       ifelse(grepl("_AR_", tmp$Variable), "Artefact rating - OTL",
 #                                                                                              NA)))))))))))))
-# write.csv(tmp, file = file.path(dir, "01_preproc", "GTI_vars_v1.csv"), row.names = F)
+# write.csv(tmp, file = file.path(dir, "01_preproc", "GTI_vars_v2.csv"), row.names = F)
 
+#### create condensed dataset based on discussions with Sam ####
+
+# predictor cols #
+
+# video components
+vcomp_cols <- names(df)[grepl("VCOMP", names(df))]
+vcomp_cols <- vcomp_cols[! vcomp_cols %in% c("VCOMP_QS3CT", "VCOMP_SE3RT")]
+
+# indicator cols
+vind_cols <- names(df)[grepl("VIND_CE3TUPCT|general|maths|VIND_QS6|VIND_QS7|VIND_QS8|VIND_QS9|VIND_QS10", names(df))]
+
+# student observations
+loo_cols <- names(df)[grepl("LOO_SBF_TESUP|LOO_SBF_SUPCOM|LOO_SBF_SUPAUT|LOO_SBF_REL_STUDTEACH|LOO_SBF_MEANING|LOO_SBF_CLARITY", names(df))]
+
+
+# declare dv
+dv_b <- "STB_PROPCORRECTSCORE"
+dv_a <- "STA_PROPCORRECTSCORE"
+
+# create data subset
+tmp <- df[, c("COUNTRY", "S_ID", "T_ID",
+              dv_b, dv_a, 
+              vcomp_cols, vind_cols, loo_cols,
+              "SA_FEMALE", "SA_AGE", "SA_PARED",
+              "CLM_SB_OTL"
+)]
+
+write.csv(tmp, file = file.path(dir, "01_preproc", "GTI_preproc_shortlist_v1.csv"), row.names = F)
+
+# declare dv
+dv_b <- c("STB_IRTSCORE", "STB_PROPCORRECTSCORE")
+dv_a <- c("STA_IRTSCORE", "STA_PROPCORRECTSCORE")
+
+# create data subset
+tmp <- df[, c("COUNTRY", "S_ID", "T_ID",
+              dv_b, dv_a, 
+              vcomp_cols, vind_cols, loo_cols,
+              "SA_FEMALE", "SA_AGE", "SA_PARED",
+              "CLM_SB_OTL"
+)]
+
+write.csv(tmp, file = file.path(dir, "01_preproc", "GTI_preproc_shortlist_v2.csv"), row.names = F)
