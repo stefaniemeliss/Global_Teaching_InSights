@@ -1,0 +1,256 @@
+---
+title: "Descriptives of student-reported variables"
+author: "Stef Meliss"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#### setups ####
+
+options(scipen = 999)
+# empty work space
+rm(list = ls())
+
+# define directory
+dir <- getwd()
+dir <- gsub("/02_analysis", "", dir)
+
+# load libraries
+library(dplyr)
+library(kableExtra)
+
+# load in functions
+devtools::source_url("https://github.com/stefaniemeliss/Global_Teaching_InSights/blob/main/functions.R?raw=TRUE")
+
+# load data
+df <- read.csv(file = file.path(dir, "01_preproc", "GTI_preproc_v3.csv"))
+
+# load categorisation file
+misc <- xlsx::read.xlsx(file = file.path(dir, "01_preproc", "GTI_vars_v2.xlsx"), sheetName = "GTI_vars", header = T)
+
+# make reproducible
+set.seed(123)
+
+# define script vars
+group <- "COUNTRY"
+
+
+```
+
+```{r working_chunk, echo=FALSE, eval=F}
+# generate and print descriptive tables to markdown
+table_desc(data = df,
+           group_var = group,
+           dep_var = dv)
+
+# create histogram all countries #
+plt <- plot_histogram(data = df, 
+                      xvar = dv,
+                      title = paste("Histogram -", dv),
+                      xlab = dv)
+plt
+
+
+# histogram for each country #
+
+# compute mean for each country
+group.means <- aggregate(get(dv) ~ get(group), data = df, FUN = mean)
+names(group.means) <- c(group, dv)
+
+# plot for each country
+plt_grp <- plt + 
+  facet_wrap(. ~ get(group), ncol = 2) +
+  geom_vline(data = group.means, mapping = aes(xintercept = get(dv)), color = teal, size = 1) +
+  labs(caption = "Note. Dashed coral line = mean all countries; solid teal line = mean specific country.")
+plt_grp
+
+
+
+```
+
+
+# Outcome variables and their baseline measures  
+  
+### Achievement
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "STB_PROPCORRECTSCORE"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "STA_PROPCORRECTSCORE"
+
+# run chunk
+<<working_chunk>>
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "STB_IRTSCORE"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "STA_IRTSCORE"
+
+# run chunk
+<<working_chunk>>
+```
+
+
+### Self-concept
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_SELFCON"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SAF_SELFCON"
+
+# run chunk
+<<working_chunk>>
+```
+
+
+### Personal interest
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_PINT"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SAF_PINT"
+
+# run chunk
+<<working_chunk>>
+```
+
+
+### General self-efficacy
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_GENSELFEFF"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SAF_GENSELFEFF"
+
+# run chunk
+<<working_chunk>>
+```
+
+
+### Task-specific self-efficacy
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_EFFICACY_MATCHED"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SAF_EFFICACY_MATCHED"
+
+# run chunk
+<<working_chunk>>
+```
+
+
+
+
+# Measures of teaching quality during the unit
+
+### Classroom management
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_CM_DISRUPT"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SBF_CM_TEACHMAN"
+
+# run chunk
+<<working_chunk>>
+```
+
+### Social-emotional support
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_TESUP"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SBF_SUPCOM"
+
+# run chunk
+<<working_chunk>>
+
+dv <- "SBF_SUPCOM"
+
+# run chunk
+<<working_chunk>>
+
+dv <- "SBF_REL_STUDTEACH"
+
+# run chunk
+<<working_chunk>>
+```
+
+### Instruction
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE, message=FALSE}
+
+dv <- "SBF_DISCOURSE"
+
+# run chunk
+<<working_chunk>>
+
+
+dv <- "SBF_CLARITY"
+
+# run chunk
+<<working_chunk>>
+
+dv <- "SBF_MEANING"
+
+# run chunk
+<<working_chunk>>
+
+dv <- "SBF_COGACT"
+
+# run chunk
+<<working_chunk>>
+
+dv <- "SBF_ADAPT"
+
+# run chunk
+<<working_chunk>>
+
+dv <- "SBF_FEEDBACK"
+
+# run chunk
+<<working_chunk>>
+```
