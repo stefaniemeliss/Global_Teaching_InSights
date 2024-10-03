@@ -48,6 +48,18 @@ stud[,paste0("SQB11", LETTERS[c(1, 2, 3)])] <- 5 - stud[,paste0("SQB11", LETTERS
 ```
 
 ```{r, echo = F, results='asis'}
+# define constructs measures
+constructs <- c(
+  "Self-concept in mathematics",
+  "Self-concept in mathematics",
+  "Personal interest in mathematics",
+  "Personal interest in mathematics",
+  "General self-efficacy in mathematics",
+  "General self-efficacy in mathematics",
+  "Task-specific self-efficacy in mathematics",
+  "Task-specific self-efficacy in mathematics"
+)
+
 # determine unique variable names
 vars <- c(
   # self-concept
@@ -57,12 +69,18 @@ vars <- c(
   "PINT_baseline",
   "PINT_posttest",
   # general self-efficacy
-  "GENSELFEFF_current",
+  "GENSELFEFF_baseline",
   "GENSELFEFF_posttest",
   # MATCHED task-specific self- efficacy 
   "EFFICACY_MATCHED_baseline",
   "EFFICACY_MATCHED_posttest"
 )
+
+# add timepoint
+timepoints <- rep_len(c("T1", "T2"), length.out = length(vars))
+
+# create nice outcome names
+vars_out <- paste(constructs, timepoints)
 
 # determine items that are summed up to factor
 scales <- c(
@@ -82,8 +100,8 @@ scales <- c(
 
 
 # combine to df for checking
-df <- data.frame(vars, scales)
-df$models <- paste(vars, "=~", scales)
+df <- data.frame(vars, constructs, timepoints, vars_out, scales)
+df$models <- paste(timepoints, "=~", scales)
 
 
 ```
@@ -97,30 +115,97 @@ options(knitr.kable.NA = '')
 for (v in 1:length(vars)) {
   
   # lavaan model formulation
-  model <- paste(vars[v], "=~", scales[v])
+  model <- df$models[v]
+  
+  # baseline model fit in each country #
+  
+  countries <- unique(stud$COUNTRY)
+  
+  df_conf <- data.frame(Country = countries,
+                        ChiSq = NA,
+                        Df = NA,
+                        p.Value = NA,
+                        CFI = NA,
+                        TLI = NA,
+                        RMSEA = NA)
+  
+  
+  for (c in 1:length(countries)) {
+    
+    # compute CFA in each country
+    tmp_fit <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud[stud$COUNTRY == countries[c], ])
+    
+    # put summary in object
+    tmp <- summary(tmp_fit, fit.measures = TRUE)
+    
+    # extract relevant information from tmp
+    tmpp <- tmp$pe[! grepl("SQ", tmp$pe$lhs) & grepl("SQ", tmp$pe$rhs), ]
+    
+    # add country information
+    tmpp$Country <- countries[c]
+    
+    # use relevant cols only
+    tmpp <- tmpp[, c("rhs", "Country", "est", "pvalue")]
+    tmpp <- tmpp[, c("rhs", "Country", "pvalue")]
+    tmpp$pvalue <- tmpp$pvalue < 0.05 # true if item loads significantly on factor
+    
+    # add to data frame
+    df_conf$ChiSq[df_conf$Country == countries[c]] <- tmp$fit["chisq"]
+    df_conf$Df[df_conf$Country == countries[c]] <- tmp$fit["df"]
+    df_conf$p.Value[df_conf$Country == countries[c]] <- tmp$fit["pvalue"]
+    df_conf$CFI[df_conf$Country == countries[c]] <- tmp$fit["cfi"]
+    df_conf$TLI[df_conf$Country == countries[c]] <- tmp$fit["tli"]
+    df_conf$RMSEA[df_conf$Country == countries[c]] <- tmp$fit["rmsea"]
+    
+    if (c == 1) {
+      loadings <- tmpp
+    } else {
+      loadings <- rbind(loadings, tmpp)
+    }
+    
+  }
+  
+  # reshape
+  tmp4 <- reshape(loadings, idvar = "rhs", timevar = "Country", direction = "wide")
+  
+  # create a variable that checks whether the loading is significant across all countries
+  # this is done by computing the SD of the boolean variable pvalue per country
+  tmp4$sd_loadings_sig <- apply(tmp4[, -1], MARGIN = 1, FUN = sd, na.rm = T)
+  
+  
+  # round df
+  df_conf[-1] <- round(df_conf[-1], 3)
+  
+  # get worst fit indices
+  afi_country <- data.frame(model = paste0("Within country range: ", sum(tmp4$sd_loadings_sig, na.rm = T)),
+                            ChiSq = paste0("[", min(df_conf$ChiSq), "; ", max(df_conf$ChiSq), "] (", unique(df_conf$Df), ")"),
+                            CFI = paste0("[", min(df_conf$CFI), "; ", max(df_conf$CFI), "]"),
+                            TLI = paste0("[", min(df_conf$TLI), "; ", max(df_conf$TLI), "]"),
+                            RMSEA = paste0("[", min(df_conf$RMSEA), "; ", max(df_conf$RMSEA), "]"))
+  
   
   # configural invariance #
   
   # fit CFA to test for conigural invariance
-  config <- lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY")
+  Configural <- lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY")
   
   # put summary in object
-  tmp <- summary(config, fit.measures = TRUE)
+  tmp <- summary(Configural, fit.measures = TRUE)
   
   # safe alternative fit indices (AFI) in df
-  afi <- data.frame(config = tmp$fit)
+  afi <- data.frame(Configural = tmp$fit)
   afi$index <- row.names(afi)
   row.names(afi) <- NULL
   
   # metric invariance #
   
-  metric <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings"))
+  Metric <-lavaan::cfa(model, missing = "pairwise", warn = FALSE, data = stud, group = "COUNTRY", group.equal = c("loadings"))
   
   # put summary in object
-  tmp <- summary(metric, fit.measures = TRUE)
+  tmp <- summary(Metric, fit.measures = TRUE)
   
   # safe alternative fit indices (AFI) in df
-  tmp_afi <- data.frame(metric = tmp$fit)
+  tmp_afi <- data.frame(Metric = tmp$fit)
   tmp_afi$index <- row.names(tmp_afi)
   row.names(tmp_afi) <- NULL
   
@@ -159,15 +244,18 @@ for (v in 1:length(vars)) {
                   "TLI", 
                   "RMSEA")
   
+  # add country fit
+  fit <- rbind.all.columns(afi_country, fit)
+  
   # compare model fit #
-  comp <- compareFit(list(config, metric))
+  comp <- compareFit(list(Configural, Metric))
   
   # get chi square model comparison etc
   chi2 <- slot(comp, "nested")
   # remove empty row
   chi2 <- chi2[!is.na(chi2$`Df diff`),]
   chi2 <- round(chi2, digits = 3)
-  chi2$model <- "metric"
+  chi2$model <- "Metric"
   # re-format values
   chi2$pval <-ifelse(chi2$`Pr(>Chisq)` < .001, "***", 
                      ifelse(chi2$`Pr(>Chisq)` < .05, "*",
@@ -182,7 +270,7 @@ for (v in 1:length(vars)) {
   # change in model fit indices
   tmp <- slot(comp, "fit.diff")
   tmp <- round(tmp, digits = 3)
-  tmp$model <- "metric"
+  tmp$model <- "Metric"
   row.names(tmp) <- NULL
   
   # re-format values
@@ -208,14 +296,17 @@ for (v in 1:length(vars)) {
   # combine all fit info related to MI in one table
   out <- merge(fit, tmp, by = "model", all = T)
   
+  # re-order rows
+  out <- out[c(3,1,2),]
+  
   # fit baseline CFA model ORDINAL #
-  base <-lavaan::cfa(model, ordered = T, estimator = "WLSMV", missing = "pairwise", warn = FALSE, data = stud)
+  Ordinal <-lavaan::cfa(model, ordered = T, missing = "pairwise", warn = FALSE, data = stud)
   
   # put summary in object
-  tmp <- summary(base, fit.measures = TRUE)
+  tmp <- summary(Ordinal, fit.measures = TRUE)
   
   # safe alternative fit indices (AFI) in df
-  afi <- data.frame(baseline_ord = tmp$fit)
+  afi <- data.frame(Ordinal = tmp$fit)
   afi$index <- row.names(afi)
   row.names(afi) <- NULL
   
@@ -226,21 +317,38 @@ for (v in 1:length(vars)) {
   fit$model <- row.names(fit)
   row.names(fit) <- NULL
   
-  # re-format values
-  fit$pval <-ifelse(fit$pvalue.scaled < .001, "***", 
+  # # re-format values: ROBUST
+  # fit$pval <-ifelse(fit$pvalue < .001, "***",
+  #                   ifelse(fit$pvalue < .05, "*",
+  #                          ifelse(fit$pvalue >= .05, "n.s.", NA)))
+  # fit$chisq <- paste0(fit$chisq, fit$pval, " (", fit$df, ")")
+  # fit$RMSEA <- paste0(fit$rmsea.robust, " [", fit$rmsea.ci.lower.robust, "; ", fit$rmsea.ci.upper.robust, "]")
+  # 
+  # # select relevant columns
+  # fit <- fit[, c("model",
+  #                "chisq", # this is scaled
+  #                "cfi.robust",
+  #                "tli.robust",
+  #                #"RMSEA",
+  #                "rmsea.robust"
+  # )]
+  
+  # re-format values: SCALED
+  fit$pval <-ifelse(fit$pvalue.scaled < .001, "***",
                     ifelse(fit$pvalue.scaled < .05, "*",
                            ifelse(fit$pvalue.scaled >= .05, "n.s.", NA)))
   fit$chisq <- paste0(fit$chisq.scaled, fit$pval, " (", fit$df.scaled, ")")
   fit$RMSEA <- paste0(fit$rmsea.scaled, " [", fit$rmsea.ci.lower.scaled, "; ", fit$rmsea.ci.upper.scaled, "]")
   
   # select relevant columns
-  fit <- fit[, c("model", 
+  fit <- fit[, c("model",
                  "chisq", # this is scaled
                  "cfi.scaled",
                  "tli.scaled",
-                 #"RMSEA", 
+                 #"RMSEA",
                  "rmsea.scaled"
   )]
+  
   
   # rename columns
   names(fit) <- c("model", 
@@ -257,11 +365,11 @@ for (v in 1:length(vars)) {
   
   # APA: put row on top that contains the variable name in model column
   tmp_apa <- rbind(NA, out)
-  tmp_apa$model[1] <- vars[v] # add var
+  tmp_apa$model[1] <- vars_out[v] # add var
   
   # markdown: add column with variable
   tmp_md <- out
-  tmp_md$var <- vars[v] # add var
+  tmp_md$var <- vars_out[v] # add var
   tmp_md <- tmp_md %>%
     relocate(var) # move first
   
@@ -270,11 +378,16 @@ for (v in 1:length(vars)) {
     apa <- tmp_apa
     md <- tmp_md
   } else {
-    apa <- rbind(tmp_apa, apa)
-    md <- rbind(tmp_md, md)
+    apa <- rbind(apa, tmp_apa)
+    md <- rbind(md, tmp_md)
   }
   
 }
+
+
+# declare factor to help with ordering
+md$var <- factor(md$var, levels = c(df$vars_out))
+# md <- md[order(md$var),]
 
 # define thresholds for highlighting
 col.cfi <- which(md$CFI < .95)
@@ -282,25 +395,25 @@ col.tli <- which(md$TLI < .95)
 col.rmsea <- which(md$RMSEA > .1)
 col.red <- which(md$`Δ CFI` < -.02 | md$`Δ RMSEA` > .03)
 
+
 # print table
 kbl(md[-1], row.names = F,
     caption = "Report of tests of measurement invariance") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = T) %>%
-  row_spec(col.cfi, bold = T, color = blue) %>%
-  row_spec(col.tli, bold = T, color = blue) %>%
-  row_spec(col.rmsea, bold = T, color = blue) %>%
-  row_spec(col.red, bold = T, color = red) %>%
+  #row_spec(col.cfi, bold = T, color = blue) %>%
+  #row_spec(col.tli, bold = T, color = blue) %>%
+  #row_spec(col.rmsea, bold = T, color = blue) %>%
+  #row_spec(col.red, bold = T, color = red) %>%
   pack_rows(index = table(md$var)) %>%
   add_footnote("Note. For the baseline model that treats the item as ordinal, scaled overall fit measures are reported.") %>%
-    print()
-  cat("\n")
+  print()
+cat("\n")
 
 # save apa file
 write.csv(apa, file = filename, row.names = F, na = "")
 
 
 ```
-
 
 The property of a scale to measure the underlying latent variable(s) equally across different groups (e.g., different countries) is referred to as measurement invariance (MI; Rutkowski & Svetina, 2014). MI (or equivalence) assesses and compares the psychometric properties of a scales across groups to demonstrate the construct has the same meaning across groups (Putnick & Bornstein, 2016). Different aspects of MI can be distinguished (Horn & McArdle, 1992; Putnick & Bornstein, 2016; Vandenberg & Lance, 2000). Configural (or model form) MI assumes that each specified group has the same pattern of factor loadings. Metric (or weak factorial) MI additionally requires the loadings of the items on a factor to be invariant across groups. Scalar (or strong factorial) MI additionally constraints the intercepts of the item’s loading on the factor(s) to be invariant across groups. Residual (or strict) MI further restricts the items’ residuals and unique variances to be equal across groups. To test for MI, a structural equation modelling (SEM) framework can be adopted, most frequently using multiple group confirmatory factor analysis (MG-CFA). Constraints are added to the MG-CFA model in a stepwise fashion and MI is tested by evaluating how well the specified model fits the data in comparison to the lesser constrained nested model (Hirschfeld et al., 2014; Putnick & Bornstein, 2016).  
 
@@ -312,20 +425,20 @@ All MI analyses were conducted using the R package lavaan (version 0.6-17; Rosse
 
 > factor =~ item_1 + item_2 + ... + item_n  
 
-The models for each construct were fitted separately for the student pre- and post-questionnaire. The models were initially fitted on all available data and overall and relative model fit indices were extracted. **ADD COMMENT re 3-item scales** As shown in Table S[XXX], metric MI could not be assumed across all scales when using data from all seven countries/economies.   
-  
+The models for each construct were fitted separately for the student pre- and post-questionnaire. The models were initially fitted on all available data and overall and relative model fit indices were extracted. Please note that for the any three-item scale (e.g., personal interest in mathematics), the configural model was just identified and hence the model fit could not be evaluated due to a lack of degrees of freedom. As such, the overall model fit indices of the configural model indicate perfect model fit because the model was directly derived from the data. Likewise, the relative model fit cannot be interpreted. For any three-item scales, metric MI was assumed if the overall model fit of the metric model was acceptable. As shown in Table S[XXX], metric MI could not be assumed across all scales when using data from all seven countries/economies.   
+
 
 ### Results when including data from all 7 countries
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
 # determine file name for tabel in apa
-filename <- "mi_all.csv"
+filename <- "01_mi_all.csv"
 # run chunk
 <<working_chunk>>
 ```
 
 In a following step, we iteratively removed countries and repeated the MI analyses until we identified subsets of countries for which metric MI was found. After excluding data from Shanghai (China), we found that all scales showed metric MI (see Table S[XXX]).   
-  
+
 ### Results when including data from all 6 selected countries
 
 ```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
@@ -339,7 +452,142 @@ stud <- stud %>%
   filter(!COUNTRY %in% countries)
 
 # determine file name for tabel in apa
-filename <- "mi_select.csv"
+filename <- "01_mi_select.csv"
+
+# run chunk
+<<working_chunk>>
+
+```
+
+##### Confirmatory factor analysis (CFA) plots for the non-cognitive outcomes  
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# create all CFA plots #
+
+# format input data
+df$vars_tmp <- tolower(gsub("_baseline|_posttest", "", df$vars))
+
+# long to wide
+df_wide <- df %>%
+  select(vars_tmp, constructs, timepoints, models) %>%
+  tidyr::pivot_wider(names_from = timepoints, values_from = models)
+
+# for each construct
+for (c in 1:length(df_wide$constructs)) {
+  
+  # create plot
+  create_cfa_plot_longitudinal(model_baseline = df_wide$T1[c],
+                               model_posttest = df_wide$T2[c],
+                               construct_name = paste(LETTERS[c], df_wide$constructs[c] ),
+                               filename = paste0("cfa_", letters[c], "_", df_wide$vars_tmp[c], ".png"))
+  
+}
+
+
+```
+
+![](cfa_a_selfcon.png)
+![](cfa_b_pint.png)
+![](cfa_c_genselfeff.png)
+![](cfa_d_efficacy_matched.png)
+
+
+
+### student reports of teaching
+
+```{r, echo = F, results='asis'}
+# define constructs measures
+constructs <- c(
+  "Disruptions", 
+  "Teacher’s classroom management", 
+  "Teacher support for learning", 
+  "Perceived support for competence", 
+  "Perceived support for autonomy", 
+  "Student-teacher relationship", 
+  "Student participation in discourse", 
+  "Clarity of instruction", 
+  "Focus on meaning", 
+  "Cognitive activation", 
+  "Adaption of instruction",
+  "Feedback"
+)
+
+# determine unique variable names
+vars <- c(
+  # CM disruption
+  "DISRUPR_posttest",
+  # CM teacher management
+  "TEACHMAN_posttest",
+  # SE teacher support
+  "TESUP_posttest",
+  # SE support for competence
+  "SUPCOM_posttest",
+  # SE support for autonomy
+  "SUPAUT_posttest",
+  # student teacher relationship 
+  "REL_STUD_TEACH_posttest",
+  # discourse
+  "DISCOURSE_posttest",
+  # clarity
+  "CLARITY_posttest",
+  # meaning
+  "MEANING_posttest",
+  # cognitive activation
+  "COCACT_posttest",
+  # adaptation of instruction
+  "ADAPT_posttest",
+  # feedback
+  "FEEDBACK_posttest"
+)
+
+# add timepoint
+timepoints <- rep_len(c("T2"), length.out = length(vars))
+
+# create nice outcome names
+vars_out <- paste(constructs, timepoints)
+
+# determine items that are summed up to factor
+scales <- c(
+  # CM disruption
+  paste0("SQB11", LETTERS[1:3],collapse = " + "),
+  # CM teacher management
+  paste0("SQB11", LETTERS[c(6, 7, 9, 10)],collapse = " + "),
+  # SE teacher support
+  paste0("SQB12", LETTERS[1:3],collapse = " + "),
+  # SE support competence
+  paste0("SQB12", LETTERS[4:7],collapse = " + "),
+  # SE support autonomy
+  paste0("SQB12", LETTERS[8:11],collapse = " + "),
+  # student teacher relationship 
+  paste0("SQB13", LETTERS[1:5],collapse = " + "),
+  # discourse
+  paste0("SQB08", LETTERS[9:11],collapse = " + "),
+  # clarity
+  paste0("SQB08", LETTERS[1:4],collapse = " + "),
+  # meaning
+  paste0("SQB09", LETTERS[1:4],collapse = " + "),
+  # cognitive activation
+  paste0("SQB08", LETTERS[5:8],collapse = " + "),
+  # adaptation of instruction
+  paste0("SQB10", LETTERS[1:5],collapse = " + "),
+  # feedback
+  paste0("SQB16", LETTERS[1:4],collapse = " + ")
+)
+
+
+# combine to df for checking
+df <- data.frame(vars, constructs, timepoints, vars_out, scales)
+df$models <- paste(timepoints, "=~", scales)
+
+
+```
+
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+
+# determine file name for table in APA
+
+filename <- "01_mi_tq.csv"
 
 # run chunk
 <<working_chunk>>
@@ -348,15 +596,82 @@ filename <- "mi_select.csv"
 
 
 
-  
-> @Sam: The red in the table below results from the 3-item scales and can thus be disregarded. Additionally, there is one blue model which means that the overall model fit does not meet our criteria. HOWEVER, I will give it a go in explaining why for this scale in particular (EFFICACY_MATCHED), we can except slightly worse model fit. To remind you, these are the items: 
+##### Confirmatory factor analysis (CFA) plots for the non-cognitive outcomes  
 
-**SA_EFFICACY**: Scale measuring student self-efficacy with mathematical tasks in general, calculated as the mean of SQA16A2 to SQA16J2, rated on a scale from 1 (not at all confident) - 4 (very confident). Question: ***For each task please indicate how confident you feel about doing these tasks.***   
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# create all CFA plots #
+
+# format input data
+df$vars_tmp <- tolower(gsub("_baseline|_posttest", "", df$vars))
+
+# long to wide
+df_wide <- df %>%
+  select(vars_tmp, constructs, timepoints, models) %>%
+  tidyr::pivot_wider(names_from = timepoints, values_from = models)
+
+# for each construct
+for (c in 1:length(df_wide$constructs)) {
   
-* Plotting the graph of y = x².  
-* Solving a problem like x²−4=0 by inspection.  
-* Finding all values of x for which(x−4)(x+5)=0.  
-* Using the binomial formula (a+b)²=a²+2ab+b² when solving a problem like x²+6x+9=0.  
-* Solving any quadratic equation (example: 4x²+6x+3 = 0).  
+  # create plot
+  create_cfa_plot(model = df_wide$T2[c],
+                  construct_name = paste(LETTERS[c], df_wide$constructs[c] ),
+                  filename = paste0("cfa_", letters[c], "_", df_wide$vars_tmp[c], ".png"))
   
-My thinking here is that because students have not yet comnpleted the unit on quadratic equations, the overall model fit is impacted by that.  
+}
+
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+# define constructs measures
+constructs <- c(
+  "Teaching quality"
+)
+
+# determine unique variable names
+vars <- c(
+  # teaching quality
+  "TQ_posttest"
+)
+
+# add timepoint
+timepoints <- "T2"
+
+# create nice outcome names
+vars_out <- paste(constructs, timepoints)
+
+# determine items that are summed up to factor
+scales <-  ' 
+  f1 =~ SQB08A + SQB08B + SQB08C + SQB08D
+  f2 =~ SQB08E + SQB08F + SQB08G + SQB08H
+  f3 =~ SQB08I + SQB08J + SQB08K
+  f4 =~ SQB09A + SQB09B + SQB09C + SQB09D
+  f5 =~ SQB10A + SQB10B + SQB10C + SQB10D + SQB10E
+  f6 =~ SQB11A + SQB11B + SQB11C
+  f7 =~ SQB11F + SQB11G + SQB11I + SQB11J
+  f8 =~ SQB12A + SQB12B + SQB12C
+  f9 =~ SQB12D + SQB12E + SQB12F + SQB12G 
+  f10 =~ SQB12H + SQB12I + SQB12J + SQB12K 
+  f11 =~ SQB13A + SQB13B + SQB13C + SQB13D + SQB13E 
+  f12 =~ SQB16A + SQB16B + SQB16C + SQB16D 
+'
+
+
+# combine to df for checking
+df <- data.frame(vars, constructs, timepoints, vars_out, scales)
+df$models <- scales
+
+
+
+```
+
+```{r, echo = F, results='asis', fig.align='center', warning=FALSE}
+
+# determine file name for table in APA
+
+filename <- "01_mi_mgti.csv"
+
+# run chunk
+<<working_chunk>>
+
+```
