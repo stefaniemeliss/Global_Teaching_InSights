@@ -41,6 +41,12 @@ stud <- stud %>%
 stud[,paste0("SQB11", LETTERS[c(1, 2, 3)])] <- 5 - stud[,paste0("SQB11", LETTERS[c(1, 2, 3)])]
 
 
+# omit data from students where there are no classroom observation ratings
+stud <- stud[stud$T_ID != "00826-0070-0002", ]
+
+# omit teacher where there are is no student questionnaire data
+stud <- stud[stud$T_ID != "00276-0002-0001", ]
+
 
 # #### compute factor scores for predictors ####
 # 
