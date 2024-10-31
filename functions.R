@@ -153,7 +153,7 @@ plot_histogram <- function(data = df, xvar = x,
     geom_density(alpha = .2, fill = dominant_col, col = dominant_col) +
     # add mean as vertical line
     geom_vline(aes(xintercept = mean(get(xvar), na.rm = T)),
-               color = dominant_col, linetype = "dashed", size = 1) +
+               color = dominant_col, linetype = "dashed", linewidth = 1) +
     # add theme
     ambition_theme +
     # determine titles
