@@ -142,6 +142,8 @@ plot_scatter_jitter <- function(data = df, xvar = x, yvar = y,
 }
 
 plot_histogram <- function(data = df, xvar = x,
+                           xlower = NULL,
+                           xupper = NULL,
                            title = "",
                            xlab = "") {
   plot <- 
@@ -158,6 +160,15 @@ plot_histogram <- function(data = df, xvar = x,
     ambition_theme +
     # determine titles
     ggtitle(paste0(title)) + xlab(paste0(xlab)) + ylab("Density") 
+  
+  
+  # determine coord system + scales
+  if (!is.null(xlower) | !is.null(xupper)) {
+    
+    #  modify x axis
+    plot <- plot + coord_cartesian(xlim = c(xlower, xupper))
+  }
+  
 }
 
 
