@@ -140,7 +140,8 @@ plot_scatter_jitter <- function(data = df, xvar = x, yvar = y,
   
 }
 
-plot_histogram <- function(data = df, xvar = x,
+plot_histogram <- function(data = df, 
+                           xvar = x,
                            xlower = NULL,
                            xupper = NULL,
                            title = "",
@@ -167,6 +168,7 @@ plot_histogram <- function(data = df, xvar = x,
     #  modify x axis
     plot <- plot + coord_cartesian(xlim = c(xlower, xupper))
   }
+  return(plot)
   
 }
 
